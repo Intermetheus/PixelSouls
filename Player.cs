@@ -30,7 +30,7 @@ namespace PixelSouls
         {
 
         }
-        private override void Move()
+        protected override void Move()
         {
 
         }
@@ -41,6 +41,16 @@ namespace PixelSouls
         }
 
         private void Aim()
+        {
+
+        }
+
+        public override void LoadContent(ContentManager content)
+        {
+
+        }
+
+        public override void OnCollision(GameObject other)
         {
 
         }

@@ -15,7 +15,7 @@ namespace PixelSouls
 
         }
 
-        public virtual void Move()
+        protected virtual void Move()
         {
 
         }
