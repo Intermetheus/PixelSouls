@@ -1,17 +1,36 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace PixelSouls
 {
     public class GameWorld : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        public SpriteFont arial;
+
+        protected static List<GameObject> gameObjects;
+        private static List<GameObject> newGameObjects;
+        private static List<GameObject> removeGameObjects;
+
+        private static GameState winLoseState;
+
+        private ButtonState leftMouseButton;
+
+        private List<UI> uiElements;
+
+        public static GameState WinLoseState
+        {
+            get { return winLoseState; }
+            set { winLoseState = value; }
+        }
+
 
         public GameWorld()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -25,7 +44,7 @@ namespace PixelSouls
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }
@@ -47,6 +66,22 @@ namespace PixelSouls
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        private bool LeftMouseButtonReleased()
+        {
+            // placeholder code
+            return true;
+        }
+
+        public void Instantiate(GameObject gameObject)
+        {
+
+        }
+
+        public void Destroy(GameObject gameObject)
+        {
+
         }
     }
 }
