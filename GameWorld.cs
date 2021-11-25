@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 namespace PixelSouls
 {
+    public enum GameState { Play, Menu, Lose, Win}
+
     public class GameWorld : Game
     {
         private GraphicsDeviceManager graphics;
