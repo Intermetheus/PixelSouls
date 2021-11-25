@@ -15,6 +15,8 @@ namespace PixelSouls
         private static List<GameObject> newGameObjects;
         private static List<GameObject> removeGameObjects;
 
+        private static Vector2 cameraPosition;
+
         private static GameState winLoseState;
 
         private ButtonState leftMouseButton;
@@ -27,6 +29,7 @@ namespace PixelSouls
             set { winLoseState = value; }
         }
 
+        public static Vector2 CameraPosition { get => cameraPosition; set => cameraPosition = value; }
 
         public GameWorld()
         {
