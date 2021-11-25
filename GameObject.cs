@@ -19,7 +19,7 @@ namespace PixelSouls
 
         public abstract void LoadContent(ContentManager content);
 
-        public virtual void Update()
+        public virtual void Update(GameTime gameTime)
         {
             screenPosition = position - GameWorld.CameraPosition;
         }
