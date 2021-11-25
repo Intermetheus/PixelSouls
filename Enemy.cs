@@ -18,7 +18,7 @@ namespace PixelSouls
 
         }
 
-        public override void Move()
+        protected override void Move()
         {
 
         }
