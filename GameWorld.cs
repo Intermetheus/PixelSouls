@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PixelSouls
 {
-    enum GameState { Play, Menu, Lose, Win}
+    public enum GameState { Play, Menu, Lose, Win}
 
     public class GameWorld : Game
     {
