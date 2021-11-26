@@ -13,7 +13,7 @@ namespace PixelSouls
         private SpriteBatch spriteBatch;
         public SpriteFont arial;
 
-        protected static List<GameObject> gameObjects;
+        protected static List<GameObject> gameObjects = new List<GameObject>();
         private static List<GameObject> newGameObjects;
         private static List<GameObject> removeGameObjects;
 
