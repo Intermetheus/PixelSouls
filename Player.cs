@@ -76,6 +76,7 @@ namespace PixelSouls
         }
         protected override void Move(GameTime gameTime)
         {
+            //Save position from before move.
             initialPosition = GameWorld.CameraPosition;
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             bool isColliding = false;

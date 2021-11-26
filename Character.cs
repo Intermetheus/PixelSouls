@@ -46,7 +46,7 @@ namespace PixelSouls
         public void Rotate(Vector2 target, Vector2 self)
         {
             Vector2 target1 = new Vector2(target.X, target.Y);
-            Vector2 Dpos = self - target1; //Vector between player and mouse
+            Vector2 Dpos = self - target1; //Vector between target and self
 
             rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
