@@ -13,7 +13,6 @@ namespace PixelSouls
     {
         private int stamina;
         private int maxStamina;
-        private float rotation;
         private Vector2 origin;
         private MouseState mouseState;
         private KeyboardState keyState;
@@ -26,6 +25,7 @@ namespace PixelSouls
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //Debug.WriteLine();
             spriteBatch.Draw(sprite, position, null, Color.White, rotation + 3.14f, origin, 1F, SpriteEffects.None, 0.2f);
         }
 
@@ -117,10 +117,11 @@ namespace PixelSouls
 
         private void Aim()
         {
-            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
-            Vector2 Dpos = position - mousePosition; //Vector between player and mouse
+            Rotate(position, new Vector2(mouseState.X, mouseState.Y));
+            //Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+            //Vector2 Dpos = position - mousePosition; //Vector between player and mouse
 
-            rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
+            //rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
 
         public override void LoadContent(ContentManager content)
@@ -134,5 +135,7 @@ namespace PixelSouls
         {
 
         }
+
+        
     }
 }
