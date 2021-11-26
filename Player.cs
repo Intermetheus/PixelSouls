@@ -13,22 +13,26 @@ namespace PixelSouls
     {
         private int stamina;
         private int maxStamina;
+        private float rotation;
+        private Vector2 origin;
         private MouseState mouseState;
         private KeyboardState keyState;
 
         public Player()
         {
             speed = 400;
+            origin = new Vector2(25,25); //Should be in the middle of the sprites texture
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, position, Color.White);
+            spriteBatch.Draw(sprite, position, null, Color.White, rotation + 3.14f, origin, 1F, SpriteEffects.None, 0.2f);
         }
 
         public override void Update(GameTime gameTime)
         {
             HandleInput();
+            Aim();
             Move(gameTime);
         }
 
@@ -76,10 +80,11 @@ namespace PixelSouls
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             bool isColliding = false;
 
-            //Create future position
+            //Create future player position(collision with objects)
             int newX = (int)(position.X + velocity.X * speed * deltaTime);
             int newY = (int)(position.Y + velocity.Y * speed * deltaTime);
 
+            //Future Camera position (collision with worldSize)
             int cameraX = (int)(GameWorld.CameraPosition.X + velocity.X * speed * deltaTime);
             int cameraY = (int)(GameWorld.CameraPosition.Y + velocity.Y * speed * deltaTime);
 
@@ -112,7 +117,10 @@ namespace PixelSouls
 
         private void Aim()
         {
+            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+            Vector2 Dpos = position - mousePosition; //Vector between player and mouse
 
+            rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
 
         public override void LoadContent(ContentManager content)
