@@ -7,11 +7,10 @@ namespace PixelSouls
 {
     static class PrototypePlayground
     {
-        public static Rectangle worldSize;
 
         public static void SetBackground()
         {
-
+            Stage.WorldSize = new Rectangle(0, 0, 5000, 5000);
         }
     }
 }

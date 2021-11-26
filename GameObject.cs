@@ -26,7 +26,7 @@ namespace PixelSouls
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, position, Color.White);
+            spriteBatch.Draw(sprite, screenPosition, Color.White);
         }
 
         public abstract void OnCollision(GameObject other);

@@ -13,11 +13,14 @@ namespace PixelSouls
         private SpriteBatch spriteBatch;
         public SpriteFont arial;
 
-        protected static List<GameObject> gameObjects;
-        private static List<GameObject> newGameObjects;
-        private static List<GameObject> removeGameObjects;
+        public static List<GameObject> gameObjects = new List<GameObject>();
+        private static List<GameObject> newGameObjects = new List<GameObject>();
+        private static List<GameObject> removeGameObjects = new List<GameObject>();
 
-        private static Vector2 cameraPosition;
+        private static Vector2 screenSize;
+        private static Vector2 cameraPosition = new Vector2(500, 500);
+
+        public static Player player = new Player();
 
         private static GameState winLoseState;
 
@@ -32,18 +35,20 @@ namespace PixelSouls
         }
 
         public static Vector2 CameraPosition { get => cameraPosition; set => cameraPosition = value; }
+        public static Vector2 ScreenSize { get => screenSize; set => screenSize = value; }
 
         public GameWorld()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            Window.AllowUserResizing = true;
+            screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            gameObjects.Add(player);
             base.Initialize();
         }
 
@@ -51,7 +56,11 @@ namespace PixelSouls
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            foreach (GameObject gameObject in gameObjects)
+            {
+                gameObject.LoadContent(Content);
+            }
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -59,7 +68,10 @@ namespace PixelSouls
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            foreach (GameObject gameObject in gameObjects)
+            {
+                gameObject.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -68,7 +80,14 @@ namespace PixelSouls
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            foreach (GameObject gameObject in gameObjects)
+            {
+                gameObject.Draw(spriteBatch);
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

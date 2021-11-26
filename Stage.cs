@@ -8,7 +8,9 @@ namespace PixelSouls
      class Stage
     {
         public static int currentStage;
-        public static Rectangle worldSize;
+        private static Rectangle worldSize;
+
+        public static Rectangle WorldSize { get => worldSize; set => worldSize = value; }
 
         public static void LoadLevel(string levelName)
         {
