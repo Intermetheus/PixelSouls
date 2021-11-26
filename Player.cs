@@ -30,7 +30,6 @@ namespace PixelSouls
         {
             HandleInput();
             Move(gameTime);
-            Debug.WriteLine(GameWorld.CameraPosition);
         }
 
         private void HandleInput()
@@ -120,7 +119,7 @@ namespace PixelSouls
         {
             sprite = content.Load<Texture2D>("player");
             position = new Vector2(GameWorld.ScreenSize.X / 2-sprite.Width/2, GameWorld.ScreenSize.Y / 2-sprite.Height/2);
-            Stage.WorldSize = new Rectangle(0, 0, 5000, 5000);
+            Stage.WorldSize = new Rectangle(0, 0, 5000, 5000); //TEMPORARY: Remove this code once Stage has been implemented
         }
 
         public override void OnCollision(GameObject other)
