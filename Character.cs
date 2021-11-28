@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PixelSouls
 {
-    abstract class Character : GameObject
+    public abstract class Character : GameObject
     {
         protected int health;
         protected int maxHealth;

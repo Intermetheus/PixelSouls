@@ -12,6 +12,8 @@ namespace PixelSouls
         private int stamina;
         private int maxStamina;
 
+
+
         public override void Update(GameTime gameTime)
         {
 
@@ -30,9 +32,9 @@ namespace PixelSouls
         {
 
         }
-        protected override void Move()
+        protected override void Move(GameTime gameTime)
         {
-
+            base.Move(gameTime);
         }
 
         private void Dodge()
@@ -51,6 +53,10 @@ namespace PixelSouls
         }
 
         public override void OnCollision(GameObject other)
+        {
+
+        }
+        public override void OnCollision(Character other)
         {
 
         }

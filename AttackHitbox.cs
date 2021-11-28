@@ -27,10 +27,14 @@ namespace PixelSouls
 
         public override void OnCollision(GameObject other)
         {
-            if (other is Character)
-            {
-                //DealDamage(other);
-            }
+        }
+        public override void OnCollision(Character other)
+        {
+            DealDamage(other);
+            //if (other is Character)
+            //{
+                
+            //}
         }
 
         private void DealDamage(Character target)

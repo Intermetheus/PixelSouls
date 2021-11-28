@@ -18,7 +18,7 @@ namespace PixelSouls
 
         }
 
-        protected override void Move()
+        protected override void Move(GameTime gameTime)
         {
 
         }
