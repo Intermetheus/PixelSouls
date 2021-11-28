@@ -17,13 +17,7 @@ namespace PixelSouls
         private MouseState mouseState;
         private KeyboardState keyState;
 
-<<<<<<< HEAD
         public Player()
-=======
-
-
-        public override void Update(GameTime gameTime)
->>>>>>> Oscar
         {
             speed = 400;
             origin = new Vector2(25,25); //Should be in the middle of the sprites texture
@@ -82,7 +76,6 @@ namespace PixelSouls
         }
         protected override void Move(GameTime gameTime)
         {
-<<<<<<< HEAD
             //Save position from before move.
             initialPosition = GameWorld.CameraPosition;
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -116,9 +109,6 @@ namespace PixelSouls
             {
                 GameWorld.CameraPosition += velocity * speed * deltaTime;
             }
-=======
-            base.Move(gameTime);
->>>>>>> Oscar
         }
 
         private void Dodge()
@@ -146,14 +136,7 @@ namespace PixelSouls
         {
 
         }
-<<<<<<< HEAD
 
         
-=======
-        public override void OnCollision(Character other)
-        {
-
-        }
->>>>>>> Oscar
     }
 }

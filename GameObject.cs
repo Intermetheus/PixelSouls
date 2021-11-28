@@ -30,7 +30,6 @@ namespace PixelSouls
         }
 
         public abstract void OnCollision(GameObject other);
-        public abstract void OnCollision(Character character);
 
         public void CheckCollision(GameObject other)
         {
