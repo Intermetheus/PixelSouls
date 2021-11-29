@@ -17,6 +17,14 @@ namespace PixelSouls
         protected float speed;
         protected float fps;
 
+        private Rectangle collisionBox;
+
+        public virtual Rectangle CollisionBoxProp
+        {
+            get { return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height); }
+            set { collisionBox = value; }
+        }
+
         public abstract void LoadContent(ContentManager content);
 
         public virtual void Update(GameTime gameTime)
@@ -42,6 +50,23 @@ namespace PixelSouls
         public virtual Rectangle CollisionBox()
         {
             return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
+        }
+
+        public virtual void TakeDamage(int damage)
+        {
+            throw new NotImplementedException("Cannot deal damage to non-character objects");
+        }
+
+        internal bool IsColliding(GameObject other)
+        {
+            if (CollisionBoxProp.Intersects(other.CollisionBoxProp))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

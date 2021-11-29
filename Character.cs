@@ -50,5 +50,10 @@ namespace PixelSouls
 
             rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
+
+        public override void TakeDamage(int damage)
+        {
+            health -= attackDamage;
+        }
     }
 }

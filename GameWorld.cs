@@ -92,12 +92,25 @@ namespace PixelSouls
             foreach (GameObject gameObject in removeGameObjects)
             {
                 gameObjects.Remove(gameObject);
-                removeGameObjects.Clear();
+                //removeGameObjects.Clear();
             }
+            removeGameObjects.Clear();
 
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.Update(gameTime);
+
+                foreach (GameObject other in gameObjects)
+                {
+                    if (gameObject != other)
+                    {
+                        if (gameObject.IsColliding(other))
+                        {
+                            gameObject.OnCollision(other);
+                            other.OnCollision(gameObject);
+                        }
+                    }
+                }
             }
             ui.Update(gameTime);
 

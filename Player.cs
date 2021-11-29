@@ -17,6 +17,8 @@ namespace PixelSouls
         private MouseState mouseState;
         private KeyboardState keyState;
 
+        private Rectangle collisionBox = new Rectangle();
+
         public Player()
         {
             speed = 400;
@@ -34,6 +36,8 @@ namespace PixelSouls
             HandleInput();
             Aim();
             Move(gameTime);
+
+            collisionBox = sprite.Bounds;
         }
 
         private void HandleInput()
@@ -64,6 +68,18 @@ namespace PixelSouls
             {
                 velocity.Normalize();
             }
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                Attack();
+            }
+        }
+
+        // Temporary generic attack
+        public override void Attack()
+        {
+            GameWorld.Instantiate(new AttackHitbox(base.position, 100, 20, 50, 50));
+            //Debug.WriteLine("An attack");
         }
         private void LightAttack()
         {
