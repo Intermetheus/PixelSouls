@@ -13,12 +13,16 @@ namespace PixelSouls
     {
         private int stamina;
         private int maxStamina;
+        private bool animationLock;
+        private int animationLockCooldown;
         private Vector2 origin;
         private MouseState mouseState;
         private KeyboardState keyState;
 
         public Player()
         {
+            animationLock = false;
+            animationLockCooldown = 0;
             speed = 400;
             origin = new Vector2(25,25); //Should be in the middle of the sprites texture
         }
@@ -31,7 +35,16 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            HandleInput();
+            if (!animationLock && animationLockCooldown < 2000)
+            {
+                HandleInput();
+                animationLockCooldown++;
+            }
+            else
+            {
+                animationLock = false;
+                animationLockCooldown = 0;
+            }
             Aim();
             Move(gameTime);
         }
@@ -62,10 +75,7 @@ namespace PixelSouls
 
             if (keyState.IsKeyDown(Keys.Space))
             {
-                Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
-                Vector2 Dpos = muse - position;
-
-                velocity = Dpos;
+                Dodge();
             }
 
             if (velocity != Vector2.Zero)
@@ -125,7 +135,11 @@ namespace PixelSouls
 
         private void Dodge()
         {
+            animationLock = true;
+            Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
+            Vector2 Dpos = muse - position;
 
+            velocity = Dpos;
         }
 
         private void Aim()
