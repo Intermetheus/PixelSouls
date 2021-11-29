@@ -60,6 +60,14 @@ namespace PixelSouls
                 velocity += new Vector2(1, 0);
             }
 
+            if (keyState.IsKeyDown(Keys.Space))
+            {
+                Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
+                Vector2 Dpos = muse - position;
+
+                velocity = Dpos;
+            }
+
             if (velocity != Vector2.Zero)
             {
                 velocity.Normalize();
