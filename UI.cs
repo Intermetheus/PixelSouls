@@ -9,17 +9,29 @@ namespace PixelSouls
 {
     class UI
     {
-        protected Texture2D sprite;
-        protected Vector2 position;
+        private QuantityDisplayBar healthBar;
+        private QuantityDisplayBar staminaBar;
+        private QuantityDisplayBar bossHealthBar;
 
         public virtual void LoadContent(ContentManager content)
         {
-            //sprite = content.Load<Texture2D>("");
+            healthBar = new PlayerHealth(content, new Vector2(20, 20), Color.DarkRed, new Vector2(200,20));
+            staminaBar = new PlayerStamina(content, new Vector2(20, 40), Color.DarkGreen, new Vector2(100, 20));
+            bossHealthBar = new BossHealth(content, new Vector2(GameWorld.ScreenSize.X/2-300, GameWorld.ScreenSize.Y - 50), Color.DarkRed, new Vector2(600, 20));
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            healthBar.Update(100, 100);
+            staminaBar.Update(100, 100);
+            bossHealthBar.Update(100, 100);
         }
 
         public virtual void Draw(SpriteBatch spritebatch)
         {
-            //spritebatch.Draw(sprite, position, Color.White);
+            healthBar.Draw(spritebatch);
+            staminaBar.Draw(spritebatch);
+            bossHealthBar.Draw(spritebatch);
         }
     }
 }

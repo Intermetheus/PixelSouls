@@ -28,6 +28,8 @@ namespace PixelSouls
 
         private List<UI> uiElements;
 
+        private UI ui;
+
         public static GameState WinLoseState
         {
             get { return winLoseState; }
@@ -49,6 +51,7 @@ namespace PixelSouls
         protected override void Initialize()
         {
             gameObjects.Add(player);
+            ui = new UI();
             base.Initialize();
         }
 
@@ -60,6 +63,7 @@ namespace PixelSouls
             {
                 gameObject.LoadContent(Content);
             }
+            ui.LoadContent(Content);
 
         }
 
@@ -72,6 +76,7 @@ namespace PixelSouls
             {
                 gameObject.Update(gameTime);
             }
+            ui.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -86,6 +91,7 @@ namespace PixelSouls
             {
                 gameObject.Draw(spriteBatch);
             }
+            ui.Draw(spriteBatch);
 
             spriteBatch.End();
 
