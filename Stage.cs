@@ -24,6 +24,8 @@ namespace PixelSouls
 
         public static void LoadLevel(string levelName)
         {
+            //TODO: make this dynamic
+            //Use string to call class methods
             if (levelName == "PrototypePlayground")
             {
                 PrototypePlayground.CreateLevel(backgroundImage);
