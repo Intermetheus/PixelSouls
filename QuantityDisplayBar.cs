@@ -18,10 +18,11 @@ namespace PixelSouls
         protected Texture2D solid;
 
 
-        public QuantityDisplayBar(ContentManager content, Vector2 position, Color color)
+        public QuantityDisplayBar(ContentManager content, Vector2 position, Color color, Vector2 size)
         {
             this.position = position;
             this.color = color;
+            this.size = size;
 
             shade = content.Load<Texture2D>("shade");
             solid = content.Load<Texture2D>("solid");

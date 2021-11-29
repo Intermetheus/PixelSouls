@@ -9,9 +9,8 @@ namespace PixelSouls
 {
     class BossHealth : QuantityDisplayBar
     {
-        public BossHealth(ContentManager content, Vector2 position, Color color, Vector2 size) : base(content, position, color)
+        public BossHealth(ContentManager content, Vector2 position, Color color, Vector2 size) : base(content, position, color, size)
         {
-            base.size = size;
         }
     }
 }

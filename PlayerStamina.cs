@@ -9,9 +9,8 @@ namespace PixelSouls
 {
     class PlayerStamina : QuantityDisplayBar
     {
-        public PlayerStamina(ContentManager content, Vector2 position, Color color, Vector2 size) : base(content, position, color)
+        public PlayerStamina(ContentManager content, Vector2 position, Color color, Vector2 size) : base(content, position, color, size)
         {
-            base.size = size;
         }
     }
 }
