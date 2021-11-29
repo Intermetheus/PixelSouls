@@ -76,6 +76,10 @@ namespace PixelSouls
         }
         protected override void Move(GameTime gameTime)
         {
+            //If the window is resized, the player will remain in the middle of the screen.
+            //BUG: This can change the player, therefore moving outside the game area :(
+            position = new Vector2(GameWorld.ScreenSize.X / 2 - sprite.Width / 2, GameWorld.ScreenSize.Y / 2 - sprite.Height / 2);
+
             //Save position from before move.
             initialPosition = GameWorld.CameraPosition;
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -129,7 +133,7 @@ namespace PixelSouls
         {
             sprite = content.Load<Texture2D>("player");
             position = new Vector2(GameWorld.ScreenSize.X / 2-sprite.Width/2, GameWorld.ScreenSize.Y / 2-sprite.Height/2);
-            Stage.WorldSize = new Rectangle(0, 0, 5000, 5000); //TEMPORARY: Remove this code once Stage has been implemented
+            //Stage.WorldSize = new Rectangle(0, 0, 5000, 5000); //TEMPORARY: Remove this code once Stage has been implemented
         }
 
         public override void OnCollision(GameObject other)

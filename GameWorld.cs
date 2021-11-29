@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace PixelSouls
@@ -44,17 +45,28 @@ namespace PixelSouls
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
             screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            Window.ClientSizeChanged += OnResize;
+        }
+
+        private void OnResize (object sender, EventArgs args)
+        {
+            //When the window size is changed we have to update the screenSize field
+            screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
         }
 
         protected override void Initialize()
         {
             gameObjects.Add(player);
             base.Initialize();
+            Stage.LoadLevel("PrototypePlayground");
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            //Sprites used in the stage have to be loaded here
+            Stage.loadContent(Content);
 
             foreach (GameObject gameObject in gameObjects)
             {
@@ -68,6 +80,15 @@ namespace PixelSouls
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            gameObjects.AddRange(newGameObjects);
+            newGameObjects.Clear();
+
+            foreach (GameObject gameObject in removeGameObjects)
+            {
+                gameObjects.Remove(gameObject);
+                removeGameObjects.Clear();
+            }
+
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.Update(gameTime);
@@ -80,7 +101,7 @@ namespace PixelSouls
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack); //Makes layers work
 
             foreach (GameObject gameObject in gameObjects)
             {
@@ -98,14 +119,14 @@ namespace PixelSouls
             return true;
         }
 
-        public void Instantiate(GameObject gameObject)
+        public static void Instantiate(GameObject gameObject)
         {
-
+            newGameObjects.Add(gameObject);
         }
 
-        public void Destroy(GameObject gameObject)
+        public static void Destroy(GameObject gameObject)
         {
-
+            removeGameObjects.Add(gameObject);
         }
     }
 }
