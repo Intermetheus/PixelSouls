@@ -101,7 +101,6 @@ namespace PixelSouls
             keyState = Keyboard.GetState();
 
             velocity = Vector2.Zero;
-
             if (keyState.IsKeyDown(Keys.W))
             {
                 velocity += new Vector2(0, -1);
@@ -200,6 +199,7 @@ namespace PixelSouls
         private void Dodge()
         {
             //dodgeCost is the amount of stamina used to dodge
+            //BUG if you dodge in multiple directions, you use double statmina
             if (Stamina > dodgeCost && !isDodge)
             {
                 if (keyState.IsKeyDown(Keys.W))
