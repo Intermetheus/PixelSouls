@@ -23,7 +23,7 @@ namespace PixelSouls
         public void Update(GameTime gameTime)
         {
             healthBar.Update(100, 100);
-            staminaBar.Update(100, 100);
+            staminaBar.Update(GameWorld.player.Stamina, GameWorld.player.MaxStamina);
             bossHealthBar.Update(100, 100);
         }
 
