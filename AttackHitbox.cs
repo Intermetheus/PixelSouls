@@ -59,6 +59,7 @@ namespace PixelSouls
             GameWorld.Destroy(this);
         }
 
+
         //private void DealDamage(Character target)
         //{
         //    target.HealthProp -= attackDamage;
