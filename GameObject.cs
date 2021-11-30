@@ -36,7 +36,6 @@ namespace PixelSouls
         {
             spriteBatch.Draw(sprite, screenPosition, Color.White);
         }
-
         public abstract void OnCollision(GameObject other);
 
         public void CheckCollision(GameObject other)
@@ -49,7 +48,15 @@ namespace PixelSouls
 
         public virtual Rectangle CollisionBox()
         {
-            return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
+            if (this is Floor)
+            {
+                //No collisionBox
+                return new Rectangle(20,20, 0, 0);
+            }
+            else
+            { 
+                return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
+            }
         }
 
         public virtual void TakeDamage(int damage)
