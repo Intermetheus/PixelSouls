@@ -14,6 +14,8 @@ namespace PixelSouls
         private int stamina;
         private int maxStamina;
         private bool animationLock;
+        private bool isDodge;
+        private int dodgeSpeed;
         private int animationLockCooldown;
         private Vector2 origin;
         private MouseState mouseState;
@@ -24,6 +26,7 @@ namespace PixelSouls
             animationLock = false;
             animationLockCooldown = 0;
             speed = 400;
+            dodgeSpeed = 10; //multiplier
             origin = new Vector2(25,25); //Should be in the middle of the sprites texture
         }
 
@@ -35,7 +38,7 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            if (!animationLock && animationLockCooldown < 2000)
+            if (!animationLock && animationLockCooldown < 50)
             {
                 HandleInput();
                 animationLockCooldown++;
@@ -43,6 +46,7 @@ namespace PixelSouls
             else
             {
                 animationLock = false;
+                isDodge = false;
                 animationLockCooldown = 0;
             }
             Aim();
@@ -129,12 +133,17 @@ namespace PixelSouls
             }
             else
             {
+                if (isDodge)
+                {
+                    GameWorld.CameraPosition += velocity * speed * dodgeSpeed * deltaTime;
+                }
                 GameWorld.CameraPosition += velocity * speed * deltaTime;
             }
         }
 
         private void Dodge()
         {
+            isDodge = true;
             animationLock = true;
             Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
             Vector2 Dpos = muse - position;
