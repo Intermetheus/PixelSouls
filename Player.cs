@@ -27,6 +27,8 @@ namespace PixelSouls
         {
             animationLock = false;
             animationLockCooldown = 0;
+            stamina = 100;
+            maxStamina = 100;
             speed = 400;
             dodgeSpeed = 10; //multiplier
             origin = new Vector2(25,25); //Should be in the middle of the sprites texture
@@ -40,6 +42,7 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
+            //TODO: move this stuff out of Update() & fix dodge
             if (!animationLock && animationLockCooldown < 50)
             {
                 HandleInput();
@@ -128,8 +131,8 @@ namespace PixelSouls
             int newY = (int)(position.Y + velocity.Y * speed * deltaTime);
 
             //Future Camera position (collision with worldSize)
-            int cameraX = (int)(GameWorld.CameraPosition.X + velocity.X * speed * deltaTime);
-            int cameraY = (int)(GameWorld.CameraPosition.Y + velocity.Y * speed * deltaTime);
+            int cameraX = (int)(GameWorld.CameraPosition.X + velocity.X * speed * dodgeSpeed * deltaTime);
+            int cameraY = (int)(GameWorld.CameraPosition.Y + velocity.Y * speed * dodgeSpeed * deltaTime);
 
             //Future player collision
             Rectangle futurePosition = new Rectangle(newX, newY, sprite.Width, sprite.Height);
@@ -151,7 +154,8 @@ namespace PixelSouls
             {
                 if (isDodge)
                 {
-                    GameWorld.CameraPosition += velocity * speed * dodgeSpeed * deltaTime;
+                    int dodgeMultiplier = dodgeSpeed;
+                    GameWorld.CameraPosition += velocity * speed * dodgeMultiplier * deltaTime;
                 }
                 GameWorld.CameraPosition += velocity * speed * deltaTime;
             }
@@ -159,12 +163,17 @@ namespace PixelSouls
 
         private void Dodge()
         {
-            isDodge = true;
-            animationLock = true;
-            Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
-            Vector2 Dpos = muse - position;
+            if (stamina > 10 && !isDodge)
+            {
+                stamina -= 10;
+                dodgeSpeed = 10;
+                isDodge = true;
+                animationLock = true;
+                Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
+                Vector2 Dpos = muse - position;
 
-            velocity = Dpos;
+                velocity = Dpos;
+            }
         }
 
         private void Aim()
