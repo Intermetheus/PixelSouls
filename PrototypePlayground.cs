@@ -24,9 +24,9 @@ namespace PixelSouls
         public static void SetBackground(Texture2D sprite)
         {
             //Draw Floor
-            for (int i = 0; i <= Stage.WorldSize.Width/800+1; i++)
+            for (int i = 0; i <= Stage.WorldSize.Width / 800 + 1; i++)
             {
-                for (int j = 0; j <= Stage.WorldSize.Height; j++)
+                for (int j = 0; j <= Stage.WorldSize.Height / 800 + 1; j++)
                 {
                     GameWorld.Instantiate(new Floor(i * 800, j * 800, sprite));
                 }

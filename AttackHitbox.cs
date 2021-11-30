@@ -16,6 +16,12 @@ namespace PixelSouls
 
         private Rectangle collisionBox = new Rectangle();
 
+        public override Rectangle CollisionBoxProp
+        {
+            get { return new Rectangle((int)position.X, (int)position.Y, attackWidth, attackHight); }
+            set { collisionBox = value; }
+        }
+
         public AttackHitbox(Vector2 position, int windupMS, int attackDamage, int attackWidth, int attackHight)
         {
             this.windupMS = windupMS;
