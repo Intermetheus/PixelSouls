@@ -11,26 +11,33 @@ namespace PixelSouls
 {
     public class Player : Character
     {
+        int dodgeCost;
+        int dodgeCooldown;
+        private bool isDodge;
+        private float dodgeSpeed;
+        private bool animationLock;
+        private int animationLockCooldown;
         private int stamina;
         private int maxStamina;
-        private bool animationLock;
-        private bool isDodge;
-        private int dodgeSpeed;
-        private int animationLockCooldown;
         private Vector2 origin;
         private MouseState mouseState;
         private KeyboardState keyState;
 
         private Rectangle collisionBox = new Rectangle();
 
+        public int Stamina { get => stamina; set => stamina = value; }
+        public int MaxStamina { get => maxStamina; set => maxStamina = value; }
+
         public Player()
         {
+            dodgeCost = 50;
+            dodgeCooldown = 0;
+            dodgeSpeed = 10f; //multiplier
             animationLock = false;
             animationLockCooldown = 0;
-            stamina = 100;
-            maxStamina = 100;
+            Stamina = 100;
+            MaxStamina = 100;
             speed = 400;
-            dodgeSpeed = 10; //multiplier
             origin = new Vector2(25,25); //Should be in the middle of the sprites texture
         }
 
@@ -42,24 +49,52 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            //TODO: move this stuff out of Update() & fix dodge
-            if (!animationLock && animationLockCooldown < 50)
-            {
-                HandleInput();
-                animationLockCooldown++;
-            }
-            else
-            {
-                animationLock = false;
-                isDodge = false;
-                animationLockCooldown = 0;
-            }
+            AnimationLock(); //animationLock &Dodge
             Aim();
             Move(gameTime);
 
             collisionBox = sprite.Bounds;
         }
 
+        /// <summary>
+        /// This method gives the player stamina each time Update() is called (if your stamina is below maxStamina)
+        /// It also handles cooldowns
+        /// The higher animationLockCooldown is, the longer you can't input.
+        /// The higher dodgeCooldown is the longer you dodge
+        /// </summary>
+        private void AnimationLock()
+        {
+            if (Stamina < MaxStamina && !animationLock)
+            {
+                Stamina++;
+                if (Stamina > MaxStamina)
+                {
+                    Stamina = MaxStamina;
+                }
+            }
+
+            if (!animationLock)
+            {
+                HandleInput();
+            }
+            else
+            {
+                animationLockCooldown++;
+                dodgeCooldown++;
+                if (dodgeCooldown >= 3)
+                {
+                    dodgeCooldown = 0;
+                    isDodge = false;
+                }
+                if (animationLockCooldown >= 15)
+                {
+                    animationLockCooldown = 0;
+                    animationLock = false;
+                }
+            }
+
+        }
+        
         private void HandleInput()
         {
             mouseState = Mouse.GetState();
@@ -154,25 +189,54 @@ namespace PixelSouls
             {
                 if (isDodge)
                 {
-                    int dodgeMultiplier = dodgeSpeed;
+                    float dodgeMultiplier = dodgeSpeed;
                     GameWorld.CameraPosition += velocity * speed * dodgeMultiplier * deltaTime;
                 }
                 GameWorld.CameraPosition += velocity * speed * deltaTime;
             }
         }
 
+
         private void Dodge()
         {
-            if (stamina > 10 && !isDodge)
+            //dodgeCost is the amount of stamina used to dodge
+            if (Stamina > dodgeCost && !isDodge)
             {
-                stamina -= 10;
-                dodgeSpeed = 10;
-                isDodge = true;
-                animationLock = true;
-                Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
-                Vector2 Dpos = muse - position;
+                if (keyState.IsKeyDown(Keys.W))
+                {
+                    velocity += new Vector2(0, -1);
+                    dodgePreset();
+                }
+                if (keyState.IsKeyDown(Keys.S))
+                {
+                    velocity += new Vector2(0, 1);
+                    dodgePreset();
 
-                velocity = Dpos;
+                }
+                if (keyState.IsKeyDown(Keys.A))
+                {
+                    velocity += new Vector2(-1, 0);
+                    dodgePreset();
+
+                }
+                if (keyState.IsKeyDown(Keys.D))
+                {
+                    velocity += new Vector2(1, 0);
+                    dodgePreset();
+                }
+
+                void dodgePreset()
+                {
+                    Stamina -= dodgeCost;
+                    dodgeSpeed = 10f; //multiplier used in Move()
+                    animationLock = true;
+                    isDodge = true;
+                }
+
+            //    Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
+            //    Vector2 Dpos = muse - position;
+
+            //    velocity = Dpos;
             }
         }
 
