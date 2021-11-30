@@ -14,16 +14,23 @@ namespace PixelSouls
         private int stamina;
         private int maxStamina;
         private bool animationLock;
+        private bool isDodge;
+        private int dodgeSpeed;
         private int animationLockCooldown;
         private Vector2 origin;
         private MouseState mouseState;
         private KeyboardState keyState;
 
+        private Rectangle collisionBox = new Rectangle();
+
         public Player()
         {
             animationLock = false;
             animationLockCooldown = 0;
+            stamina = 100;
+            maxStamina = 100;
             speed = 400;
+            dodgeSpeed = 10; //multiplier
             origin = new Vector2(25,25); //Should be in the middle of the sprites texture
         }
 
@@ -35,7 +42,8 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            if (!animationLock && animationLockCooldown < 2000)
+            //TODO: move this stuff out of Update() & fix dodge
+            if (!animationLock && animationLockCooldown < 50)
             {
                 HandleInput();
                 animationLockCooldown++;
@@ -43,10 +51,13 @@ namespace PixelSouls
             else
             {
                 animationLock = false;
+                isDodge = false;
                 animationLockCooldown = 0;
             }
             Aim();
             Move(gameTime);
+
+            collisionBox = sprite.Bounds;
         }
 
         private void HandleInput()
@@ -82,6 +93,18 @@ namespace PixelSouls
             {
                 velocity.Normalize();
             }
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                Attack();
+            }
+        }
+
+        // Temporary generic attack
+        public override void Attack()
+        {
+            GameWorld.Instantiate(new AttackHitbox(base.position, 100, 20, 50, 50));
+            //Debug.WriteLine("An attack");
         }
         private void LightAttack()
         {
@@ -108,8 +131,8 @@ namespace PixelSouls
             int newY = (int)(position.Y + velocity.Y * speed * deltaTime);
 
             //Future Camera position (collision with worldSize)
-            int cameraX = (int)(GameWorld.CameraPosition.X + velocity.X * speed * deltaTime);
-            int cameraY = (int)(GameWorld.CameraPosition.Y + velocity.Y * speed * deltaTime);
+            int cameraX = (int)(GameWorld.CameraPosition.X + velocity.X * speed * dodgeSpeed * deltaTime);
+            int cameraY = (int)(GameWorld.CameraPosition.Y + velocity.Y * speed * dodgeSpeed * deltaTime);
 
             //Future player collision
             Rectangle futurePosition = new Rectangle(newX, newY, sprite.Width, sprite.Height);
@@ -129,17 +152,28 @@ namespace PixelSouls
             }
             else
             {
+                if (isDodge)
+                {
+                    int dodgeMultiplier = dodgeSpeed;
+                    GameWorld.CameraPosition += velocity * speed * dodgeMultiplier * deltaTime;
+                }
                 GameWorld.CameraPosition += velocity * speed * deltaTime;
             }
         }
 
         private void Dodge()
         {
-            animationLock = true;
-            Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
-            Vector2 Dpos = muse - position;
+            if (stamina > 10 && !isDodge)
+            {
+                stamina -= 10;
+                dodgeSpeed = 10;
+                isDodge = true;
+                animationLock = true;
+                Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
+                Vector2 Dpos = muse - position;
 
-            velocity = Dpos;
+                velocity = Dpos;
+            }
         }
 
         private void Aim()
