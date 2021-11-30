@@ -94,7 +94,6 @@ namespace PixelSouls
             foreach (GameObject gameObject in removeGameObjects)
             {
                 gameObjects.Remove(gameObject);
-                //removeGameObjects.Clear();
             }
             removeGameObjects.Clear();
 
