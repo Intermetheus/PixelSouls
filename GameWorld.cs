@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace PixelSouls
 {
@@ -92,13 +93,19 @@ namespace PixelSouls
             foreach (GameObject gameObject in removeGameObjects)
             {
                 gameObjects.Remove(gameObject);
-                removeGameObjects.Clear();
+                //removeGameObjects.Clear();
             }
+            removeGameObjects.Clear();
 
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.Update(gameTime);
+                foreach (GameObject other in gameObjects)
+                {
+                    gameObject.CheckCollision(other);
+                }
             }
+
             ui.Update(gameTime);
 
             base.Update(gameTime);
