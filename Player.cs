@@ -23,7 +23,7 @@ namespace PixelSouls
         private MouseState mouseState;
         private KeyboardState keyState;
 
-        //private Rectangle collisionBox = new Rectangle();
+        private Rectangle collisionBox = new Rectangle();
 
 
         public int Stamina { get => stamina; set => stamina = value; }
