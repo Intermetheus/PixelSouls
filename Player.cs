@@ -41,25 +41,29 @@ namespace PixelSouls
         {
             dodgeCost = 50;
             dodgeCooldown = 0;
-            dodgeSpeed = 10f; //multiplier
+            dodgeSpeed = 10f; // multiplier
             animationLock = false;
             iFrame = false;
             animationLockCooldown = 0;
+
+            health = 100;
+            maxHealth = 100;
             Stamina = 100;
             MaxStamina = 100;
+
             speed = 400;
-            origin = new Vector2(25,25); //Should be in the middle of the sprites texture
+            origin = new Vector2(25,25); // Should be in the middle of the sprites texture
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Debug.WriteLine();
-            spriteBatch.Draw(sprite, position, null, Color.White, rotation + 3.14f, origin, 1F, SpriteEffects.None, 0.2f);
+            spriteBatch.Draw(sprite, position, null, Color.White, rotation + 3.14f, origin, 1F, SpriteEffects.None, 0.2f); // Why the fuck are we adding pi???
         }
 
         public override void Update(GameTime gameTime)
         {
-            AnimationLock(); //animationLock &Dodge
+            AnimationLock(); // animationLock & Dodge
             Aim();
             Move(gameTime);
             CheckIframes();
@@ -186,7 +190,7 @@ namespace PixelSouls
         // Temporary generic attack
         public override void Attack()
         {
-            GameWorld.Instantiate(new AttackHitbox(position, 100, 20, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 20, 50, 50));
             //Debug.WriteLine("An attack");
         }
         private void LightAttack()
@@ -210,15 +214,16 @@ namespace PixelSouls
             bool isColliding = false;
 
             //Create future player position(collision with objects)
-            int newX = (int)(position.X + velocity.X * speed * deltaTime);
-            int newY = (int)(position.Y + velocity.Y * speed * deltaTime);
+            // Unused?
+            int newX = (int)(position.X - origin.X + velocity.X * speed * deltaTime);
+            int newY = (int)(position.Y - origin.Y + velocity.Y * speed * deltaTime);
 
             //Future Camera position (collision with worldSize)
-            int cameraX = (int)(GameWorld.CameraPosition.X + velocity.X * speed * dodgeSpeed * deltaTime);
-            int cameraY = (int)(GameWorld.CameraPosition.Y + velocity.Y * speed * dodgeSpeed * deltaTime);
+            int cameraX = (int)(GameWorld.CameraPosition.X - origin.X + velocity.X * speed * dodgeSpeed * deltaTime);
+            int cameraY = (int)(GameWorld.CameraPosition.Y - origin.Y + velocity.Y * speed * dodgeSpeed * deltaTime);
 
             //Future player collision
-            Rectangle futurePosition = new Rectangle(newX, newY, sprite.Width, sprite.Height);
+            Rectangle futurePosition = new Rectangle(newX, newY, sprite.Width, sprite.Height); // Unused?
             Rectangle futureCamera = new Rectangle(cameraX, cameraY, sprite.Width, sprite.Height);
 
             //For collision with worldSize use future camera position
