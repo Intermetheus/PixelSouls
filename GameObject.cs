@@ -17,11 +17,11 @@ namespace PixelSouls
         protected float speed;
         protected float fps;
 
-        private Rectangle collisionBox;
+        protected Rectangle collisionBox;
 
         public virtual Rectangle CollisionBoxProp
         {
-            get { return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height); }
+            get { return collisionBox; }
             set { collisionBox = value; }
         }
 

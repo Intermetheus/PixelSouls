@@ -32,6 +32,7 @@ namespace PixelSouls
 
         private Rectangle collisionBox = new Rectangle();
 
+
         public int Stamina { get => stamina; set => stamina = value; }
         public int MaxStamina { get => maxStamina; set => maxStamina = value; }
 
@@ -60,7 +61,9 @@ namespace PixelSouls
             Aim();
             Move(gameTime);
 
-            collisionBox = sprite.Bounds;
+            collisionBox = new Rectangle((int)position.X - (int)origin.X, (int)position.Y - (int)origin.Y, sprite.Width, sprite.Height);
+            //collisionBox.X -= (int)origin.X;
+            //collisionBox.Y -= (int)origin.Y;
         }
 
         /// <summary>
