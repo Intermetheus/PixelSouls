@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 
@@ -26,6 +27,8 @@ namespace PixelSouls
         public static Player player = new Player();
 
         private static GameState winLoseState;
+
+        private Song backgroundMusic;
 
         private ButtonState leftMouseButton;
 
@@ -71,6 +74,11 @@ namespace PixelSouls
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            backgroundMusic = Content.Load<Song>("music");
+            MediaPlayer.Volume = 0.3f;
+            MediaPlayer.Play(backgroundMusic);
+            MediaPlayer.IsRepeating = true;
 
             collisionTexture = Content.Load<Texture2D>("collisionTexture");
 
