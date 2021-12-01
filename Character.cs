@@ -16,7 +16,7 @@ namespace PixelSouls
         protected float rotation;
 
         protected int windupMS = 200;
-        protected int attackDamage = 25;
+        protected int attackDamage = 1;
         protected int attackWidth = 100;
         protected int attackHight = 50;
 
@@ -24,6 +24,11 @@ namespace PixelSouls
         {
             get { return health; }
             set { health = value; }
+        }
+        public int MaxHealthProp
+        {
+            get { return maxHealth; }
+            set { maxHealth = value; }
         }
 
 
@@ -43,10 +48,10 @@ namespace PixelSouls
             position += ((velocity * speed) * _deltaTime);
         }
 
-        public void Rotate(Vector2 target, Vector2 self)
+        public void Rotate(Vector2 self, Vector2 target)
         {
-            Vector2 target1 = new Vector2(target.X, target.Y);
-            Vector2 Dpos = self - target1; //Vector between target and self
+            //Vector2 target1 = new Vector2(target.X, target.Y); // What the fuck does this line even do?
+            Vector2 Dpos = target - self; //Vector between target and self
 
             rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
