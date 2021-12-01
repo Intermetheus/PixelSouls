@@ -130,6 +130,16 @@ namespace PixelSouls
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.Draw(spriteBatch);
+                #if DEBUG
+                if (gameObject is Player)
+                {
+                    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
+                }
+                else
+                {
+                    DrawCollisionBox(gameObject.CollisionBoxProp);
+                }
+                #endif
             }
             ui.Draw(spriteBatch);
 
@@ -163,10 +173,27 @@ namespace PixelSouls
             int colX = collisionBox.X - (int)CameraPosition.X + (int)ScreenSize.X / 2;
             int colY = collisionBox.Y - (int)CameraPosition.Y + (int)ScreenSize.Y / 2;
 
-            Rectangle topLine = new Rectangle(colX, colY, collisionBox.Width-100, 1);
-            Rectangle bottomLine = new Rectangle(colX, colY + collisionBox.Height-100, collisionBox.Width -100, 1);
-            Rectangle rightLine = new Rectangle(colX + collisionBox.Width-100, colY, 1, collisionBox.Height-100);
-            Rectangle leftLine = new Rectangle(colX, colY, 1, collisionBox.Height-100);
+            Rectangle topLine = new Rectangle(colX, colY, collisionBox.Width, 1);
+            Rectangle bottomLine = new Rectangle(colX, colY + collisionBox.Height, collisionBox.Width , 1);
+            Rectangle rightLine = new Rectangle(colX + collisionBox.Width, colY, 1, collisionBox.Height);
+            Rectangle leftLine = new Rectangle(colX, colY, 1, collisionBox.Height);
+
+            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
+            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
+            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
+            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
+        }
+
+        private void DrawCollisionBoxPlayer(Rectangle rect)
+        {
+            Rectangle collisionBox = rect;
+            int colX = collisionBox.X;
+            int colY = collisionBox.Y;
+
+            Rectangle topLine = new Rectangle(colX, colY, collisionBox.Width, 1);
+            Rectangle bottomLine = new Rectangle(colX, colY + collisionBox.Height, collisionBox.Width, 1);
+            Rectangle rightLine = new Rectangle(colX + collisionBox.Width, colY, 1, collisionBox.Height);
+            Rectangle leftLine = new Rectangle(colX, colY, 1, collisionBox.Height);
 
             spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
             spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
