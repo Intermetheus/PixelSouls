@@ -18,7 +18,7 @@ namespace PixelSouls
 
         public override Rectangle CollisionBoxProp
         {
-            get { return new Rectangle((int)collisionBox.X, (int)collisionBox.Y, attackWidth, attackHight); }
+            get { return new Rectangle((int)position.X, (int)position.Y, attackWidth, attackHight); }
             set { collisionBox = value; }
         }
 
@@ -58,7 +58,6 @@ namespace PixelSouls
             base.Update(gameTime);
             GameWorld.Destroy(this);
         }
-
 
         //private void DealDamage(Character target)
         //{

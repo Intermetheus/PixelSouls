@@ -128,7 +128,7 @@ namespace PixelSouls
                 velocity.Normalize();
             }
 
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 Attack();
             }
@@ -137,7 +137,7 @@ namespace PixelSouls
         // Temporary generic attack
         public override void Attack()
         {
-            GameWorld.Instantiate(new AttackHitbox(position, 100, 20, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(base.position, 100, 20, 50, 50));
             //Debug.WriteLine("An attack");
         }
         private void LightAttack()
@@ -153,7 +153,7 @@ namespace PixelSouls
         {
             //If the window is resized, the player will remain in the middle of the screen.
             //BUG: This can change the player, therefore moving outside the game area :(
-            position = new Vector2(GameWorld.ScreenSize.X / 2, GameWorld.ScreenSize.Y / 2);
+            position = new Vector2(GameWorld.ScreenSize.X / 2 - sprite.Width / 2, GameWorld.ScreenSize.Y / 2 - sprite.Height / 2);
 
             //Save position from before move.
             initialPosition = GameWorld.CameraPosition;
