@@ -50,7 +50,6 @@ namespace PixelSouls
 
         public void Rotate(Vector2 self, Vector2 target)
         {
-            //Vector2 target1 = new Vector2(target.X, target.Y); // What the fuck does this line even do?
             Vector2 Dpos = target - self; //Vector between target and self
 
             rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);

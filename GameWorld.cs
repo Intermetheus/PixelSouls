@@ -76,7 +76,7 @@ namespace PixelSouls
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             backgroundMusic = Content.Load<Song>("music");
-            MediaPlayer.Volume = 0.3f;
+            MediaPlayer.Volume = 0.3f; //BUG: sound level only works sometimes
             MediaPlayer.Play(backgroundMusic);
             MediaPlayer.IsRepeating = true;
 

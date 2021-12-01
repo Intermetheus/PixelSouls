@@ -26,7 +26,7 @@ namespace PixelSouls
         private KeyboardState keyState;
 
         private SoundEffectInstance dodgeSound;
-        private const float delay = 14;
+        private const float delay = 14; //sound delay
         private float remainingDelay = 0;
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance walk2Sound;
@@ -58,7 +58,7 @@ namespace PixelSouls
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Debug.WriteLine();
-            spriteBatch.Draw(sprite, position, null, Color.White, rotation + 3.14f, origin, 1F, SpriteEffects.None, 0.2f); // Why the fuck are we adding pi???
+            spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.2f); // Why the fuck are we adding pi???
         }
 
         public override void Update(GameTime gameTime)
