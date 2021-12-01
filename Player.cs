@@ -30,7 +30,7 @@ namespace PixelSouls
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance walk2Sound;
 
-        private Rectangle collisionBox = new Rectangle();
+        //private Rectangle collisionBox = new Rectangle();
 
 
         public int Stamina { get => stamina; set => stamina = value; }
