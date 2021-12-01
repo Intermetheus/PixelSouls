@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -22,6 +23,12 @@ namespace PixelSouls
         private Vector2 origin;
         private MouseState mouseState;
         private KeyboardState keyState;
+
+        private SoundEffectInstance dodgeSound;
+        private const float delay = 14;
+        private float remainingDelay = 0;
+        private SoundEffectInstance walk1Sound;
+        private SoundEffectInstance walk2Sound;
 
         private Rectangle collisionBox = new Rectangle();
 
@@ -104,18 +111,32 @@ namespace PixelSouls
             if (keyState.IsKeyDown(Keys.W))
             {
                 velocity += new Vector2(0, -1);
+                playWalkSound();
             }
             if (keyState.IsKeyDown(Keys.S))
             {
                 velocity += new Vector2(0, 1);
+                playWalkSound();
             }
             if (keyState.IsKeyDown(Keys.A))
             {
                 velocity += new Vector2(-1, 0);
+                playWalkSound();
             }
             if (keyState.IsKeyDown(Keys.D))
             {
                 velocity += new Vector2(1, 0);
+                playWalkSound();
+            }
+            
+            //Stop walkSound when movement keys are released
+            if (velocity == Vector2.Zero)
+            {
+                remainingDelay -= 1;
+                if (remainingDelay <= 0)
+                {
+                    walk1Sound.Stop();
+                }
             }
 
             if (keyState.IsKeyDown(Keys.Space))
@@ -132,7 +153,16 @@ namespace PixelSouls
             {
                 Attack();
             }
+            void playWalkSound()
+            {
+                if (walk1Sound.State == SoundState.Stopped)
+                {
+                    remainingDelay = delay;
+                    walk1Sound.Play();
+                }
+            }
         }
+
 
         // Temporary generic attack
         public override void Attack()
@@ -231,6 +261,7 @@ namespace PixelSouls
                     dodgeSpeed = 10f; //multiplier used in Move()
                     animationLock = true;
                     isDodge = true;
+                    dodgeSound.Play();
                 }
 
             //    Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
@@ -243,17 +274,18 @@ namespace PixelSouls
         private void Aim()
         {
             Rotate(position, new Vector2(mouseState.X, mouseState.Y));
-            //Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
-            //Vector2 Dpos = position - mousePosition; //Vector between player and mouse
-
-            //rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
 
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("player");
             position = new Vector2(GameWorld.ScreenSize.X / 2-sprite.Width/2, GameWorld.ScreenSize.Y / 2-sprite.Height/2);
-            //Stage.WorldSize = new Rectangle(0, 0, 5000, 5000); //TEMPORARY: Remove this code once Stage has been implemented
+
+            dodgeSound = content.Load<SoundEffect>("dodge").CreateInstance();
+            walk1Sound = content.Load<SoundEffect>("walk1").CreateInstance();
+            walk2Sound = content.Load<SoundEffect>("walk2").CreateInstance();
+
+            walk1Sound.Volume = 0.5f;
         }
 
         public override void OnCollision(GameObject other)
