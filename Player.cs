@@ -14,7 +14,8 @@ namespace PixelSouls
     {
         int dodgeCost;
         int dodgeCooldown;
-        private bool isDodge;
+        private bool iFrame;
+        private bool isDodge; //this is your iframe
         private float dodgeSpeed;
         private bool animationLock;
         private int animationLockCooldown;
@@ -42,6 +43,7 @@ namespace PixelSouls
             dodgeCooldown = 0;
             dodgeSpeed = 10f; //multiplier
             animationLock = false;
+            iFrame = false;
             animationLockCooldown = 0;
             Stamina = 100;
             MaxStamina = 100;
@@ -60,10 +62,24 @@ namespace PixelSouls
             AnimationLock(); //animationLock &Dodge
             Aim();
             Move(gameTime);
+            CheckIframes();
 
             collisionBox = new Rectangle((int)position.X - (int)origin.X, (int)position.Y - (int)origin.Y, sprite.Width, sprite.Height);
             //collisionBox.X -= (int)origin.X;
             //collisionBox.Y -= (int)origin.Y;
+        }
+
+        private void CheckIframes()
+        {
+            if (isDodge)
+            {
+                iFrame = true;
+            }
+            else
+            {
+                iFrame = false;
+            }
+            //Add other iFrame checks here
         }
 
         /// <summary>
