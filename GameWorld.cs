@@ -76,14 +76,14 @@ namespace PixelSouls
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             backgroundMusic = Content.Load<Song>("music");
+            MediaPlayer.Volume = 0.3f; //BUG: sound level only works sometimes
             MediaPlayer.Play(backgroundMusic);
-            MediaPlayer.Volume = 0.2f;
             MediaPlayer.IsRepeating = true;
 
             collisionTexture = Content.Load<Texture2D>("collisionTexture");
 
             //Sprites used in the stage have to be loaded here
-            Stage.LoadContent(Content);
+            Stage.loadContent(Content);
 
             foreach (GameObject gameObject in gameObjects)
             {
@@ -139,7 +139,7 @@ namespace PixelSouls
             {
                 gameObject.Draw(spriteBatch);
                 #if DEBUG
-                if (gameObject is Player)
+                if (gameObject is Player || gameObject is AttackHitbox)
                 {
                     DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
                 }
@@ -186,10 +186,10 @@ namespace PixelSouls
             Rectangle rightLine = new Rectangle(colX + collisionBox.Width, colY, 1, collisionBox.Height);
             Rectangle leftLine = new Rectangle(colX, colY, 1, collisionBox.Height);
 
-            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
+            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
         }
 
         private void DrawCollisionBoxPlayer(Rectangle rect)
@@ -203,10 +203,10 @@ namespace PixelSouls
             Rectangle rightLine = new Rectangle(colX + collisionBox.Width, colY, 1, collisionBox.Height);
             Rectangle leftLine = new Rectangle(colX, colY, 1, collisionBox.Height);
 
-            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
+            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
         }
     }
 }
