@@ -56,7 +56,7 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            //base.Update(gameTime);
             GameWorld.Destroy(this);
         }
 

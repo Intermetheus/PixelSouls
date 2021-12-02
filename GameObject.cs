@@ -12,10 +12,13 @@ namespace PixelSouls
         protected Vector2 screenPosition;
         protected Vector2 position;
         protected Vector2 velocity;
+        protected Vector2 origin;
         protected Texture2D sprite;
         protected Texture2D[] sprites;
         protected float speed;
         protected float fps;
+        protected float rotation;
+
 
         protected Rectangle collisionBox;
 
@@ -30,11 +33,12 @@ namespace PixelSouls
         public virtual void Update(GameTime gameTime)
         {
             screenPosition = position - GameWorld.CameraPosition;
+            collisionBox = new Rectangle((int)screenPosition.X - (int)origin.X, (int)screenPosition.Y - (int)origin.Y, sprite.Width, sprite.Height);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, screenPosition, Color.White);
+            spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.4f);
         }
         public abstract void OnCollision(GameObject other);
 
@@ -74,6 +78,11 @@ namespace PixelSouls
             {
                 return false;
             }
+        }
+
+        public void CreateOrigin()
+        {
+            origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
         }
     }
 }
