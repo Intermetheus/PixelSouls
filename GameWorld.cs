@@ -83,7 +83,7 @@ namespace PixelSouls
             collisionTexture = Content.Load<Texture2D>("collisionTexture");
 
             //Sprites used in the stage have to be loaded here
-            Stage.loadContent(Content);
+            Stage.LoadContent(Content);
 
             foreach (GameObject gameObject in gameObjects)
             {
