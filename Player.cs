@@ -276,11 +276,15 @@ namespace PixelSouls
 
                 void dodgePreset()
                 {
-                    Stamina -= dodgeCost;
-                    dodgeSpeed = 10f; //multiplier used in Move()
-                    animationLock = true;
-                    isDodge = true;
-                    dodgeSound.Play();
+                    //Prevents the player from dodging twice(losing twice stamina) when moving diagonally.
+                    if (!isDodge)
+                    {
+                        Stamina -= dodgeCost;
+                        dodgeSpeed = 10f; //multiplier used in Move()
+                        animationLock = true;
+                        isDodge = true;
+                        dodgeSound.Play();
+                    }
                 }
 
             //    Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
