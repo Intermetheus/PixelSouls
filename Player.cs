@@ -190,7 +190,7 @@ namespace PixelSouls
         // Temporary generic attack
         public override void Attack()
         {
-            GameWorld.Instantiate(new AttackHitbox(position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 20, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 20, 50, 50));
             //Debug.WriteLine("An attack");
         }
         private void LightAttack()
