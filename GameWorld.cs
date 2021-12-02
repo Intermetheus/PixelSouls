@@ -142,15 +142,15 @@ namespace PixelSouls
             {
                 gameObject.Draw(spriteBatch);
 #if DEBUG
-                //DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
-                if (gameObject is Player || gameObject is AttackHitbox)
-                {
-                    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
-                }
-                else
-                {
-                    DrawCollisionBox(gameObject.CollisionBoxProp);
-                }
+                DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
+                //if (gameObject is Player || gameObject is AttackHitbox || gameObject is Boss)
+                //{
+                //    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
+                //}
+                //else
+                //{
+                //    DrawCollisionBox(gameObject.CollisionBoxProp);
+                //}
 #endif
             }
             ui.Draw(spriteBatch);

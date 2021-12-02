@@ -8,11 +8,19 @@ namespace PixelSouls
 {
     abstract public class Enemy : Character
     {
-
+        //public float timer;
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            collisionBox = new Rectangle((int)position.X - (int)origin.X, (int)position.Y - (int)origin.Y, sprite.Width, sprite.Height);
+            //if(timer > 360)
+            //{
+            //    timer = 0;
+            //}
+            //else
+            //{
+            //    timer++;
+            //}
+            //rotation = timer;
         }
 
         public override void Attack()

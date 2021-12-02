@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PixelSouls
 {
@@ -11,10 +12,8 @@ namespace PixelSouls
         protected int health;
         protected int maxHealth;
         protected bool isAlive;
-
-        protected Vector2 origin;
-        protected Vector2 initialPosition;
-        protected float rotation;
+      
+        protected Vector2 initialPosition;       
 
         protected int windupMS = 200;
         protected int attackDamage = 1;
@@ -56,10 +55,10 @@ namespace PixelSouls
             rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
 
-        public void CreateOrigin()
-        {
-            origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
-        }
+        //public void CreateOrigin()
+        //{
+        //    origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
+        //}
 
         public override void TakeDamage(int damage)
         {
