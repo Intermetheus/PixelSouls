@@ -30,11 +30,12 @@ namespace PixelSouls
         public virtual void Update(GameTime gameTime)
         {
             screenPosition = position - GameWorld.CameraPosition;
+            collisionBox = new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, screenPosition, Color.White);
+            spriteBatch.Draw(sprite, screenPosition, null, Color.White, 0, Vector2.Zero, 1F, SpriteEffects.None, 0.4f);
         }
         public abstract void OnCollision(GameObject other);
 

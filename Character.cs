@@ -11,7 +11,8 @@ namespace PixelSouls
         protected int health;
         protected int maxHealth;
         protected bool isAlive;
-        
+
+        protected Vector2 origin;
         protected Vector2 initialPosition;
         protected float rotation;
 
@@ -53,6 +54,11 @@ namespace PixelSouls
             Vector2 Dpos = target - self; //Vector between target and self
 
             rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
+        }
+
+        public void CreateOrigin()
+        {
+            origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
         }
 
         public override void TakeDamage(int damage)
