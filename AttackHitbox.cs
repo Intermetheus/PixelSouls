@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace PixelSouls
@@ -14,11 +15,11 @@ namespace PixelSouls
         private int attackWidth;
         private int attackHight;
 
-        private Rectangle collisionBox = new Rectangle();
+        //private Rectangle collisionBox = new Rectangle();
 
         public override Rectangle CollisionBoxProp
         {
-            get { return new Rectangle((int)position.X, (int)position.Y, attackWidth, attackHight); }
+            get { return new Rectangle(collisionBox.X, collisionBox.Y, attackWidth, attackHight); }
             set { collisionBox = value; }
         }
 
@@ -58,6 +59,7 @@ namespace PixelSouls
             base.Update(gameTime);
             GameWorld.Destroy(this);
         }
+
 
         //private void DealDamage(Character target)
         //{

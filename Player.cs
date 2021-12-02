@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,7 +14,8 @@ namespace PixelSouls
     {
         int dodgeCost;
         int dodgeCooldown;
-        private bool isDodge;
+        private bool iFrame;
+        private bool isDodge; //this is your iframe
         private float dodgeSpeed;
         private bool animationLock;
         private int animationLockCooldown;
@@ -23,7 +25,14 @@ namespace PixelSouls
         private MouseState mouseState;
         private KeyboardState keyState;
 
-        private Rectangle collisionBox = new Rectangle();
+        private SoundEffectInstance dodgeSound;
+        private const float delay = 14; //sound delay
+        private float remainingDelay = 0;
+        private SoundEffectInstance walk1Sound;
+        private SoundEffectInstance walk2Sound;
+
+        //private Rectangle collisionBox = new Rectangle();
+
 
         public int Stamina { get => stamina; set => stamina = value; }
         public int MaxStamina { get => maxStamina; set => maxStamina = value; }
@@ -32,28 +41,49 @@ namespace PixelSouls
         {
             dodgeCost = 50;
             dodgeCooldown = 0;
-            dodgeSpeed = 10f; //multiplier
+            dodgeSpeed = 10f; // multiplier
             animationLock = false;
+            iFrame = false;
             animationLockCooldown = 0;
+
+            health = 100;
+            maxHealth = 100;
             Stamina = 100;
             MaxStamina = 100;
+
             speed = 400;
-            origin = new Vector2(25,25); //Should be in the middle of the sprites texture
+            origin = new Vector2(25,25); // Should be in the middle of the sprites texture
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Debug.WriteLine();
-            spriteBatch.Draw(sprite, position, null, Color.White, rotation + 3.14f, origin, 1F, SpriteEffects.None, 0.2f);
+            spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.2f); // Why the fuck are we adding pi???
         }
 
         public override void Update(GameTime gameTime)
         {
-            AnimationLock(); //animationLock &Dodge
+            AnimationLock(); // animationLock & Dodge
             Aim();
             Move(gameTime);
+            CheckIframes();
 
-            collisionBox = sprite.Bounds;
+            collisionBox = new Rectangle((int)position.X - (int)origin.X, (int)position.Y - (int)origin.Y, sprite.Width, sprite.Height);
+            //collisionBox.X -= (int)origin.X;
+            //collisionBox.Y -= (int)origin.Y;
+        }
+
+        private void CheckIframes()
+        {
+            if (isDodge)
+            {
+                iFrame = true;
+            }
+            else
+            {
+                iFrame = false;
+            }
+            //Add other iFrame checks here
         }
 
         /// <summary>
@@ -101,22 +131,35 @@ namespace PixelSouls
             keyState = Keyboard.GetState();
 
             velocity = Vector2.Zero;
-
             if (keyState.IsKeyDown(Keys.W))
             {
                 velocity += new Vector2(0, -1);
+                playWalkSound();
             }
             if (keyState.IsKeyDown(Keys.S))
             {
                 velocity += new Vector2(0, 1);
+                playWalkSound();
             }
             if (keyState.IsKeyDown(Keys.A))
             {
                 velocity += new Vector2(-1, 0);
+                playWalkSound();
             }
             if (keyState.IsKeyDown(Keys.D))
             {
                 velocity += new Vector2(1, 0);
+                playWalkSound();
+            }
+            
+            //Stop walkSound when movement keys are released
+            if (velocity == Vector2.Zero)
+            {
+                remainingDelay -= 1;
+                if (remainingDelay <= 0)
+                {
+                    walk1Sound.Stop();
+                }
             }
 
             if (keyState.IsKeyDown(Keys.Space))
@@ -129,16 +172,25 @@ namespace PixelSouls
                 velocity.Normalize();
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 Attack();
             }
+            void playWalkSound()
+            {
+                if (walk1Sound.State == SoundState.Stopped)
+                {
+                    remainingDelay = delay;
+                    walk1Sound.Play();
+                }
+            }
         }
+
 
         // Temporary generic attack
         public override void Attack()
         {
-            GameWorld.Instantiate(new AttackHitbox(base.position, 100, 20, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 20, 50, 50));
             //Debug.WriteLine("An attack");
         }
         private void LightAttack()
@@ -154,7 +206,7 @@ namespace PixelSouls
         {
             //If the window is resized, the player will remain in the middle of the screen.
             //BUG: This can change the player, therefore moving outside the game area :(
-            position = new Vector2(GameWorld.ScreenSize.X / 2 - sprite.Width / 2, GameWorld.ScreenSize.Y / 2 - sprite.Height / 2);
+            position = new Vector2(GameWorld.ScreenSize.X / 2, GameWorld.ScreenSize.Y / 2);
 
             //Save position from before move.
             initialPosition = GameWorld.CameraPosition;
@@ -162,15 +214,16 @@ namespace PixelSouls
             bool isColliding = false;
 
             //Create future player position(collision with objects)
-            int newX = (int)(position.X + velocity.X * speed * deltaTime);
-            int newY = (int)(position.Y + velocity.Y * speed * deltaTime);
+            // Unused?
+            int newX = (int)(position.X - origin.X + velocity.X * speed * deltaTime);
+            int newY = (int)(position.Y - origin.Y + velocity.Y * speed * deltaTime);
 
             //Future Camera position (collision with worldSize)
-            int cameraX = (int)(GameWorld.CameraPosition.X + velocity.X * speed * dodgeSpeed * deltaTime);
-            int cameraY = (int)(GameWorld.CameraPosition.Y + velocity.Y * speed * dodgeSpeed * deltaTime);
+            int cameraX = (int)(GameWorld.CameraPosition.X - origin.X + velocity.X * speed * dodgeSpeed * deltaTime);
+            int cameraY = (int)(GameWorld.CameraPosition.Y - origin.Y + velocity.Y * speed * dodgeSpeed * deltaTime);
 
             //Future player collision
-            Rectangle futurePosition = new Rectangle(newX, newY, sprite.Width, sprite.Height);
+            Rectangle futurePosition = new Rectangle(newX, newY, sprite.Width, sprite.Height); // Unused?
             Rectangle futureCamera = new Rectangle(cameraX, cameraY, sprite.Width, sprite.Height);
 
             //For collision with worldSize use future camera position
@@ -200,6 +253,7 @@ namespace PixelSouls
         private void Dodge()
         {
             //dodgeCost is the amount of stamina used to dodge
+            //BUG if you dodge in multiple directions, you use double statmina
             if (Stamina > dodgeCost && !isDodge)
             {
                 if (keyState.IsKeyDown(Keys.W))
@@ -231,6 +285,7 @@ namespace PixelSouls
                     dodgeSpeed = 10f; //multiplier used in Move()
                     animationLock = true;
                     isDodge = true;
+                    dodgeSound.Play();
                 }
 
             //    Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
@@ -243,17 +298,18 @@ namespace PixelSouls
         private void Aim()
         {
             Rotate(position, new Vector2(mouseState.X, mouseState.Y));
-            //Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
-            //Vector2 Dpos = position - mousePosition; //Vector between player and mouse
-
-            //rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
 
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("player");
             position = new Vector2(GameWorld.ScreenSize.X / 2-sprite.Width/2, GameWorld.ScreenSize.Y / 2-sprite.Height/2);
-            //Stage.WorldSize = new Rectangle(0, 0, 5000, 5000); //TEMPORARY: Remove this code once Stage has been implemented
+
+            dodgeSound = content.Load<SoundEffect>("dodge").CreateInstance();
+            walk1Sound = content.Load<SoundEffect>("walk1").CreateInstance();
+            walk2Sound = content.Load<SoundEffect>("walk2").CreateInstance();
+
+            walk1Sound.Volume = 0.5f;
         }
 
         public override void OnCollision(GameObject other)

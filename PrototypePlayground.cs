@@ -31,6 +31,8 @@ namespace PixelSouls
                     GameWorld.Instantiate(new Floor(i * 800, j * 800, sprite));
                 }
             }
+            //Draw walls
+
         }
     }
 }

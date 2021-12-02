@@ -35,8 +35,8 @@ namespace PixelSouls
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(shade, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), null, Color.Black, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(solid, new Rectangle((int)position.X + border, (int)position.Y + border, (int)(((int)size.X - border*2)*percentage), (int)size.Y - border*2), null, color, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(shade, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), null, Color.Black, 0, Vector2.Zero, SpriteEffects.None, 1f);
+            spriteBatch.Draw(solid, new Rectangle((int)position.X + border, (int)position.Y + border, (int)(((int)size.X - border*2)*percentage), (int)size.Y - border*2), null, color, 0, Vector2.Zero, SpriteEffects.None, 1f);
         }
 
 
