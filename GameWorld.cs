@@ -76,8 +76,8 @@ namespace PixelSouls
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             backgroundMusic = Content.Load<Song>("music");
-            MediaPlayer.Volume = 0.3f;
             MediaPlayer.Play(backgroundMusic);
+            MediaPlayer.Volume = 0.2f;
             MediaPlayer.IsRepeating = true;
 
             collisionTexture = Content.Load<Texture2D>("collisionTexture");

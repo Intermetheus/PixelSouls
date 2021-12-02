@@ -286,11 +286,11 @@ namespace PixelSouls
                         dodgeSound.Play();
                     }
                 }
+            //Dodge in mouse direction
+            //Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
+            //Vector2 Dpos = muse - position;
 
-            //    Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
-            //    Vector2 Dpos = muse - position;
-
-            //    velocity = Dpos;
+            //velocity = Dpos;
             }
         }
 
