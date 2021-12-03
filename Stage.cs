@@ -16,7 +16,7 @@ namespace PixelSouls
 
         public static Rectangle WorldSize { get => worldSize; set => worldSize = value; }
 
-        public static void loadContent(ContentManager content)
+        public static void LoadContent(ContentManager content)
         {
             backgroundImage = content.Load<Texture2D>("backgroundImage");
         }

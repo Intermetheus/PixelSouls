@@ -15,6 +15,8 @@ namespace PixelSouls
         private int attackWidth;
         private int attackHight;
 
+        private GameObject attacker;
+
         //private Rectangle collisionBox = new Rectangle();
 
         public override Rectangle CollisionBoxProp
@@ -23,8 +25,9 @@ namespace PixelSouls
             set { collisionBox = value; }
         }
 
-        public AttackHitbox(Vector2 position, int windupMS, int attackDamage, int attackWidth, int attackHight)
+        public AttackHitbox(GameObject self, Vector2 position, int windupMS, int attackDamage, int attackWidth, int attackHight)
         {
+            this.attacker = self;
             this.windupMS = windupMS;
             this.attackDamage = attackDamage;
             this.attackWidth = attackWidth;
@@ -46,9 +49,15 @@ namespace PixelSouls
             // Empty to allow the hitbox to be a game object, though it has no sprite of its own
         }
 
+        /// <summary>
+        /// OnCollision override for the attack hitbox, purely concerned with dealing damage to objects it intersects with.
+        /// Looks to make sure the GameObject being hit is actually a character and that it is not the attacker themselves.
+        /// If these conditions are met, the GameObject that was hit is instructed to run its TakeDamage method.
+        /// </summary>
+        /// <param name="other">The game object being hit by the attack</param>
         public override void OnCollision(GameObject other)
         {
-            if (other is Character)
+            if (other is Character && attacker != other)
             {
                 other.TakeDamage(attackDamage);
             }
@@ -56,7 +65,7 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            //base.Update(gameTime);
             GameWorld.Destroy(this);
         }
 

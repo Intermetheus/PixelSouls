@@ -21,7 +21,7 @@ namespace PixelSouls
         private int animationLockCooldown;
         private int stamina;
         private int maxStamina;
-        private Vector2 origin;
+        //private Vector2 origin;
         private MouseState mouseState;
         private KeyboardState keyState;
 
@@ -52,13 +52,13 @@ namespace PixelSouls
             MaxStamina = 100;
 
             speed = 400;
-            origin = new Vector2(25,25); // Should be in the middle of the sprites texture
+            //origin = new Vector2(25,25); // Should be in the middle of the sprites texture
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Debug.WriteLine();
-            spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.2f); // Why the fuck are we adding pi???
+            spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.3f); // Why the fuck are we adding pi???
         }
 
         public override void Update(GameTime gameTime)
@@ -190,7 +190,7 @@ namespace PixelSouls
         // Temporary generic attack
         public override void Attack()
         {
-            GameWorld.Instantiate(new AttackHitbox(position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 20, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 20, 50, 50));
             //Debug.WriteLine("An attack");
         }
         private void LightAttack()
@@ -281,17 +281,21 @@ namespace PixelSouls
 
                 void dodgePreset()
                 {
-                    Stamina -= dodgeCost;
-                    dodgeSpeed = 10f; //multiplier used in Move()
-                    animationLock = true;
-                    isDodge = true;
-                    dodgeSound.Play();
+                    //Prevents the player from dodging twice(losing twice stamina) when moving diagonally.
+                    if (!isDodge)
+                    {
+                        Stamina -= dodgeCost;
+                        dodgeSpeed = 10f; //multiplier used in Move()
+                        animationLock = true;
+                        isDodge = true;
+                        dodgeSound.Play();
+                    }
                 }
+            //Dodge in mouse direction
+            //Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
+            //Vector2 Dpos = muse - position;
 
-            //    Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
-            //    Vector2 Dpos = muse - position;
-
-            //    velocity = Dpos;
+            //velocity = Dpos;
             }
         }
 
@@ -303,6 +307,7 @@ namespace PixelSouls
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("player");
+            CreateOrigin();
             position = new Vector2(GameWorld.ScreenSize.X / 2-sprite.Width/2, GameWorld.ScreenSize.Y / 2-sprite.Height/2);
 
             dodgeSound = content.Load<SoundEffect>("dodge").CreateInstance();
@@ -316,7 +321,5 @@ namespace PixelSouls
         {
 
         }
-
-        
     }
 }

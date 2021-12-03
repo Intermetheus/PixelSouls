@@ -25,6 +25,7 @@ namespace PixelSouls
         private static Vector2 cameraPosition = new Vector2(500, 500);
 
         public static Player player = new Player();
+        public static Boss boss = new Boss();
 
         private static GameState winLoseState;
 
@@ -66,6 +67,8 @@ namespace PixelSouls
         protected override void Initialize()
         {
             gameObjects.Add(player);
+            gameObjects.Add(boss);
+
             ui = new UI();
             base.Initialize();
             Stage.LoadLevel("PrototypePlayground");
@@ -76,14 +79,14 @@ namespace PixelSouls
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             backgroundMusic = Content.Load<Song>("music");
-            MediaPlayer.Volume = 0.3f; //BUG: sound level only works sometimes
             MediaPlayer.Play(backgroundMusic);
+            MediaPlayer.Volume = 0.3f; //BUG: sound level only works sometimes
             MediaPlayer.IsRepeating = true;
 
             collisionTexture = Content.Load<Texture2D>("collisionTexture");
 
             //Sprites used in the stage have to be loaded here
-            Stage.loadContent(Content);
+            Stage.LoadContent(Content);
 
             foreach (GameObject gameObject in gameObjects)
             {
@@ -138,16 +141,17 @@ namespace PixelSouls
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.Draw(spriteBatch);
-                #if DEBUG
-                if (gameObject is Player || gameObject is AttackHitbox)
-                {
-                    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
-                }
-                else
-                {
-                    DrawCollisionBox(gameObject.CollisionBoxProp);
-                }
-                #endif
+#if DEBUG
+                DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
+                //if (gameObject is Player || gameObject is AttackHitbox || gameObject is Boss)
+                //{
+                //    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
+                //}
+                //else
+                //{
+                //    DrawCollisionBox(gameObject.CollisionBoxProp);
+                //}
+#endif
             }
             ui.Draw(spriteBatch);
 
@@ -174,7 +178,7 @@ namespace PixelSouls
             removeGameObjects.Add(gameObject);
         }
 
-        //This is used to draw the Stages walls
+        // This is used to draw the Stages walls
         private void DrawCollisionBox(Rectangle rect)
         {
             Rectangle collisionBox = rect;
@@ -182,7 +186,7 @@ namespace PixelSouls
             int colY = collisionBox.Y - (int)CameraPosition.Y + (int)ScreenSize.Y / 2;
 
             Rectangle topLine = new Rectangle(colX, colY, collisionBox.Width, 1);
-            Rectangle bottomLine = new Rectangle(colX, colY + collisionBox.Height, collisionBox.Width , 1);
+            Rectangle bottomLine = new Rectangle(colX, colY + collisionBox.Height, collisionBox.Width, 1);
             Rectangle rightLine = new Rectangle(colX + collisionBox.Width, colY, 1, collisionBox.Height);
             Rectangle leftLine = new Rectangle(colX, colY, 1, collisionBox.Height);
 

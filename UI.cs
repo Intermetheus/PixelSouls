@@ -24,7 +24,7 @@ namespace PixelSouls
         {
             healthBar.Update(GameWorld.player.HealthProp, GameWorld.player.MaxHealthProp);
             staminaBar.Update(GameWorld.player.Stamina, GameWorld.player.MaxStamina);
-            bossHealthBar.Update(100, 100);
+            bossHealthBar.Update(GameWorld.boss.HealthProp, GameWorld.boss.MaxHealthProp);
         }
 
         public virtual void Draw(SpriteBatch spritebatch)
