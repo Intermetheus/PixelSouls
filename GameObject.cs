@@ -33,7 +33,14 @@ namespace PixelSouls
         public virtual void Update(GameTime gameTime)
         {
             screenPosition = position - GameWorld.CameraPosition;
-            collisionBox = new Rectangle((int)screenPosition.X - (int)origin.X, (int)screenPosition.Y - (int)origin.Y, sprite.Width, sprite.Height);
+            if (this is Floor)
+            {
+
+            }
+            else
+            {
+                collisionBox = new Rectangle((int)screenPosition.X - (int)origin.X, (int)screenPosition.Y - (int)origin.Y, sprite.Width, sprite.Height);
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

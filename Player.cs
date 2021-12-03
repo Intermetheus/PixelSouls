@@ -19,6 +19,7 @@ namespace PixelSouls
         private float dodgeSpeed;
         private bool animationLock;
         private int animationLockCooldown;
+        private int lockTime;
         private int stamina;
         private int maxStamina;
         //private Vector2 origin;
@@ -116,10 +117,19 @@ namespace PixelSouls
                     dodgeCooldown = 0;
                     isDodge = false;
                 }
-                if (animationLockCooldown >= 15)
+                if (animationLockCooldown >= lockTime)
                 {
                     animationLockCooldown = 0;
                     animationLock = false;
+                }
+            }
+            //Stop walkSound when movement keys are released
+            if (velocity == Vector2.Zero)
+            {
+                remainingDelay -= 1;
+                if (remainingDelay <= 0)
+                {
+                    walk1Sound.Stop();
                 }
             }
 
@@ -152,15 +162,7 @@ namespace PixelSouls
                 playWalkSound();
             }
             
-            //Stop walkSound when movement keys are released
-            if (velocity == Vector2.Zero)
-            {
-                remainingDelay -= 1;
-                if (remainingDelay <= 0)
-                {
-                    walk1Sound.Stop();
-                }
-            }
+           
 
             if (keyState.IsKeyDown(Keys.Space))
             {
@@ -190,7 +192,13 @@ namespace PixelSouls
         // Temporary generic attack
         public override void Attack()
         {
-            GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 20, 50, 50));
+            if (!animationLock)
+            {
+                GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
+                animationLock = true;
+                lockTime = 25; //AnimationLock time
+                velocity = Vector2.Zero;
+            }
             //Debug.WriteLine("An attack");
         }
         private void LightAttack()
@@ -286,6 +294,7 @@ namespace PixelSouls
                     {
                         Stamina -= dodgeCost;
                         dodgeSpeed = 10f; //multiplier used in Move()
+                        lockTime = 15; //Time the player is animation locked for
                         animationLock = true;
                         isDodge = true;
                         dodgeSound.Play();

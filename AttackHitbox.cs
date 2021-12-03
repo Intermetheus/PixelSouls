@@ -59,6 +59,7 @@ namespace PixelSouls
         {
             if (other is Character && attacker != other)
             {
+                Debug.WriteLine(attackDamage);
                 other.TakeDamage(attackDamage);
             }
         }
