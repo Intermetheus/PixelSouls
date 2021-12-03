@@ -22,6 +22,12 @@ namespace PixelSouls
 
         protected Rectangle collisionBox;
 
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
         public virtual Rectangle CollisionBoxProp
         {
             get { return collisionBox; }
