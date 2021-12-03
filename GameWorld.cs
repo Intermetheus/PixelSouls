@@ -80,8 +80,8 @@ namespace PixelSouls
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             backgroundMusic = Content.Load<SoundEffect>("music").CreateInstance();
+            backgroundMusic.Volume = 0.1f;
             backgroundMusic.Play();
-            backgroundMusic.Volume = 0.3f;
             backgroundMusic.IsLooped = true;
 
             collisionTexture = Content.Load<Texture2D>("collisionTexture");

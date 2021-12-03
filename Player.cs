@@ -16,6 +16,7 @@ namespace PixelSouls
         int dodgeCooldown;
         private bool iFrame;
         private bool isDodge; //this is your iframe
+        private bool isAttacking;
         private float dodgeSpeed;
         private bool animationLock;
         private int animationLockCooldown;
@@ -31,6 +32,7 @@ namespace PixelSouls
         private float remainingDelay = 0;
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance walk2Sound;
+        private SoundEffectInstance attackSound;
 
         //private Rectangle collisionBox = new Rectangle();
 
@@ -45,6 +47,7 @@ namespace PixelSouls
             dodgeSpeed = 10f; // multiplier
             animationLock = false;
             iFrame = false;
+            isAttacking = false;
             animationLockCooldown = 0;
 
             health = 100;
@@ -65,6 +68,7 @@ namespace PixelSouls
         public override void Update(GameTime gameTime)
         {
             AnimationLock(); // animationLock & Dodge
+            AttackCheck();
             Aim();
             Move(gameTime);
             CheckIframes();
@@ -72,6 +76,22 @@ namespace PixelSouls
             collisionBox = new Rectangle((int)position.X - (int)origin.X, (int)position.Y - (int)origin.Y, sprite.Width, sprite.Height);
             //collisionBox.X -= (int)origin.X;
             //collisionBox.Y -= (int)origin.Y;
+        }
+
+        private void AttackCheck()
+        {
+            if (isAttacking && windup <= 0)
+            {
+                GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
+                animationLock = true;
+                lockTime = 15; //AnimationLock time
+                isAttacking = false;
+                attackSound.Play();
+            }
+            else if (isAttacking)
+            {
+                windup--;
+            }
         }
 
         private void CheckIframes()
@@ -194,9 +214,10 @@ namespace PixelSouls
         {
             if (!animationLock)
             {
-                GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
                 animationLock = true;
-                lockTime = 25; //AnimationLock time
+                isAttacking = true;
+                windup = 10;
+                lockTime = windup;
                 velocity = Vector2.Zero;
             }
             //Debug.WriteLine("An attack");
@@ -322,8 +343,10 @@ namespace PixelSouls
             dodgeSound = content.Load<SoundEffect>("dodge").CreateInstance();
             walk1Sound = content.Load<SoundEffect>("walk1").CreateInstance();
             walk2Sound = content.Load<SoundEffect>("walk2").CreateInstance();
+            attackSound = content.Load<SoundEffect>("attack").CreateInstance();
 
             walk1Sound.Volume = 0.5f;
+            attackSound.Volume = 0.3f;
         }
 
         public override void OnCollision(GameObject other)
