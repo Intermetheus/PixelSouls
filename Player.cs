@@ -26,7 +26,7 @@ namespace PixelSouls
         private KeyboardState keyState;
 
         private SoundEffectInstance dodgeSound;
-        private const float delay = 14; //sound delay
+        private float delay = 14; //sound delay
         private float remainingDelay = 0;
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance walk2Sound;
