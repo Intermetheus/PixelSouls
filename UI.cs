@@ -15,9 +15,9 @@ namespace PixelSouls
 
         public virtual void LoadContent(ContentManager content)
         {
-            healthBar = new PlayerHealth(content, new Vector2(20, 20), Color.DarkRed, new Vector2(200,20));
-            staminaBar = new PlayerStamina(content, new Vector2(20, 40), Color.DarkGreen, new Vector2(100, 20));
-            bossHealthBar = new BossHealth(content, new Vector2(GameWorld.ScreenSize.X/2-300, GameWorld.ScreenSize.Y - 50), Color.DarkRed, new Vector2(600, 20));
+            healthBar = new QuantityDisplayBar(content, new Vector2(20, 20), Color.DarkRed, new Vector2(200,20));
+            staminaBar = new QuantityDisplayBar(content, new Vector2(20, 40), Color.DarkGreen, new Vector2(100, 20));
+            bossHealthBar = new QuantityDisplayBar(content, new Vector2(GameWorld.ScreenSize.X/2-300, GameWorld.ScreenSize.Y - 50), Color.DarkRed, new Vector2(600, 20));
         }
 
         public void Update(GameTime gameTime)

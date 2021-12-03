@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PixelSouls
 {
-    abstract class QuantityDisplayBar
+    class QuantityDisplayBar
     {
         protected int border = 2;
         protected float percentage;

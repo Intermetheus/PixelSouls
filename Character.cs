@@ -19,7 +19,7 @@ namespace PixelSouls
         protected int windupMS = 200;
         protected int attackDamage = 1;
         protected int attackWidth = 100;
-        protected int attackHight = 50;
+        protected int attackHeight = 50;
 
         public int HealthProp
         {
@@ -39,7 +39,7 @@ namespace PixelSouls
         }
         public virtual Rectangle AttackHitbox()
         {
-            return new Rectangle((int)position.X, (int)position.Y, attackWidth, attackHight);
+            return new Rectangle((int)position.X, (int)position.Y, attackWidth, attackHeight);
         }
 
         protected virtual void Move(GameTime gameTime)

@@ -81,7 +81,7 @@ namespace PixelSouls
             throw new NotImplementedException("Cannot deal damage to non-character objects");
         }
 
-        internal bool IsColliding(GameObject other)
+        public bool IsColliding(GameObject other)
         {
             if (CollisionBoxProp.Intersects(other.CollisionBoxProp))
             {

@@ -13,7 +13,7 @@ namespace PixelSouls
         private int windupMS;
         private int attackDamage;
         private int attackWidth;
-        private int attackHight;
+        private int attackHeight;
 
         private GameObject attacker;
 
@@ -21,22 +21,22 @@ namespace PixelSouls
 
         public override Rectangle CollisionBoxProp
         {
-            get { return new Rectangle(collisionBox.X, collisionBox.Y, attackWidth, attackHight); }
+            get { return new Rectangle(collisionBox.X, collisionBox.Y, attackWidth, attackHeight); }
             set { collisionBox = value; }
         }
 
-        public AttackHitbox(GameObject self, Vector2 position, int windupMS, int attackDamage, int attackWidth, int attackHight)
+        public AttackHitbox(GameObject attacker, Vector2 position, int windupMS, int attackDamage, int attackWidth, int attackHeight)
         {
-            this.attacker = self;
+            this.attacker = attacker;
             this.windupMS = windupMS;
             this.attackDamage = attackDamage;
             this.attackWidth = attackWidth;
-            this.attackHight = attackHight;
+            this.attackHeight = attackHeight;
 
             collisionBox.X = (int)position.X;
             collisionBox.Y = (int)position.Y;
             collisionBox.Width = attackWidth;
-            collisionBox.Height = attackHight;
+            collisionBox.Height = attackHeight;
         }
 
         public override void LoadContent(ContentManager content)

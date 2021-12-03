@@ -56,14 +56,14 @@ namespace PixelSouls
             graphics.PreferredBackBufferHeight = 900;
             //Window.AllowUserResizing = true;
             screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-            Window.ClientSizeChanged += OnResize;
+            //Window.ClientSizeChanged += OnResize;
         }
 
-        private void OnResize (object sender, EventArgs args)
-        {
-            //When the window size is changed we have to update the screenSize field
-            screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-        }
+        //private void OnResize (object sender, EventArgs args)
+        //{
+        //    //When the window size is changed we have to update the screenSize field
+        //    screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+        //}
 
         protected override void Initialize()
         {
@@ -163,11 +163,11 @@ namespace PixelSouls
             base.Draw(gameTime);
         }
 
-        private bool LeftMouseButtonReleased()
-        {
-            // placeholder code
-            return true;
-        }
+        //private bool LeftMouseButtonReleased()
+        //{
+        //    // placeholder code
+        //    return true;
+        //}
 
         public static void Instantiate(GameObject gameObject)
         {
