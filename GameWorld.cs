@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -29,7 +30,7 @@ namespace PixelSouls
 
         private static GameState winLoseState;
 
-        private Song backgroundMusic;
+        private SoundEffectInstance backgroundMusic;
 
         private ButtonState leftMouseButton;
 
@@ -78,10 +79,10 @@ namespace PixelSouls
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            backgroundMusic = Content.Load<Song>("music");
-            MediaPlayer.Play(backgroundMusic);
-            MediaPlayer.Volume = 0.3f; //BUG: sound level only works sometimes
-            MediaPlayer.IsRepeating = true;
+            backgroundMusic = Content.Load<SoundEffect>("music").CreateInstance();
+            backgroundMusic.Play();
+            backgroundMusic.Volume = 0.3f;
+            backgroundMusic.IsLooped = true;
 
             collisionTexture = Content.Load<Texture2D>("collisionTexture");
 

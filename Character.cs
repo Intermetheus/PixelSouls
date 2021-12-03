@@ -12,6 +12,7 @@ namespace PixelSouls
         protected int health;
         protected int maxHealth;
         protected bool isAlive;
+        protected int windup;
       
         protected Vector2 initialPosition;       
 
@@ -60,7 +61,7 @@ namespace PixelSouls
         //    origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
         //}
 
-        public override void TakeDamage(int damage)
+        public override void TakeDamage(int attackDamage)
         {
             health -= attackDamage;
         }
