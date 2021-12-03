@@ -14,7 +14,6 @@ namespace PixelSouls
     {
         int dodgeCost;
         int dodgeCooldown;
-        private bool iFrame;
         private bool isDodge; //this is your iframe
         private bool isAttacking;
         private float dodgeSpeed;
@@ -46,7 +45,7 @@ namespace PixelSouls
             dodgeCooldown = 0;
             dodgeSpeed = 10f; // multiplier
             animationLock = false;
-            iFrame = false;
+            IFrame = false;
             isAttacking = false;
             animationLockCooldown = 0;
 
@@ -100,11 +99,20 @@ namespace PixelSouls
         {
             if (isDodge)
             {
-                iFrame = true;
+                IFrame = true;
             }
             else
             {
-                iFrame = false;
+                IFrame = false;
+            }
+            if (IFrame && IFrameCooldown >= 0)
+            {
+                IFrameCooldown--;
+            }
+            else
+            {
+                IFrameCooldown = 3;
+                IFrame = false;
             }
             //Add other iFrame checks here
         }

@@ -13,6 +13,8 @@ namespace PixelSouls
         protected int maxHealth;
         protected bool isAlive;
         protected int windup;
+        protected bool IFrame;
+        protected int IFrameCooldown;
       
         protected Vector2 initialPosition;       
 
@@ -63,7 +65,14 @@ namespace PixelSouls
 
         public override void TakeDamage(int attackDamage)
         {
-            health -= attackDamage;
+            if (IFrame)
+            {
+            }
+            else
+            {
+                health -= attackDamage;
+                IFrame = true;
+            }
         }
     }
 }

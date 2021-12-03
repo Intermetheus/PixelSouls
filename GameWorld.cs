@@ -23,7 +23,7 @@ namespace PixelSouls
         private static List<GameObject> removeGameObjects = new List<GameObject>();
 
         private static Vector2 screenSize;
-        private static Vector2 cameraPosition = new Vector2(500, 500);
+        private static Vector2 cameraPosition = new Vector2(800, 800);
 
         public static Player player = new Player();
         public static Boss boss = new Boss();
