@@ -59,15 +59,14 @@ namespace PixelSouls
         {
             if (other is Character && attacker != other)
             {
-                Debug.WriteLine(attackDamage);
                 other.TakeDamage(attackDamage);
             }
         }
 
         public override void Update(GameTime gameTime)
         {
-            //base.Update(gameTime);
             GameWorld.Destroy(this);
+            //base.Update(gameTime);
         }
 
 
