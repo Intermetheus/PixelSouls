@@ -83,6 +83,8 @@ namespace PixelSouls
             if (isAttacking && windup <= 0)
             {
                 GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
+                GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
+
                 animationLock = true;
                 lockTime = 15; //AnimationLock time
                 isAttacking = false;

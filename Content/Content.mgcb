@@ -31,6 +31,12 @@
 /processorParam:TextureFormat=Color
 /build:backgroundImage.png
 
+#begin bossAttack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bossAttack.wav
+
 #begin collisionTexture.png
 /importer:TextureImporter
 /processor:TextureProcessor
