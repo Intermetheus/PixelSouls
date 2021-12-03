@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 
 
@@ -21,6 +22,8 @@ namespace PixelSouls
             maxHealth = 2000;
             health = maxHealth;
             attackCooldown = 0;
+            speed = 50f;
+            IFrameCooldown = 3;
         }
 
         public override void LoadContent(ContentManager content)
@@ -35,13 +38,25 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
+            velocity = GameWorld.player.Position - screenPosition;
+            velocity.Normalize();
+            //Move towards player
             screenPosition = position - GameWorld.CameraPosition;
+
+            Move(gameTime);
+            CheckIFrames();
+            AttackCheck();
             collisionBox = new Rectangle((int)screenPosition.X - (int)origin.X, (int)screenPosition.Y - (int)origin.Y, sprite.Width, sprite.Height);
 
+            
+        }
+
+        private void AttackCheck()
+        {
             if (attackCooldown == 0)
             {
-                attackRange();
-                attackCooldown = 100;
+                AttackRange();
+                attackCooldown = 150;
             }
             if (attackCooldown > 0)
             {
@@ -49,8 +64,7 @@ namespace PixelSouls
             }
         }
 
-
-        public void attackRange()
+        private void AttackRange()
         {
             if (Vector2.Distance(screenPosition, GameWorld.player.Position) > 50)
             {
@@ -69,9 +83,6 @@ namespace PixelSouls
             GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - GameWorld.player.Position) * 25, 100, 25, 50, 50));
             GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - GameWorld.player.Position) * 75, 100, 25, 50, 50));
             GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - GameWorld.player.Position) * 125, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - GameWorld.player.Position) * 175, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - GameWorld.player.Position) * 225, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - GameWorld.player.Position) * 275, 100, 25, 50, 50));
 
             //Debug.WriteLine("An attack");
         }

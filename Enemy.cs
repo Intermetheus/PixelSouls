@@ -28,11 +28,6 @@ namespace PixelSouls
 
         }
 
-        protected override void Move(GameTime gameTime)
-        {
-
-        }
-
         public void FacePlayer()
         {
 

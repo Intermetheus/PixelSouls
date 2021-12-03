@@ -46,6 +46,7 @@ namespace PixelSouls
             dodgeSpeed = 10f; // multiplier
             animationLock = false;
             IFrame = false;
+            IFrameCooldown = 3;
             isAttacking = false;
             animationLockCooldown = 0;
 
@@ -70,7 +71,7 @@ namespace PixelSouls
             AttackCheck();
             Aim();
             Move(gameTime);
-            CheckIframes();
+            CheckIFrames();
 
             collisionBox = new Rectangle((int)position.X - (int)origin.X, (int)position.Y - (int)origin.Y, sprite.Width, sprite.Height);
             //collisionBox.X -= (int)origin.X;
@@ -95,9 +96,9 @@ namespace PixelSouls
             }
         }
 
-        private void CheckIframes()
+        protected override void CheckIFrames()
         {
-            if (isDodge)
+            if (isDodge && IFrameCooldown >= 0)
             {
                 IFrame = true;
             }

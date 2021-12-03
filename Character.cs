@@ -44,11 +44,24 @@ namespace PixelSouls
             return new Rectangle((int)position.X, (int)position.Y, attackWidth, attackHeight);
         }
 
+        protected virtual void CheckIFrames()
+        {
+            if (IFrame && IFrameCooldown >= 0)
+            {
+                IFrameCooldown--;
+            }
+            else
+            {
+                IFrameCooldown = 3;
+                IFrame = false;
+            }
+        }
+
         protected virtual void Move(GameTime gameTime)
         {
-            float _deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            position += ((velocity * speed) * _deltaTime);
+            position += ((velocity * speed) * deltaTime);
         }
 
         public void Rotate(Vector2 self, Vector2 target)
