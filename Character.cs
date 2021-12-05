@@ -72,6 +72,22 @@ namespace PixelSouls
             {
                 health -= attackDamage;
                 IFrame = true;
+                CheckDeath();
+            }
+        }
+
+        public void CheckDeath()
+        {
+            if(health <= 0)
+            {
+                if(GetType() == typeof(Player))
+                {
+                    GameWorld.WinLoseState = GameState.Lose;
+                }
+                else
+                {
+                    GameWorld.WinLoseState = GameState.Win;
+                }
             }
         }
     }
