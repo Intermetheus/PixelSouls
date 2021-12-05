@@ -303,6 +303,7 @@ namespace PixelSouls
                 damageSound.Play();
                 health -= attackDamage;
                 IFrame = true;
+                CheckDeath();
             }
         }
 
