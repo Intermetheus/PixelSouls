@@ -13,17 +13,20 @@ namespace PixelSouls
 {
     public class Boss : Enemy
     {
+        public string name;
+
         private int attackCooldown;
 
         private SoundEffectInstance bossAttack;
 
-        public Boss()
+        public Boss(string name)
         {
             maxHealth = 2000;
             health = maxHealth;
             attackCooldown = 0;
             speed = 50f;
             IFrameCooldown = 3;
+            this.name = name;
         }
 
         public override void LoadContent(ContentManager content)
