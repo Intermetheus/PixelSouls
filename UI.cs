@@ -32,6 +32,7 @@ namespace PixelSouls
             healthBar.Draw(spritebatch);
             staminaBar.Draw(spritebatch);
             bossHealthBar.Draw(spritebatch);
+            spritebatch.DrawString(GameWorld.arial, GameWorld.boss.name, new Vector2(GameWorld.ScreenSize.X / 2 - 200, GameWorld.ScreenSize.Y - 100), Color.Red, 0, Vector2.Zero, 2, SpriteEffects.None, 1);
         }
     }
 }

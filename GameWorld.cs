@@ -14,7 +14,7 @@ namespace PixelSouls
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        public SpriteFont arial;
+        public static SpriteFont arial;
 
         private Texture2D collisionTexture;
 
@@ -26,7 +26,7 @@ namespace PixelSouls
         private static Vector2 cameraPosition = new Vector2(800, 800);
 
         public static Player player = new Player();
-        public static Boss boss = new Boss();
+        public static Boss boss = new Boss("Onesiphorus The Blasphemed");
 
         private static GameState winLoseState;
 
@@ -78,6 +78,8 @@ namespace PixelSouls
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            arial = Content.Load<SpriteFont>("Arial");
 
             backgroundMusic = Content.Load<SoundEffect>("music").CreateInstance();
             backgroundMusic.Volume = 0.1f;
