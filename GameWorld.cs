@@ -15,7 +15,7 @@ namespace PixelSouls
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        public SpriteFont arial;
+        public static SpriteFont arial;
 
         private Texture2D collisionTexture;
 
@@ -27,7 +27,7 @@ namespace PixelSouls
         private static Vector2 cameraPosition = new Vector2(800, 800);
 
         public static Player player = new Player();
-        public static Boss boss = new Boss();
+        public static Boss boss = new Boss("Onesiphorus The Blasphemed");
 
         private static GameState winLoseState;
 
@@ -68,6 +68,7 @@ namespace PixelSouls
 
         protected override void Initialize()
         {
+            winLoseState = GameState.Play;
             gameObjects.Add(player);
             gameObjects.Add(boss);
 
@@ -79,6 +80,8 @@ namespace PixelSouls
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            arial = Content.Load<SpriteFont>("Arial");
 
             backgroundMusic = Content.Load<SoundEffect>("music").CreateInstance();
             backgroundMusic.Volume = 0.1f;
@@ -103,33 +106,36 @@ namespace PixelSouls
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            gameObjects.AddRange(newGameObjects);
-            newGameObjects.Clear();
-
-            foreach (GameObject gameObject in removeGameObjects)
+            if(winLoseState == GameState.Play)
             {
-                gameObjects.Remove(gameObject);
-                //removeGameObjects.Clear();
-            }
-            removeGameObjects.Clear();
+                gameObjects.AddRange(newGameObjects);
+                newGameObjects.Clear();
 
-            foreach (GameObject gameObject in gameObjects)
-            {
-                gameObject.Update(gameTime);
-
-                foreach (GameObject other in gameObjects)
+                foreach (GameObject gameObject in removeGameObjects)
                 {
-                    if (gameObject != other)
+                    gameObjects.Remove(gameObject);
+                    //removeGameObjects.Clear();
+                }
+                removeGameObjects.Clear();
+
+                foreach (GameObject gameObject in gameObjects)
+                {
+                    gameObject.Update(gameTime);
+
+                    foreach (GameObject other in gameObjects)
                     {
-                        if (gameObject.IsColliding(other))
+                        if (gameObject != other)
                         {
-                            gameObject.OnCollision(other);
-                            other.OnCollision(gameObject);
+                            if (gameObject.IsColliding(other))
+                            {
+                                gameObject.OnCollision(other);
+                                other.OnCollision(gameObject);
+                            }
                         }
                     }
                 }
-            }
-            ui.Update(gameTime);
+                ui.Update(gameTime);
+            }            
 
             base.Update(gameTime);
         }
@@ -138,26 +144,37 @@ namespace PixelSouls
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack); //Makes layers work
+            spriteBatch.Begin(SpriteSortMode.FrontToBack); //Makes layers work           
 
-            foreach (GameObject gameObject in gameObjects)
+            if (winLoseState == GameState.Play)
             {
-                gameObject.Draw(spriteBatch);
+                foreach (GameObject gameObject in gameObjects)
+                {
+                    gameObject.Draw(spriteBatch);
 #if DEBUG
-                DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
-                //if (gameObject is Player || gameObject is AttackHitbox || gameObject is Boss)
-                //{
-                //    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
-                //}
-                //else
-                //{
-                //    DrawCollisionBox(gameObject.CollisionBoxProp);
-                //}
+                    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
+                    //if (gameObject is Player || gameObject is AttackHitbox || gameObject is Boss)
+                    //{
+                    //    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
+                    //}
+                    //else
+                    //{
+                    //    DrawCollisionBox(gameObject.CollisionBoxProp);
+                    //}
 #endif
-            }
-            ui.Draw(spriteBatch);
+                }
+                ui.Draw(spriteBatch);
 
-            DrawCollisionBox(Stage.WorldSize);
+                DrawCollisionBox(Stage.WorldSize);
+            }
+            else if (winLoseState == GameState.Win)
+            {
+                spriteBatch.DrawString(arial, "You Win", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            }
+            else if (winLoseState == GameState.Lose)
+            {
+                spriteBatch.DrawString(arial, "You Lose", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            }
 
             spriteBatch.End();
 
