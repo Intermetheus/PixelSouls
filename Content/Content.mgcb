@@ -49,6 +49,12 @@
 /processorParam:TextureFormat=Color
 /build:collisionTexture.png
 
+#begin damageSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:damageSound.wav
+
 #begin dodge.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

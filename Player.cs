@@ -32,6 +32,7 @@ namespace PixelSouls
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance walk2Sound;
         private SoundEffectInstance attackSound;
+        private SoundEffectInstance damageSound;
 
         //private Rectangle collisionBox = new Rectangle();
 
@@ -288,7 +289,22 @@ namespace PixelSouls
                 GameWorld.CameraPosition += velocity * speed * deltaTime;
             }
         }
-
+        /// <summary>
+        /// Override  so we can play the damageSound
+        /// </summary>
+        /// <param name="attackDamage"></param>
+        public override void TakeDamage(int attackDamage)
+        {
+            if (IFrame)
+            {
+            }
+            else
+            {
+                damageSound.Play();
+                health -= attackDamage;
+                IFrame = true;
+            }
+        }
 
         private void Dodge()
         {
@@ -355,6 +371,7 @@ namespace PixelSouls
             walk1Sound = content.Load<SoundEffect>("walk1").CreateInstance();
             walk2Sound = content.Load<SoundEffect>("walk2").CreateInstance();
             attackSound = content.Load<SoundEffect>("attack").CreateInstance();
+            damageSound = content.Load<SoundEffect>("damageSound").CreateInstance();
 
             walk1Sound.Volume = 0.5f;
             attackSound.Volume = 0.3f;
