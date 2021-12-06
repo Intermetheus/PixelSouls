@@ -22,6 +22,8 @@ namespace PixelSouls
         private bool animationLock;
         private int animationLockCooldown;
         private int lockTime;
+        private int healingTries;
+        private bool isHealing;
         private int stamina;
         private int maxStamina;
         //private Vector2 origin;
@@ -60,7 +62,7 @@ namespace PixelSouls
             Stamina = 100;
             MaxStamina = 100;
 
-            halingTries = 3;
+            healingTries = 3;
 
             speed = 400;
             //origin = new Vector2(25,25); // Should be in the middle of the sprites texture
@@ -379,15 +381,15 @@ namespace PixelSouls
         {
             if (!animationLock)
             {
-                if (this.halingTries > 0)
+                if (this.healingTries > 0)
                 {
                     if (health < 100)
                     {
                         isHealing = true;
                         animationLock = true;
                         windup = 10;
-                        this.health += 50;
-                        this.halingTries -= 1;
+                        this.health += 40;
+                        this.healingTries -= 1;
                         if (health > 100)
                         {
                             this.health = 100;
