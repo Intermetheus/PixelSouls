@@ -16,6 +16,8 @@ namespace PixelSouls
         int dodgeCooldown;
         private bool isDodge;
         private bool isAttacking;
+        private bool isTargeted;
+        private Vector2 targetedPosition; //Target position the boss attacks
         private float dodgeSpeed;
         private bool animationLock;
         private int animationLockCooldown;
@@ -39,6 +41,8 @@ namespace PixelSouls
 
         public int Stamina { get => stamina; set => stamina = value; }
         public int MaxStamina { get => maxStamina; set => maxStamina = value; }
+        public bool IsTargeted { get => isTargeted; set => isTargeted = value; }
+        public Vector2 TargetedPosition { get => targetedPosition; set => targetedPosition = value; }
 
         public Player()
         {
@@ -292,6 +296,14 @@ namespace PixelSouls
                     GameWorld.CameraPosition += velocity * speed * dodgeMultiplier * deltaTime;
                 }
                 GameWorld.CameraPosition += velocity * speed * deltaTime;
+            }
+            if (!isTargeted)
+            {
+                targetedPosition = position-origin;
+            }
+            if (isTargeted)
+            {
+                targetedPosition -= velocity * speed * deltaTime;
             }
         }
         /// <summary>
