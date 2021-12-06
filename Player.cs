@@ -14,7 +14,7 @@ namespace PixelSouls
     {
         int dodgeCost;
         int dodgeCooldown;
-        private bool isDodge; //this is your iframe
+        private bool isDodge;
         private bool isAttacking;
         private bool isHealing;
         private int halingTries;
