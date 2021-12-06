@@ -71,6 +71,7 @@ namespace PixelSouls
             winLoseState = GameState.Play;
             gameObjects.Add(player);
             gameObjects.Add(boss);
+            gameObjects.Add(new Target());
 
             ui = new UI();
             base.Initialize();
