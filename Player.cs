@@ -327,7 +327,7 @@ namespace PixelSouls
         private void Dodge()
         {
             //dodgeCost is the amount of stamina used to dodge
-            //BUG if you dodge in multiple directions, you use double statmina
+            //BUG: if you dodge in opposite directions, you don't use stamina
             if (Stamina > dodgeCost && !isDodge)
             {
                 if (keyState.IsKeyDown(Keys.W))
