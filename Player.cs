@@ -19,7 +19,7 @@ namespace PixelSouls
         private bool isTargeted;
         private Vector2 targetedPosition; //Target position the boss attacks
         private float dodgeSpeed;
-        private bool animationLock;
+        //private bool animationLock;
         private int animationLockCooldown;
         private int lockTime;
         private int healingTries;
@@ -71,7 +71,15 @@ namespace PixelSouls
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Debug.WriteLine();
-            spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.3f); // Why the fuck are we adding pi???
+            if (facingRight)
+            {
+                spriteBatch.Draw(sprite, position, null, Color.White, 0, origin, 1.5F, SpriteEffects.None, 0.5f);
+            }
+            else
+            {
+                spriteBatch.Draw(sprite, position, null, Color.White, 0, origin, 1.5F, SpriteEffects.FlipHorizontally, 0.5f);
+            }
+            
         }
 
         public override void Update(GameTime gameTime)
@@ -85,6 +93,8 @@ namespace PixelSouls
             collisionBox = new Rectangle((int)position.X - (int)origin.X, (int)position.Y - (int)origin.Y, sprite.Width, sprite.Height);
             //collisionBox.X -= (int)origin.X;
             //collisionBox.Y -= (int)origin.Y;
+
+            Animate(gameTime);
         }
 
         private void AttackCheck()
@@ -95,7 +105,7 @@ namespace PixelSouls
                 GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
 
                 animationLock = true;
-                lockTime = 15; //AnimationLock time
+                lockTime = 20; //AnimationLock time
                 isAttacking = false;
                 attackSound.Play();
             }
@@ -239,9 +249,21 @@ namespace PixelSouls
             {
                 animationLock = true;
                 isAttacking = true;
-                windup = 10;
+                windup = 15;
                 lockTime = windup;
                 velocity = Vector2.Zero;
+                animState = AnimState.Attack;
+                currentSpriteList = attackSprites;               
+                if (mouseState.Position.X < position.X)
+                {
+                    facingRight = false;
+                    origin = new Vector2(60, 42);
+                }
+                else if(mouseState.Position.X > position.X)
+                {
+                    facingRight = true;
+                    origin = new Vector2(40, 42);
+                }
             }
             //Debug.WriteLine("An attack");
         }
@@ -418,6 +440,23 @@ namespace PixelSouls
 
             walk1Sound.Volume = 0.5f;
             attackSound.Volume = 0.3f;
+
+            for (int i = 0; i < 3; i++)
+            {
+                idleSprites.Add(content.Load<Texture2D>($"ready_{i + 1}"));
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                walkSprites.Add(content.Load<Texture2D>($"walk_{i + 1}"));
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                attackSprites.Add(content.Load<Texture2D>($"attack4_{i + 1}"));
+            }
+
+            currentSpriteList = idleSprites;
         }
 
         public override void OnCollision(GameObject other)

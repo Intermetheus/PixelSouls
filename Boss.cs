@@ -40,6 +40,23 @@ namespace PixelSouls
 
             bossAttack = content.Load<SoundEffect>("bossAttack").CreateInstance();
             bossAttack.Volume = 0.5f;
+
+            for (int i = 0; i < 3; i++)
+            {
+                idleSprites.Add(content.Load<Texture2D>($"ready_{i + 1}"));
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                walkSprites.Add(content.Load<Texture2D>($"walk1_{i + 1}"));
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                attackSprites.Add(content.Load<Texture2D>($"attack2_{i + 1}"));
+            }
+
+            currentSpriteList = idleSprites;
         }
 
         public override void Update(GameTime gameTime)
@@ -50,8 +67,7 @@ namespace PixelSouls
             CheckIFrames();
             AttackCheck();
             collisionBox = new Rectangle((int)screenPosition.X - (int)origin.X, (int)screenPosition.Y - (int)origin.Y, sprite.Width, sprite.Height);
-
-
+            Animate(gameTime);
         }
 
         private void MovementCheck()
