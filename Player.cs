@@ -16,8 +16,6 @@ namespace PixelSouls
         int dodgeCooldown;
         private bool isDodge;
         private bool isAttacking;
-        private bool isHealing;
-        private int halingTries;
         private float dodgeSpeed;
         private bool animationLock;
         private int animationLockCooldown;
