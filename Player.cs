@@ -16,6 +16,8 @@ namespace PixelSouls
         int dodgeCooldown;
         private bool isDodge; //this is your iframe
         private bool isAttacking;
+        private bool isHealing;
+        private int halingTries;
         private float dodgeSpeed;
         private bool animationLock;
         private int animationLockCooldown;
@@ -55,6 +57,8 @@ namespace PixelSouls
             maxHealth = 100;
             Stamina = 100;
             MaxStamina = 100;
+
+            halingTries = 3;
 
             speed = 400;
             //origin = new Vector2(25,25); // Should be in the middle of the sprites texture
@@ -193,8 +197,11 @@ namespace PixelSouls
                 velocity += new Vector2(1, 0);
                 playWalkSound();
             }
-            
-           
+
+            if (keyState.IsKeyDown(Keys.F))
+            {
+                Healing();
+            }
 
             if (keyState.IsKeyDown(Keys.Space))
             {
@@ -357,6 +364,29 @@ namespace PixelSouls
             }
         }
 
+
+        private void Healing()
+        {
+            if (!animationLock)
+            {
+                if (this.halingTries > 0)
+                {
+                    if (health < 100)
+                    {
+                        isHealing = true;
+                        animationLock = true;
+                        windup = 10;
+                        this.health += 50;
+                        this.halingTries -= 1;
+                        if (health > 100)
+                        {
+                            this.health = 100;
+                        }
+                    }
+                }
+            }
+        }
+
         private void Aim()
         {
             Rotate(position, new Vector2(mouseState.X, mouseState.Y));
@@ -380,7 +410,7 @@ namespace PixelSouls
 
         public override void OnCollision(GameObject other)
         {
-
+        
         }
     }
 }
