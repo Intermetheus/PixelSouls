@@ -16,13 +16,13 @@ namespace PixelSouls
     {
         public override void LoadContent(ContentManager content)
         {
-            sprite = content.Load<Texture2D>("target");
+            //sprite = content.Load<Texture2D>("target");
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
 #if DEBUG
-            spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 1f);
+            //spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 1f);
 #endif
         }
 

@@ -80,6 +80,23 @@ namespace PixelSouls
             else
             {
                 velocity = Vector2.Zero;
+
+                if(animState != AnimState.Attack)
+                {
+                    animState = AnimState.Attack;
+                    currentSpriteList = attackSprites;
+                    if (screenPosition.X < GameWorld.player.Position.X)
+                    {
+                        facingRight = false;
+                        origin = new Vector2(60, 42);
+                    }
+                    else if (screenPosition.X > GameWorld.player.Position.X)
+                    {
+                        facingRight = true;
+                        origin = new Vector2(40, 42);
+                    }
+                    animationLock = true;
+                }
             }
         }
 
@@ -99,7 +116,7 @@ namespace PixelSouls
                 {
                     Attack();
                     GameWorld.player.IsTargeted = false;
-                    attackCooldown = 150;
+                    attackCooldown = 150;                   
                 }
                 else if (collisionBox.Contains(GameWorld.player.Position.X, GameWorld.player.Position.Y))
                 {
@@ -107,6 +124,7 @@ namespace PixelSouls
                     GameWorld.player.IsTargeted = false;
                     attackCooldown = 150;
                 }
+                animationLock = false;
             }
             if (attackCooldown > 0)
             {
