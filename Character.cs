@@ -14,7 +14,9 @@ namespace PixelSouls
         protected int health;
         protected int maxHealth;
         protected bool isAlive;
+
         protected int windup;
+
         protected bool IFrame;
         protected int IFrameCooldown;
       
@@ -34,7 +36,6 @@ namespace PixelSouls
         protected List<Texture2D> idleSprites = new List<Texture2D>();
         protected List<Texture2D> walkSprites = new List<Texture2D>();
         protected List<Texture2D> attackSprites = new List<Texture2D>();
-
         protected bool animationLock;
 
         public int HealthProp
@@ -46,6 +47,24 @@ namespace PixelSouls
         {
             get { return maxHealth; }
             set { maxHealth = value; }
+        }
+
+        public override void LoadContent(ContentManager content)
+        {
+            currentSpriteList = idleSprites;
+            CreateOrigin();
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (facingRight)
+            {
+                spriteBatch.Draw(sprite, screenPosition, null, Color.White, 0, origin, scale, SpriteEffects.None, layerDepth);
+            }
+            else
+            {
+                spriteBatch.Draw(sprite, screenPosition, null, Color.White, 0, origin, scale, SpriteEffects.FlipHorizontally, layerDepth);
+            }
         }
 
         public abstract void Attack();

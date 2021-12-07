@@ -14,13 +14,16 @@ namespace PixelSouls
             this.position = new Vector2(x, y);
             this.sprite = sprite;
             CreateOrigin();
+
+            scale = 1f;
+            layerDepth = 0.1f;
         }
 
         //Override draw function to put floors below the player
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, 1f, SpriteEffects.None, 0.1f);
-        }
+        //public override void Draw(SpriteBatch spriteBatch)
+        //{
+        //    spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, 1f, SpriteEffects.None, 0.1f);
+        //}
 
         public override void LoadContent(ContentManager content)
         {

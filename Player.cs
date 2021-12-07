@@ -12,23 +12,27 @@ namespace PixelSouls
 {
     public class Player : Character
     {
-        int dodgeCost;
-        int dodgeCooldown;
+        private MouseState mouseState;
+        private KeyboardState keyState;
+
         private bool isDodge;
         private bool isAttacking;
         private bool isTargeted;
-        private Vector2 targetedPosition; //Target position the boss attacks
-        private float dodgeSpeed;
-        //private bool animationLock;
-        private int animationLockCooldown;
-        private int lockTime;
-        private int healingTries;
         private bool isHealing;
+
+        private int dodgeCost;
+        private int dodgeCooldown;
+        private float dodgeSpeed;
+
         private int stamina;
         private int maxStamina;
-        //private Vector2 origin;
-        private MouseState mouseState;
-        private KeyboardState keyState;
+
+        private int healingTries;
+
+        private int animationLockCooldown;
+        private int lockTime;
+
+        private Vector2 targetedPosition; //Target position the boss attacks
 
         private SoundEffectInstance dodgeSound;
         private float delay = 14; //sound delay
@@ -38,48 +42,68 @@ namespace PixelSouls
         private SoundEffectInstance attackSound;
         private SoundEffectInstance damageSound;
 
-        //private Rectangle collisionBox = new Rectangle();
-
-
+        public bool IsTargeted { get => isTargeted; set => isTargeted = value; }
         public int Stamina { get => stamina; set => stamina = value; }
         public int MaxStamina { get => maxStamina; set => maxStamina = value; }
-        public bool IsTargeted { get => isTargeted; set => isTargeted = value; }
         public Vector2 TargetedPosition { get => targetedPosition; set => targetedPosition = value; }
 
         public Player()
         {
-            dodgeCost = 50;
-            dodgeCooldown = 0;
-            dodgeSpeed = 10f; // multiplier
-            animationLock = false;
-            IFrame = false;
-            IFrameCooldown = 3;
-            isAttacking = false;
-            animationLockCooldown = 0;
-
-            health = 100;
             maxHealth = 100;
-            Stamina = 100;
+            health = maxHealth;
             MaxStamina = 100;
+            Stamina = maxStamina;
+
+            speed = 400;
 
             healingTries = 3;
 
-            speed = 400;
-            //origin = new Vector2(25,25); // Should be in the middle of the sprites texture
+            dodgeCost = 50;
+            dodgeCooldown = 0;
+            dodgeSpeed = 10f; // multiplier
+
+            IFrame = false;
+            IFrameCooldown = 3;
+
+            animationLock = false;
+            animationLockCooldown = 0;
+
+            scale = 2f;
+            layerDepth = 0.4f;
+
+            isAttacking = false;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void LoadContent(ContentManager content)
         {
-            //Debug.WriteLine();
-            if (facingRight)
+            sprite = content.Load<Texture2D>("ready_1");
+            position = new Vector2(GameWorld.ScreenSize.X / 2, GameWorld.ScreenSize.Y / 2);
+
+            for (int i = 0; i < 3; i++)
             {
-                spriteBatch.Draw(sprite, position, null, Color.White, 0, origin, 1.5F, SpriteEffects.None, 0.5f);
+                idleSprites.Add(content.Load<Texture2D>($"ready_{i + 1}"));
             }
-            else
+
+            for (int i = 0; i < 6; i++)
             {
-                spriteBatch.Draw(sprite, position, null, Color.White, 0, origin, 1.5F, SpriteEffects.FlipHorizontally, 0.5f);
+                walkSprites.Add(content.Load<Texture2D>($"walk_{i + 1}"));
             }
-            
+
+            for (int i = 0; i < 6; i++)
+            {
+                attackSprites.Add(content.Load<Texture2D>($"attack4_{i + 1}"));
+            }
+
+            dodgeSound = content.Load<SoundEffect>("dodge").CreateInstance();
+            walk1Sound = content.Load<SoundEffect>("walk1").CreateInstance();
+            walk2Sound = content.Load<SoundEffect>("walk2").CreateInstance();
+            attackSound = content.Load<SoundEffect>("attack").CreateInstance();
+            damageSound = content.Load<SoundEffect>("damageSound").CreateInstance();
+
+            walk1Sound.Volume = 0.5f;
+            attackSound.Volume = 0.3f;
+
+            base.LoadContent(content);
         }
 
         public override void Update(GameTime gameTime)
@@ -89,101 +113,22 @@ namespace PixelSouls
             Aim();
             Move(gameTime);
             CheckIFrames();
-            collisionBox = new Rectangle((int)position.X-25, (int)position.Y-25, 50, 50);
-            //collisionBox.X -= (int)origin.X;
-            //collisionBox.Y -= (int)origin.Y;
-
+            collisionBox = new Rectangle((int)position.X - 25, (int)position.Y - 25, 50, 50);
             Animate(gameTime);
         }
 
-        private void AttackCheck()
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (isAttacking && windup <= 0)
+            if (facingRight)
             {
-                GameWorld.Instantiate(new AttackHitbox(this, position - new Vector2(25, 25) - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
-                GameWorld.Instantiate(new AttackHitbox(this, position - new Vector2(25, 25) - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
-
-                animationLock = true;
-                lockTime = 20; //AnimationLock time
-                isAttacking = false;
-                attackSound.Play();
-            }
-            else if (isAttacking)
-            {
-                windup--;
-            }
-        }
-
-        protected override void CheckIFrames()
-        {
-            if (isDodge && IFrameCooldown >= 0)
-            {
-                IFrame = true;
+                spriteBatch.Draw(sprite, position, null, Color.White, 0, origin, scale, SpriteEffects.None, layerDepth);
             }
             else
             {
-                IFrame = false;
-            }
-            if (IFrame && IFrameCooldown >= 0)
-            {
-                IFrameCooldown--;
-            }
-            else
-            {
-                IFrameCooldown = 3;
-                IFrame = false;
-            }
-            //Add other iFrame checks here
-        }
-
-        /// <summary>
-        /// This method gives the player stamina each time Update() is called (if your stamina is below maxStamina)
-        /// It also handles cooldowns
-        /// The higher animationLockCooldown is, the longer you can't input.
-        /// The higher dodgeCooldown is the longer you dodge
-        /// </summary>
-        private void AnimationLock()
-        {
-            if (Stamina < MaxStamina && !animationLock)
-            {
-                Stamina++;
-                if (Stamina > MaxStamina)
-                {
-                    Stamina = MaxStamina;
-                }
-            }
-
-            if (!animationLock)
-            {
-                HandleInput();
-            }
-            else
-            {
-                animationLockCooldown++;
-                dodgeCooldown++;
-                if (dodgeCooldown >= 3)
-                {
-                    dodgeCooldown = 0;
-                    isDodge = false;
-                }
-                if (animationLockCooldown >= lockTime)
-                {
-                    animationLockCooldown = 0;
-                    animationLock = false;
-                }
-            }
-            //Stop walkSound when movement keys are released
-            if (velocity == Vector2.Zero)
-            {
-                remainingDelay -= 1;
-                if (remainingDelay <= 0)
-                {
-                    walk1Sound.Stop();
-                }
+                spriteBatch.Draw(sprite, position, null, Color.White, 0, origin, scale, SpriteEffects.FlipHorizontally, layerDepth);
             }
 
         }
-        
         private void HandleInput()
         {
             mouseState = Mouse.GetState();
@@ -240,41 +185,11 @@ namespace PixelSouls
             }
         }
 
-
-        // Temporary generic attack
-        public override void Attack()
+        private void Aim()
         {
-            if (!animationLock)
-            {
-                animationLock = true;
-                isAttacking = true;
-                windup = 15;
-                lockTime = windup;
-                velocity = Vector2.Zero;
-                animState = AnimState.Attack;
-                currentSpriteList = attackSprites;               
-                if (mouseState.Position.X <= position.X)
-                {
-                    facingRight = false;
-                    origin = new Vector2(60, 42);
-                }
-                else if(mouseState.Position.X > position.X)
-                {
-                    facingRight = true;
-                    origin = new Vector2(40, 42);
-                }
-            }
-            //Debug.WriteLine("An attack");
-        }
-        private void LightAttack()
-        {
-
+            Rotate(position, new Vector2(mouseState.X, mouseState.Y));
         }
 
-        private void HeavyAttack()
-        {
-
-        }
         protected override void Move(GameTime gameTime)
         {
             //If the window is resized, the player will remain in the middle of the screen.
@@ -329,23 +244,6 @@ namespace PixelSouls
                 targetedPosition -= velocity * speed * deltaTime;
             }
         }
-        /// <summary>
-        /// Override  so we can play the damageSound
-        /// </summary>
-        /// <param name="attackDamage"></param>
-        public override void TakeDamage(int attackDamage)
-        {
-            if (IFrame)
-            {
-            }
-            else
-            {
-                damageSound.Play();
-                health -= attackDamage;
-                IFrame = true;
-                CheckDeath();
-            }
-        }
 
         private void Dodge()
         {
@@ -389,14 +287,144 @@ namespace PixelSouls
                         dodgeSound.Play();
                     }
                 }
-            //Dodge in mouse direction
-            //Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
-            //Vector2 Dpos = muse - position;
+                //Dodge in mouse direction
+                //Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
+                //Vector2 Dpos = muse - position;
 
-            //velocity = Dpos;
+                //velocity = Dpos;
             }
         }
 
+        /// <summary>
+        /// This method gives the player stamina each time Update() is called (if your stamina is below maxStamina)
+        /// It also handles cooldowns
+        /// The higher animationLockCooldown is, the longer you can't input.
+        /// The higher dodgeCooldown is the longer you dodge
+        /// </summary>
+        private void AnimationLock()
+        {
+            if (Stamina < MaxStamina && !animationLock)
+            {
+                Stamina++;
+                if (Stamina > MaxStamina)
+                {
+                    Stamina = MaxStamina;
+                }
+            }
+
+            if (!animationLock)
+            {
+                HandleInput();
+            }
+            else
+            {
+                animationLockCooldown++;
+                dodgeCooldown++;
+                if (dodgeCooldown >= 3)
+                {
+                    dodgeCooldown = 0;
+                    isDodge = false;
+                }
+                if (animationLockCooldown >= lockTime)
+                {
+                    animationLockCooldown = 0;
+                    animationLock = false;
+                }
+            }
+            //Stop walkSound when movement keys are released
+            if (velocity == Vector2.Zero)
+            {
+                remainingDelay -= 1;
+                if (remainingDelay <= 0)
+                {
+                    walk1Sound.Stop();
+                }
+            }
+
+        }
+
+        public override void Attack()
+        {
+            if (!animationLock)
+            {
+                animationLock = true;
+                isAttacking = true;
+                windup = 15;
+                lockTime = windup;
+                velocity = Vector2.Zero;
+                animState = AnimState.Attack;
+                currentSpriteList = attackSprites;
+                if (mouseState.Position.X <= position.X)
+                {
+                    facingRight = false;
+                    origin = new Vector2(60, 42);
+                }
+                else if (mouseState.Position.X > position.X)
+                {
+                    facingRight = true;
+                    origin = new Vector2(40, 42);
+                }
+            }
+            //Debug.WriteLine("An attack");
+        }
+
+        private void AttackCheck()
+        {
+            if (isAttacking && windup <= 0)
+            {
+                GameWorld.Instantiate(new AttackHitbox(this, position - new Vector2(25, 25) - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
+                GameWorld.Instantiate(new AttackHitbox(this, position - new Vector2(25, 25) - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
+
+                animationLock = true;
+                lockTime = 20; //AnimationLock time
+                isAttacking = false;
+                attackSound.Play();
+            }
+            else if (isAttacking)
+            {
+                windup--;
+            }
+        }
+
+        protected override void CheckIFrames()
+        {
+            if (isDodge && IFrameCooldown >= 0)
+            {
+                IFrame = true;
+            }
+            else
+            {
+                IFrame = false;
+            }
+            if (IFrame && IFrameCooldown >= 0)
+            {
+                IFrameCooldown--;
+            }
+            else
+            {
+                IFrameCooldown = 3;
+                IFrame = false;
+            }
+            //Add other iFrame checks here
+        }
+        
+        /// <summary>
+        /// Override  so we can play the damageSound
+        /// </summary>
+        /// <param name="attackDamage"></param>
+        public override void TakeDamage(int attackDamage)
+        {
+            if (IFrame)
+            {
+            }
+            else
+            {
+                damageSound.Play();
+                health -= attackDamage;
+                IFrame = true;
+                CheckDeath();
+            }
+        }
 
         private void Healing()
         {
@@ -420,47 +448,9 @@ namespace PixelSouls
             }
         }
 
-        private void Aim()
-        {
-            Rotate(position, new Vector2(mouseState.X, mouseState.Y));
-        }
-
-        public override void LoadContent(ContentManager content)
-        {
-            sprite = content.Load<Texture2D>("player");
-            CreateOrigin();
-            position = new Vector2(GameWorld.ScreenSize.X / 2, GameWorld.ScreenSize.Y / 2);
-
-            dodgeSound = content.Load<SoundEffect>("dodge").CreateInstance();
-            walk1Sound = content.Load<SoundEffect>("walk1").CreateInstance();
-            walk2Sound = content.Load<SoundEffect>("walk2").CreateInstance();
-            attackSound = content.Load<SoundEffect>("attack").CreateInstance();
-            damageSound = content.Load<SoundEffect>("damageSound").CreateInstance();
-
-            walk1Sound.Volume = 0.5f;
-            attackSound.Volume = 0.3f;
-
-            for (int i = 0; i < 3; i++)
-            {
-                idleSprites.Add(content.Load<Texture2D>($"ready_{i + 1}"));
-            }
-
-            for (int i = 0; i < 6; i++)
-            {
-                walkSprites.Add(content.Load<Texture2D>($"walk_{i + 1}"));
-            }
-
-            for (int i = 0; i < 6; i++)
-            {
-                attackSprites.Add(content.Load<Texture2D>($"attack4_{i + 1}"));
-            }
-
-            currentSpriteList = idleSprites;
-        }
-
         public override void OnCollision(GameObject other)
         {
-        
+            
         }
     }
 }

@@ -18,6 +18,8 @@ namespace PixelSouls
         protected float speed;
         //protected float fps;
         protected float rotation;
+        protected float scale;
+        protected float layerDepth;
 
 
         protected Rectangle collisionBox;
@@ -51,7 +53,7 @@ namespace PixelSouls
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.4f);
+            spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, scale, SpriteEffects.None, layerDepth);
         }
         public abstract void OnCollision(GameObject other);       
 

@@ -18,12 +18,15 @@ namespace PixelSouls
         {
             sprite = content.Load<Texture2D>("target");
             CreateOrigin();
+
+            scale = 1f;
+            layerDepth = 0.8f;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
 #if DEBUG
-            spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 1f);
+            spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, layerDepth);
 #endif
         }
 
