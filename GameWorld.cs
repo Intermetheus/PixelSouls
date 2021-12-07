@@ -143,7 +143,7 @@ namespace PixelSouls
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack); //Makes layers work           
 
@@ -170,11 +170,11 @@ namespace PixelSouls
             }
             else if (winLoseState == GameState.Win)
             {
-                spriteBatch.DrawString(arial, "You Win", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.Red, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                spriteBatch.DrawString(arial, "You Win", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
             }
             else if (winLoseState == GameState.Lose)
             {
-                spriteBatch.DrawString(arial, "You Lose", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.Red, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                spriteBatch.DrawString(arial, "You Lose", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
             }
 
             spriteBatch.End();
