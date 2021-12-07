@@ -89,8 +89,7 @@ namespace PixelSouls
             Aim();
             Move(gameTime);
             CheckIFrames();
-
-            collisionBox = new Rectangle((int)position.X - (int)origin.X, (int)position.Y - (int)origin.Y, sprite.Width, sprite.Height);
+            collisionBox = new Rectangle((int)position.X-25, (int)position.Y-25, 50, 50);
             //collisionBox.X -= (int)origin.X;
             //collisionBox.Y -= (int)origin.Y;
 
@@ -323,7 +322,7 @@ namespace PixelSouls
             }
             if (!isTargeted)
             {
-                targetedPosition = position-origin;
+                targetedPosition = position - new Vector2(25,25);
             }
             if (isTargeted)
             {

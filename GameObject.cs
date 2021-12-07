@@ -62,13 +62,20 @@ namespace PixelSouls
                 OnCollision(other);
             }
         }
-
+        /// <summary>
+        /// Delete this
+        /// </summary>
+        /// <returns></returns>
         public virtual Rectangle CollisionBox()
         {
             if (this is Floor)
             {
                 //No collisionBox
                 return new Rectangle(20,20, 0, 0);
+            }
+            if (this is Player)
+            {
+                return new Rectangle((int)position.X, (int)position.Y, 50, 50);
             }
             else
             { 
