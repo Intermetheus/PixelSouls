@@ -48,15 +48,7 @@ namespace PixelSouls
             set { maxHealth = value; }
         }
 
-
-        public virtual void Attack()
-        {
-
-        }
-        public virtual Rectangle AttackHitbox()
-        {
-            return new Rectangle((int)position.X, (int)position.Y, attackWidth, attackHeight);
-        }
+        public abstract void Attack();
 
         protected virtual void CheckIFrames()
         {
@@ -84,11 +76,6 @@ namespace PixelSouls
 
             rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
-
-        //public void CreateOrigin()
-        //{
-        //    origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
-        //}
 
         public override void TakeDamage(int attackDamage)
         {

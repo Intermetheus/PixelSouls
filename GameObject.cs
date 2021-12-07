@@ -53,35 +53,7 @@ namespace PixelSouls
         {
             spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.4f);
         }
-        public abstract void OnCollision(GameObject other);
-
-        public void CheckCollision(GameObject other)
-        {
-            if (CollisionBox().Intersects(other.CollisionBox()))
-            {
-                OnCollision(other);
-            }
-        }
-        /// <summary>
-        /// Delete this
-        /// </summary>
-        /// <returns></returns>
-        public virtual Rectangle CollisionBox()
-        {
-            if (this is Floor)
-            {
-                //No collisionBox
-                return new Rectangle(20,20, 0, 0);
-            }
-            if (this is Player)
-            {
-                return new Rectangle((int)position.X, (int)position.Y, 50, 50);
-            }
-            else
-            { 
-                return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
-            }
-        }
+        public abstract void OnCollision(GameObject other);       
 
         public virtual void TakeDamage(int damage)
         {
@@ -100,7 +72,7 @@ namespace PixelSouls
             }
         }
 
-        public void CreateOrigin()
+        public virtual void CreateOrigin()
         {
             origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
         }

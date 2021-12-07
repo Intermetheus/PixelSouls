@@ -23,11 +23,6 @@ namespace PixelSouls
             //rotation = timer;
         }
 
-        public override void Attack()
-        {
-
-        }
-
         public void FacePlayer()
         {
 

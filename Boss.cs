@@ -135,9 +135,9 @@ namespace PixelSouls
         public override void Attack()
         {
             bossAttack.Play();
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - playerTarget) * 25, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - playerTarget) * 75, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - playerTarget) * 125, 100, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 25, 100, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 75, 100, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 125, 100, 25, 50, 50));
 
             //Debug.WriteLine("An attack");
         }

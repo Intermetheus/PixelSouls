@@ -100,8 +100,8 @@ namespace PixelSouls
         {
             if (isAttacking && windup <= 0)
             {
-                GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
-                GameWorld.Instantiate(new AttackHitbox(this, position - origin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
+                GameWorld.Instantiate(new AttackHitbox(this, position - new Vector2(25, 25) - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
+                GameWorld.Instantiate(new AttackHitbox(this, position - new Vector2(25, 25) - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
 
                 animationLock = true;
                 lockTime = 20; //AnimationLock time
@@ -253,7 +253,7 @@ namespace PixelSouls
                 velocity = Vector2.Zero;
                 animState = AnimState.Attack;
                 currentSpriteList = attackSprites;               
-                if (mouseState.Position.X < position.X)
+                if (mouseState.Position.X <= position.X)
                 {
                     facingRight = false;
                     origin = new Vector2(60, 42);
@@ -322,7 +322,7 @@ namespace PixelSouls
             }
             if (!isTargeted)
             {
-                targetedPosition = position - new Vector2(25,25);
+                targetedPosition = position;
             }
             if (isTargeted)
             {
@@ -429,7 +429,7 @@ namespace PixelSouls
         {
             sprite = content.Load<Texture2D>("player");
             CreateOrigin();
-            position = new Vector2(GameWorld.ScreenSize.X / 2-sprite.Width/2, GameWorld.ScreenSize.Y / 2-sprite.Height/2);
+            position = new Vector2(GameWorld.ScreenSize.X / 2, GameWorld.ScreenSize.Y / 2);
 
             dodgeSound = content.Load<SoundEffect>("dodge").CreateInstance();
             walk1Sound = content.Load<SoundEffect>("walk1").CreateInstance();
