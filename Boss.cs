@@ -43,7 +43,7 @@ namespace PixelSouls
 
             for (int i = 0; i < 3; i++)
             {
-                idleSprites.Add(content.Load<Texture2D>($"ready_{i + 1}"));
+                idleSprites.Add(content.Load<Texture2D>($"ready1_{i + 1}"));
             }
 
             for (int i = 0; i < 6; i++)
