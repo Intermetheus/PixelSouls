@@ -13,11 +13,13 @@ namespace PixelSouls
         protected Vector2 position;
         protected Vector2 velocity;
         protected Vector2 origin;
+
+        protected float speed;
+        protected float rotation;
+
         protected Texture2D sprite;
         protected Texture2D[] sprites;
-        protected float speed;
-        //protected float fps;
-        protected float rotation;
+
         protected float scale;
         protected float layerDepth;
 

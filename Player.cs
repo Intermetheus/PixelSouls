@@ -20,10 +20,11 @@ namespace PixelSouls
         private bool isTargeted;
         private bool isHealing;
 
-        private int dodgeCost;
+        private int dodgeStaminaCost;
         private int dodgeCooldown;
         private float dodgeSpeed;
 
+        private int attackStaminaCost;
         private int stamina;
         private int maxStamina;
 
@@ -32,10 +33,10 @@ namespace PixelSouls
         private int animationLockCooldown;
         private int lockTime;
 
-        private Vector2 targetedPosition; //Target position the boss attacks
+        private Vector2 targetedPosition;   // Target position the boss attacks
 
         private SoundEffectInstance dodgeSound;
-        private float delay = 14; //sound delay
+        private float delay = 14;   // sound delay
         private float remainingDelay = 0;
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance walk2Sound;
@@ -58,9 +59,10 @@ namespace PixelSouls
 
             healingTries = 3;
 
-            dodgeCost = 50;
+            dodgeStaminaCost = 50;
+            attackStaminaCost = 15;
             dodgeCooldown = 0;
-            dodgeSpeed = 10f; // multiplier
+            dodgeSpeed = 10f;   // multiplier
 
             IFrame = false;
             IFrameCooldown = 3;
@@ -249,7 +251,7 @@ namespace PixelSouls
         {
             //dodgeCost is the amount of stamina used to dodge
             //BUG: if you dodge in opposite directions, you don't use stamina
-            if (Stamina > dodgeCost && !isDodge)
+            if (Stamina > dodgeStaminaCost && !isDodge)
             {
                 if (keyState.IsKeyDown(Keys.W))
                 {
@@ -279,7 +281,7 @@ namespace PixelSouls
                     //Prevents the player from dodging twice(losing twice stamina) when moving diagonally.
                     if (!isDodge)
                     {
-                        Stamina -= dodgeCost;
+                        Stamina -= dodgeStaminaCost;
                         dodgeSpeed = 10f; //multiplier used in Move()
                         lockTime = 15; //Time the player is animation locked for
                         animationLock = true;
@@ -306,6 +308,7 @@ namespace PixelSouls
             if (Stamina < MaxStamina && !animationLock)
             {
                 Stamina++;
+
                 if (Stamina > MaxStamina)
                 {
                     Stamina = MaxStamina;
@@ -320,18 +323,21 @@ namespace PixelSouls
             {
                 animationLockCooldown++;
                 dodgeCooldown++;
+
                 if (dodgeCooldown >= 3)
                 {
                     dodgeCooldown = 0;
                     isDodge = false;
                 }
+
                 if (animationLockCooldown >= lockTime)
                 {
                     animationLockCooldown = 0;
                     animationLock = false;
                 }
             }
-            //Stop walkSound when movement keys are released
+
+            // Stop walkSound when movement keys are released
             if (velocity == Vector2.Zero)
             {
                 remainingDelay -= 1;
@@ -340,7 +346,6 @@ namespace PixelSouls
                     walk1Sound.Stop();
                 }
             }
-
         }
 
         public override void Attack()
@@ -351,9 +356,10 @@ namespace PixelSouls
                 isAttacking = true;
                 windup = 15;
                 lockTime = windup;
+
                 velocity = Vector2.Zero;
-                animState = AnimState.Attack;
-                currentSpriteList = attackSprites;
+                ChangeAnimationState(AnimState.Attack, attackSprites, origin, 10);
+
                 if (mouseState.Position.X <= position.X)
                 {
                     facingRight = false;
@@ -365,18 +371,19 @@ namespace PixelSouls
                     origin = new Vector2(40, 42);
                 }
             }
-            //Debug.WriteLine("An attack");
         }
 
         private void AttackCheck()
         {
-            if (isAttacking && windup <= 0)
+            if (isAttacking == true && windup <= 0)
             {
-                GameWorld.Instantiate(new AttackHitbox(this, position - new Vector2(25, 25) - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
-                GameWorld.Instantiate(new AttackHitbox(this, position - new Vector2(25, 25) - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
+                GameWorld.Instantiate(new AttackHitbox(this, position - trueOrigin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
+                GameWorld.Instantiate(new AttackHitbox(this, position - trueOrigin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
+
+                stamina -= attackStaminaCost;
 
                 animationLock = true;
-                lockTime = 20; //AnimationLock time
+                lockTime = 20;   // AnimationLock time
                 isAttacking = false;
                 attackSound.Play();
             }
@@ -430,18 +437,22 @@ namespace PixelSouls
         {
             if (!animationLock)
             {
-                if (this.healingTries > 0)
+                if (healingTries > 0)
                 {
                     if (health < 100)
                     {
+                        velocity = Vector2.Zero;
+                        ChangeAnimationState(AnimState.Idle, idleSprites, trueOrigin, 5);
+
                         isHealing = true;
                         animationLock = true;
-                        windup = 10;
-                        this.health += 40;
-                        this.healingTries -= 1;
+                        lockTime = 100;
+
+                        health += 40;
+                        healingTries -= 1;
                         if (health > 100)
                         {
-                            this.health = 100;
+                            health = 100;
                         }
                     }
                 }

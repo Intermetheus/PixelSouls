@@ -15,7 +15,7 @@ namespace PixelSouls
     {
         public string name;
 
-        private SoundEffectInstance bossAttack;
+        private SoundEffectInstance bossAttackSound;
 
         public Boss(string name)
         {
@@ -51,8 +51,8 @@ namespace PixelSouls
                 attackSprites.Add(content.Load<Texture2D>($"attack2_{i + 1}"));
             }
 
-            bossAttack = content.Load<SoundEffect>("bossAttack").CreateInstance();
-            bossAttack.Volume = 0.5f;
+            bossAttackSound = content.Load<SoundEffect>("bossAttack").CreateInstance();
+            bossAttackSound.Volume = 0.5f;
 
             base.LoadContent(content);
         }
@@ -70,10 +70,10 @@ namespace PixelSouls
 
         public override void Attack()
         {
-            bossAttack.Play();
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 25, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 75, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 125, 100, 25, 50, 50));
+            bossAttackSound.Play();
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 25, 100, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 75, 100, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 125, 100, 25, 50, 50));
         }
 
         public override void OnCollision(GameObject other)

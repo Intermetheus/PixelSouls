@@ -20,7 +20,8 @@ namespace PixelSouls
         protected bool IFrame;
         protected int IFrameCooldown;
       
-        protected Vector2 initialPosition;       
+        protected Vector2 initialPosition;
+        protected Vector2 trueOrigin;
 
         protected int windupMS = 200;
         protected int attackDamage = 1;
@@ -124,21 +125,21 @@ namespace PixelSouls
             }
         }
 
+        public override void CreateOrigin()
+        {
+            base.CreateOrigin();
+            trueOrigin = origin;
+        }
+
         public void Animate(GameTime gameTime)
         {
             if(velocity == Vector2.Zero && animState != AnimState.Idle && !animationLock)
             {
-                animState = AnimState.Idle;
-                currentSpriteList = idleSprites;
-                ResetAnimation();
-                origin = new Vector2(25, 25);
+                ChangeAnimationState(AnimState.Idle, idleSprites, trueOrigin, 5);
             }
             else if(velocity != Vector2.Zero && animState != AnimState.Walk && !animationLock)
             {
-                animState = AnimState.Walk;
-                currentSpriteList = walkSprites;
-                ResetAnimation();
-                origin = new Vector2(25, 25);
+                ChangeAnimationState(AnimState.Walk, walkSprites, trueOrigin, 5);
             }
 
             if(velocity.X > 0)
@@ -160,6 +161,15 @@ namespace PixelSouls
             }
 
             sprite = currentSpriteList[currentSpriteIndex];
+        }
+
+        public void ChangeAnimationState(AnimState animState, List<Texture2D> spriteList, Vector2 origin, float fps)
+        {
+            this.animState = animState;
+            currentSpriteList = spriteList;
+            ResetAnimation();
+            this.origin = origin;
+            this.fps = fps;
         }
 
         public void ResetAnimation()

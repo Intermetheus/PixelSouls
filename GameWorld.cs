@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace PixelSouls
 {
-    public enum GameState { Play, Menu, Lose, Win}
+    public enum GameState { Play, Menu, Lose, Win }
 
     public class GameWorld : Game
     {
