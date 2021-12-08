@@ -29,6 +29,9 @@ namespace PixelSouls
 
             scale = 2f;
             layerDepth = 0.4f;
+
+            windup = 50;
+            attackTrackingLag = 15;
         }
 
         public override void LoadContent(ContentManager content)
@@ -60,11 +63,10 @@ namespace PixelSouls
         public override void Update(GameTime gameTime)
         {
             screenPosition = position - GameWorld.CameraPosition;
-            MovementCheck();
             Move(gameTime);
             CheckIFrames();
-            AttackCheck();
-            collisionBox = new Rectangle((int)screenPosition.X - (int)origin.X, (int)screenPosition.Y - (int)origin.Y, sprite.Width, sprite.Height);
+            Behaviour();
+            collisionBox = new Rectangle((int)screenPosition.X - 25, (int)screenPosition.Y - 25, 50, 50);
             Animate(gameTime);
         }
 

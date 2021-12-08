@@ -15,6 +15,8 @@ namespace PixelSouls
         protected int maxHealth;
         protected bool isAlive;
 
+        protected bool isAttacking;
+
         protected int windup;
 
         protected bool IFrame;

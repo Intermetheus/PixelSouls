@@ -12,67 +12,71 @@ namespace PixelSouls
         protected int attackCooldown;   // Total attackCooldown
         protected int attackTime;   // The time when the boss starts attacking. Max = attackCooldown
         protected Vector2 playerTarget;
+        protected int attackTrackingLag;
+        protected int windupTimer;
 
-        public void MovementCheck()
+        /// <summary>
+        /// Governs enemy movement and attack behaviour
+        /// </summary>
+        public void Behaviour()
         {
-            if (attackCooldown > attackTime + 25)   // Additive value determines the time the boss halts movement before an attack.
+            if(attackCooldown <= 0)
             {
-                velocity = GameWorld.player.Position - screenPosition;
-                velocity.Normalize();
-            }
-            else
-            {
-                velocity = Vector2.Zero;
-
-                if (animState != AnimState.Attack)
+                if (Vector2.Distance(screenPosition, GameWorld.player.Position) < 250 && !isAttacking)
                 {
-                    ChangeAnimationState(AnimState.Attack, attackSprites, origin, 5);
+                    isAttacking = true;
 
-                    if (screenPosition.X < GameWorld.player.Position.X)
-                    {
-                        facingRight = true;
-                        origin = new Vector2(40, 42);
-                    }
-                    else if (screenPosition.X > GameWorld.player.Position.X)
-                    {
-                        facingRight = false;
-                        origin = new Vector2(60, 42);
-                    }
-                    animationLock = true;
-                }
-            }
-        }
+                    windupTimer = windup;
 
-        public void AttackCheck()
-        {
-            if (attackCooldown >= attackTime - 3 && attackCooldown < attackTime)
-            {
-                GameWorld.player.IsTargeted = true;
-            }
-            else
-            {
-            }
-            if (attackCooldown == 0)
-            {
-                playerTarget = GameWorld.player.TargetedPosition;
-                if (Vector2.Distance(screenPosition, GameWorld.player.Position) > 50)
+                    velocity = Vector2.Zero;
+
+                    if (animState != AnimState.Attack)
+                    {
+                        ChangeAnimationState(AnimState.Attack, attackSprites, origin, 5);
+
+                        if (screenPosition.X < GameWorld.player.Position.X)
+                        {
+                            facingRight = true;
+                            origin = new Vector2(40, 42);
+                        }
+                        else if (screenPosition.X > GameWorld.player.Position.X)
+                        {
+                            facingRight = false;
+                            origin = new Vector2(60, 42);
+                        }
+                        animationLock = true;
+                    }
+                }    
+
+                if (isAttacking && windupTimer <= 0)
                 {
+                    playerTarget = GameWorld.player.TargetedPosition;
                     Attack();
                     GameWorld.player.IsTargeted = false;
                     attackCooldown = 100;
+                    isAttacking = false;
+                    animationLock = false;
                 }
-                else if (collisionBox.Contains(GameWorld.player.Position.X, GameWorld.player.Position.Y))
+                else if(isAttacking)
                 {
-                    Attack();
-                    GameWorld.player.IsTargeted = false;
-                    attackCooldown = 100;
+                    windupTimer--;
+
+                    if (windupTimer <= attackTrackingLag)
+                    {
+                        GameWorld.player.IsTargeted = true;
+                    }
                 }
-                animationLock = false;
             }
-            if (attackCooldown > 0)
+            else
             {
                 attackCooldown--;
             }
+
+            if (!isAttacking)
+            {
+                velocity = GameWorld.player.Position - screenPosition;
+                velocity.Normalize();
+            }           
         }
     }
 }

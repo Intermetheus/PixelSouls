@@ -16,7 +16,6 @@ namespace PixelSouls
         private KeyboardState keyState;
 
         private bool isDodge;
-        private bool isAttacking;
         private bool isTargeted;
         private bool isHealing;
 
