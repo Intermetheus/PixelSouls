@@ -17,7 +17,6 @@ namespace PixelSouls
 
         private bool isDodge;
         private bool isTargeted;
-        private bool isHealing;
 
         private int dodgeStaminaCost;
         private int dodgeCooldown;
@@ -114,7 +113,7 @@ namespace PixelSouls
             Aim();
             Move(gameTime);
             CheckIFrames();
-            collisionBox = new Rectangle((int)position.X - 25, (int)position.Y - 25, 50, 50);
+            collisionBox = new Rectangle((int)position.X - (int)trueOrigin.X, (int)position.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
             Animate(gameTime);
         }
 
@@ -443,7 +442,6 @@ namespace PixelSouls
                         velocity = Vector2.Zero;
                         ChangeAnimationState(AnimState.Idle, idleSprites, trueOrigin, 5);
 
-                        isHealing = true;
                         animationLock = true;
                         lockTime = 100;
 

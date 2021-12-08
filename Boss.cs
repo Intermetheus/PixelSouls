@@ -66,7 +66,7 @@ namespace PixelSouls
             Move(gameTime);
             CheckIFrames();
             Behaviour();
-            collisionBox = new Rectangle((int)screenPosition.X - 25, (int)screenPosition.Y - 25, 50, 50);
+            collisionBox = new Rectangle((int)screenPosition.X - (int)trueOrigin.X, (int)screenPosition.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
             Animate(gameTime);
         }
 

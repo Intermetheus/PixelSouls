@@ -33,10 +33,6 @@ namespace PixelSouls
 
         private SoundEffectInstance backgroundMusic;
 
-        private ButtonState leftMouseButton;
-
-        private List<UI> uiElements;
-
         private UI ui;
 
         public static GameState WinLoseState
@@ -143,7 +139,7 @@ namespace PixelSouls
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack); //Makes layers work           
 
