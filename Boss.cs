@@ -15,10 +15,6 @@ namespace PixelSouls
     {
         public string name;
 
-        private int attackCooldown; //Total attackCooldown
-        private int attackTime; //The time when the boss starts attacking. Max = attackCooldown
-        private Vector2 playerTarget;
-
         private SoundEffectInstance bossAttack;
 
         public Boss(string name)
@@ -30,16 +26,15 @@ namespace PixelSouls
             speed = 50f;
             IFrameCooldown = 3;
             this.name = name;
+
+            scale = 2f;
+            layerDepth = 0.4f;
         }
 
         public override void LoadContent(ContentManager content)
         {
-            sprite = content.Load<Texture2D>("player");
-            CreateOrigin();
+            sprite = content.Load<Texture2D>("ready1_1");
             position = new Vector2(1000, 1000);
-
-            bossAttack = content.Load<SoundEffect>("bossAttack").CreateInstance();
-            bossAttack.Volume = 0.5f;
 
             for (int i = 0; i < 3; i++)
             {
@@ -56,7 +51,10 @@ namespace PixelSouls
                 attackSprites.Add(content.Load<Texture2D>($"attack2_{i + 1}"));
             }
 
-            currentSpriteList = idleSprites;
+            bossAttack = content.Load<SoundEffect>("bossAttack").CreateInstance();
+            bossAttack.Volume = 0.5f;
+
+            base.LoadContent(content);
         }
 
         public override void Update(GameTime gameTime)
@@ -70,60 +68,13 @@ namespace PixelSouls
             Animate(gameTime);
         }
 
-        private void MovementCheck()
-        {
-            if (attackCooldown > attackTime + 25) //Additive value determines the time the boss halts movement before an attack.
-            {
-                velocity = GameWorld.player.Position - screenPosition;
-                velocity.Normalize();
-            }
-            else
-            {
-                velocity = Vector2.Zero;
-            }
-        }
-
-        private void AttackCheck()
-        {
-            if (attackCooldown >= attackTime-3 && attackCooldown < attackTime)
-            {
-                GameWorld.player.IsTargeted = true;
-            }
-            else
-            {
-            }
-            if (attackCooldown == 0)
-            {
-                playerTarget = GameWorld.player.TargetedPosition;
-                if (Vector2.Distance(screenPosition, GameWorld.player.Position) > 50)
-                {
-                    Attack();
-                    GameWorld.player.IsTargeted = false;
-                    attackCooldown = 150;
-                }
-                else if (collisionBox.Contains(GameWorld.player.Position.X, GameWorld.player.Position.Y))
-                {
-                    Attack();
-                    GameWorld.player.IsTargeted = false;
-                    attackCooldown = 150;
-                }
-            }
-            if (attackCooldown > 0)
-            {
-                attackCooldown--;
-            }
-        }
-
         public override void Attack()
         {
             bossAttack.Play();
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - playerTarget) * 25, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - playerTarget) * 75, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - origin - Vector2.Normalize(screenPosition - playerTarget) * 125, 100, 25, 50, 50));
-
-            //Debug.WriteLine("An attack");
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 25, 100, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 75, 100, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - new Vector2(25, 25) - Vector2.Normalize(screenPosition - playerTarget) * 125, 100, 25, 50, 50));
         }
-
 
         public override void OnCollision(GameObject other)
         {

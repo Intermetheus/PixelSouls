@@ -14,7 +14,9 @@ namespace PixelSouls
         protected int health;
         protected int maxHealth;
         protected bool isAlive;
+
         protected int windup;
+
         protected bool IFrame;
         protected int IFrameCooldown;
       
@@ -34,7 +36,6 @@ namespace PixelSouls
         protected List<Texture2D> idleSprites = new List<Texture2D>();
         protected List<Texture2D> walkSprites = new List<Texture2D>();
         protected List<Texture2D> attackSprites = new List<Texture2D>();
-
         protected bool animationLock;
 
         public int HealthProp
@@ -48,15 +49,25 @@ namespace PixelSouls
             set { maxHealth = value; }
         }
 
-
-        public virtual void Attack()
+        public override void LoadContent(ContentManager content)
         {
+            currentSpriteList = idleSprites;
+            CreateOrigin();
+        }
 
-        }
-        public virtual Rectangle AttackHitbox()
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            return new Rectangle((int)position.X, (int)position.Y, attackWidth, attackHeight);
+            if (facingRight)
+            {
+                spriteBatch.Draw(sprite, screenPosition, null, Color.White, 0, origin, scale, SpriteEffects.None, layerDepth);
+            }
+            else
+            {
+                spriteBatch.Draw(sprite, screenPosition, null, Color.White, 0, origin, scale, SpriteEffects.FlipHorizontally, layerDepth);
+            }
         }
+
+        public abstract void Attack();
 
         protected virtual void CheckIFrames()
         {
@@ -84,11 +95,6 @@ namespace PixelSouls
 
             rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
         }
-
-        //public void CreateOrigin()
-        //{
-        //    origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
-        //}
 
         public override void TakeDamage(int attackDamage)
         {

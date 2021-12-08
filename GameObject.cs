@@ -18,6 +18,8 @@ namespace PixelSouls
         protected float speed;
         //protected float fps;
         protected float rotation;
+        protected float scale;
+        protected float layerDepth;
 
 
         protected Rectangle collisionBox;
@@ -51,30 +53,9 @@ namespace PixelSouls
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, 1F, SpriteEffects.None, 0.4f);
+            spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, scale, SpriteEffects.None, layerDepth);
         }
-        public abstract void OnCollision(GameObject other);
-
-        public void CheckCollision(GameObject other)
-        {
-            if (CollisionBox().Intersects(other.CollisionBox()))
-            {
-                OnCollision(other);
-            }
-        }
-
-        public virtual Rectangle CollisionBox()
-        {
-            if (this is Floor)
-            {
-                //No collisionBox
-                return new Rectangle(20,20, 0, 0);
-            }
-            else
-            { 
-                return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
-            }
-        }
+        public abstract void OnCollision(GameObject other);       
 
         public virtual void TakeDamage(int damage)
         {
@@ -93,7 +74,7 @@ namespace PixelSouls
             }
         }
 
-        public void CreateOrigin()
+        public virtual void CreateOrigin()
         {
             origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
         }
