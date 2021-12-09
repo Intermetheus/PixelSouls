@@ -19,7 +19,6 @@ namespace PixelSouls
 
         protected Texture2D sprite;
         protected Texture2D[] sprites;
-
         protected float scale;
         protected float layerDepth;
 

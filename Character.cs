@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -41,6 +42,8 @@ namespace PixelSouls
         protected List<Texture2D> attackSprites = new List<Texture2D>();
         protected bool animationLock;
 
+        protected SoundEffectInstance damageSound;
+
         public int HealthProp
         {
             get { return health; }
@@ -56,6 +59,13 @@ namespace PixelSouls
         {
             currentSpriteList = idleSprites;
             CreateOrigin();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            Move(gameTime);
+            CheckIFrames();
+            Animate(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -101,11 +111,9 @@ namespace PixelSouls
 
         public override void TakeDamage(int attackDamage)
         {
-            if (IFrame)
+            if (!IFrame)
             {
-            }
-            else
-            {
+                damageSound.Play();
                 health -= attackDamage;
                 IFrame = true;
                 CheckDeath();

@@ -8,12 +8,20 @@ namespace PixelSouls
 {
     abstract public class Enemy : Character
     {
-
         protected int attackCooldown;   // Total attackCooldown
         protected int attackTime;   // The time when the boss starts attacking. Max = attackCooldown
         protected Vector2 playerTarget;
         protected int attackTrackingLag;
         protected int windupTimer;
+
+        public override void Update(GameTime gameTime)
+        {
+            collisionBox = new Rectangle((int)screenPosition.X - (int)trueOrigin.X, (int)screenPosition.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
+            screenPosition = position - GameWorld.CameraPosition;
+
+            Behaviour();
+            base.Update(gameTime);
+        }
 
         /// <summary>
         /// Governs enemy movement and attack behaviour

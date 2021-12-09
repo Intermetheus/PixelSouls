@@ -57,17 +57,9 @@ namespace PixelSouls
             bossAttackSound = content.Load<SoundEffect>("bossAttack").CreateInstance();
             bossAttackSound.Volume = 0.5f;
 
-            base.LoadContent(content);
-        }
+            damageSound = content.Load<SoundEffect>("damageSound2").CreateInstance();
 
-        public override void Update(GameTime gameTime)
-        {
-            screenPosition = position - GameWorld.CameraPosition;
-            Move(gameTime);
-            CheckIFrames();
-            Behaviour();
-            collisionBox = new Rectangle((int)screenPosition.X - (int)trueOrigin.X, (int)screenPosition.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
-            Animate(gameTime);
+            base.LoadContent(content);
         }
 
         public override void Attack()

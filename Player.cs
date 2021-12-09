@@ -39,7 +39,10 @@ namespace PixelSouls
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance walk2Sound;
         private SoundEffectInstance attackSound;
-        private SoundEffectInstance damageSound;
+
+
+        // test
+        private int timer = 15;
 
         public bool IsTargeted { get => isTargeted; set => isTargeted = value; }
         public int Stamina { get => stamina; set => stamina = value; }
@@ -108,13 +111,12 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            AnimationLock(); // animationLock & Dodge
-            AttackCheck();
-            Aim();
-            Move(gameTime);
-            CheckIFrames();
             collisionBox = new Rectangle((int)position.X - (int)trueOrigin.X, (int)position.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
-            Animate(gameTime);
+            AnimationLock();   // animationLock & Dodge
+
+            Aim();
+            AttackCheck();
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -235,6 +237,7 @@ namespace PixelSouls
                 }
                 GameWorld.CameraPosition += velocity * speed * deltaTime;
             }
+
             if (!isTargeted)
             {
                 targetedPosition = position;
@@ -260,13 +263,11 @@ namespace PixelSouls
                 {
                     velocity += new Vector2(0, 1);
                     dodgePreset();
-
                 }
                 if (keyState.IsKeyDown(Keys.A))
                 {
                     velocity += new Vector2(-1, 0);
                     dodgePreset();
-
                 }
                 if (keyState.IsKeyDown(Keys.D))
                 {
@@ -280,8 +281,8 @@ namespace PixelSouls
                     if (!isDodge)
                     {
                         Stamina -= dodgeStaminaCost;
-                        dodgeSpeed = 10f; //multiplier used in Move()
-                        lockTime = 15; //Time the player is animation locked for
+                        dodgeSpeed = 1.5f; //multiplier used in Move()
+                        lockTime = timer; //Time the player is animation locked for
                         animationLock = true;
                         isDodge = true;
                         dodgeSound.Play();
@@ -322,7 +323,7 @@ namespace PixelSouls
                 animationLockCooldown++;
                 dodgeCooldown++;
 
-                if (dodgeCooldown >= 3)
+                if (dodgeCooldown >= timer)
                 {
                     dodgeCooldown = 0;
                     isDodge = false;
@@ -397,38 +398,22 @@ namespace PixelSouls
             {
                 IFrame = true;
             }
+            //seems to only work with this removed, how does this even work?
             else
             {
                 IFrame = false;
             }
+
             if (IFrame && IFrameCooldown >= 0)
             {
                 IFrameCooldown--;
             }
             else
             {
-                IFrameCooldown = 3;
+                IFrameCooldown = timer;
                 IFrame = false;
             }
             //Add other iFrame checks here
-        }
-        
-        /// <summary>
-        /// Override  so we can play the damageSound
-        /// </summary>
-        /// <param name="attackDamage"></param>
-        public override void TakeDamage(int attackDamage)
-        {
-            if (IFrame)
-            {
-            }
-            else
-            {
-                damageSound.Play();
-                health -= attackDamage;
-                IFrame = true;
-                CheckDeath();
-            }
         }
 
         private void Healing()
