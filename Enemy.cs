@@ -16,9 +16,9 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            collisionBox = new Rectangle((int)screenPosition.X - (int)trueOrigin.X, (int)screenPosition.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
             screenPosition = position - GameWorld.CameraPosition;
-
+            collisionBox = new Rectangle((int)screenPosition.X - (int)trueOrigin.X, (int)screenPosition.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
+            
             Behaviour();
             base.Update(gameTime);
         }
