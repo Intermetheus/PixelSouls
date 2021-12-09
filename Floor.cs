@@ -30,6 +30,11 @@ namespace PixelSouls
             //This should be loaded in Stage
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            screenPosition = position - GameWorld.CameraPosition;
+        }
+
         public override void OnCollision(GameObject other)
         {
             

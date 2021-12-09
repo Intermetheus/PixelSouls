@@ -24,7 +24,6 @@ namespace PixelSouls
             attackCooldown = 150;
             attackTime = 15;
             speed = 50f;
-            IFrameCooldown = 3;
             this.name = name;
 
             scale = 2f;

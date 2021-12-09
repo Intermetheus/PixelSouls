@@ -51,16 +51,8 @@ namespace PixelSouls
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = 1600;
             graphics.PreferredBackBufferHeight = 900;
-            //Window.AllowUserResizing = true;
             screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-            //Window.ClientSizeChanged += OnResize;
         }
-
-        //private void OnResize (object sender, EventArgs args)
-        //{
-        //    //When the window size is changed we have to update the screenSize field
-        //    screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-        //}
 
         protected override void Initialize()
         {
@@ -94,8 +86,8 @@ namespace PixelSouls
             {
                 gameObject.LoadContent(Content);
             }
-            ui.LoadContent(Content);
 
+            ui.LoadContent(Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -111,7 +103,6 @@ namespace PixelSouls
                 foreach (GameObject gameObject in removeGameObjects)
                 {
                     gameObjects.Remove(gameObject);
-                    //removeGameObjects.Clear();
                 }
                 removeGameObjects.Clear();
 
@@ -141,7 +132,7 @@ namespace PixelSouls
         {
             GraphicsDevice.Clear(Color.Black);
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack); //Makes layers work           
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);   // Makes layers work           
 
             if (winLoseState == GameState.Play)
             {
@@ -149,20 +140,12 @@ namespace PixelSouls
                 {
                     gameObject.Draw(spriteBatch);
 #if DEBUG
-                    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
-                    //if (gameObject is Player || gameObject is AttackHitbox || gameObject is Boss)
-                    //{
-                    //    DrawCollisionBoxPlayer(gameObject.CollisionBoxProp);
-                    //}
-                    //else
-                    //{
-                    //    DrawCollisionBox(gameObject.CollisionBoxProp);
-                    //}
+                    DrawCollisionBox(gameObject.CollisionBoxProp);
 #endif
                 }
                 ui.Draw(spriteBatch);
 
-                DrawCollisionBox(Stage.WorldSize);
+                DrawWorldBoundary(Stage.WorldSize);
             }
             else if (winLoseState == GameState.Win)
             {
@@ -170,19 +153,13 @@ namespace PixelSouls
             }
             else if (winLoseState == GameState.Lose)
             {
-                spriteBatch.DrawString(arial, "You Lose", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                spriteBatch.DrawString(arial, "You Suck", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
             }
 
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
-
-        //private bool LeftMouseButtonReleased()
-        //{
-        //    // placeholder code
-        //    return true;
-        //}
 
         public static void Instantiate(GameObject gameObject)
         {
@@ -197,36 +174,30 @@ namespace PixelSouls
         // This is used to draw the Stages walls
         private void DrawCollisionBox(Rectangle rect)
         {
-            Rectangle collisionBox = rect;
-            int colX = collisionBox.X - (int)CameraPosition.X + (int)ScreenSize.X / 2;
-            int colY = collisionBox.Y - (int)CameraPosition.Y + (int)ScreenSize.Y / 2;
-
-            Rectangle topLine = new Rectangle(colX, colY, collisionBox.Width, 1);
-            Rectangle bottomLine = new Rectangle(colX, colY + collisionBox.Height, collisionBox.Width, 1);
-            Rectangle rightLine = new Rectangle(colX + collisionBox.Width, colY, 1, collisionBox.Height);
-            Rectangle leftLine = new Rectangle(colX, colY, 1, collisionBox.Height);
-
-            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            DrawLines(rect, Color.Red, 1);
         }
 
-        private void DrawCollisionBoxPlayer(Rectangle rect)
+        private void DrawWorldBoundary(Rectangle rect)
         {
             Rectangle collisionBox = rect;
-            int colX = collisionBox.X;
-            int colY = collisionBox.Y;
 
-            Rectangle topLine = new Rectangle(colX, colY, collisionBox.Width, 1);
-            Rectangle bottomLine = new Rectangle(colX, colY + collisionBox.Height, collisionBox.Width, 1);
-            Rectangle rightLine = new Rectangle(colX + collisionBox.Width, colY, 1, collisionBox.Height);
-            Rectangle leftLine = new Rectangle(colX, colY, 1, collisionBox.Height);
+            collisionBox.X = collisionBox.X - (int)CameraPosition.X + (int)ScreenSize.X / 2;
+            collisionBox.Y = collisionBox.Y - (int)CameraPosition.Y + (int)ScreenSize.Y / 2;
 
-            spriteBatch.Draw(collisionTexture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(collisionTexture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(collisionTexture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(collisionTexture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            DrawLines(collisionBox, Color.DarkGray, 10);
+        }
+
+        private void DrawLines(Rectangle rect, Color color, int lineWidth)
+        {
+            Rectangle topLine = new Rectangle(rect.X, rect.Y, rect.Width, lineWidth);
+            Rectangle bottomLine = new Rectangle(rect.X, rect.Y + rect.Height, rect.Width, lineWidth);
+            Rectangle rightLine = new Rectangle(rect.X + rect.Width, rect.Y, lineWidth, rect.Height + lineWidth);
+            Rectangle leftLine = new Rectangle(rect.X, rect.Y, lineWidth, rect.Height);
+
+            spriteBatch.Draw(collisionTexture, topLine, null, color, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, bottomLine, null, color, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, rightLine, null, color, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(collisionTexture, leftLine, null, color, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
         }
     }
 }

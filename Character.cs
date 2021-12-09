@@ -18,11 +18,10 @@ namespace PixelSouls
 
         protected bool isAttacking;
 
+        protected bool hasTakenDamage;
+
         protected int windup;
 
-        protected bool IFrame;
-        protected int IFrameCooldown;
-      
         protected Vector2 initialPosition;
         protected Vector2 trueOrigin;
 
@@ -64,8 +63,8 @@ namespace PixelSouls
         public override void Update(GameTime gameTime)
         {
             Move(gameTime);
-            CheckIFrames();
             Animate(gameTime);
+            hasTakenDamage = false;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -81,19 +80,6 @@ namespace PixelSouls
         }
 
         public abstract void Attack();
-
-        protected virtual void CheckIFrames()
-        {
-            if (IFrame && IFrameCooldown >= 0)
-            {
-                IFrameCooldown--;
-            }
-            else
-            {
-                IFrameCooldown = 3;
-                IFrame = false;
-            }
-        }
 
         protected virtual void Move(GameTime gameTime)
         {
@@ -111,13 +97,13 @@ namespace PixelSouls
 
         public override void TakeDamage(int attackDamage)
         {
-            if (!IFrame)
+            if (!hasTakenDamage)
             {
+                hasTakenDamage = true;
                 damageSound.Play();
                 health -= attackDamage;
-                IFrame = true;
                 CheckDeath();
-            }
+            }          
         }
 
         public void CheckDeath()
