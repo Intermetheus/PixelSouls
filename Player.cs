@@ -44,7 +44,6 @@ namespace PixelSouls
         private float remainingDelay = 0;
         private SoundEffectInstance dodgeSound;
         private SoundEffectInstance walk1Sound;
-        private SoundEffectInstance walk2Sound;
         private SoundEffectInstance attackSound;
 
         public bool IsTargeted { get => isTargeted; set => isTargeted = value; }
