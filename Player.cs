@@ -185,6 +185,7 @@ namespace PixelSouls
             }
         }
 
+        // Currently unused, would be used for governing sprite orientation
         //private void Aim()
         //{
         //    Rotate(position, new Vector2(mouseState.X, mouseState.Y));
