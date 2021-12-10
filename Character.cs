@@ -25,7 +25,6 @@ namespace PixelSouls
         protected Vector2 initialPosition;
         protected Vector2 trueOrigin;
 
-        protected int windupMS = 200;
         protected int attackDamage = 1;
         protected int attackWidth = 100;
         protected int attackHeight = 50;
