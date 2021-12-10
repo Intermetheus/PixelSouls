@@ -79,21 +79,23 @@ namespace PixelSouls
             }
         }
 
-        public abstract void Attack();
+        protected abstract void Attack();
 
-        protected virtual void Move(GameTime gameTime)
-        {
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        protected abstract void Move(GameTime gameTime);
 
-            position += ((velocity * speed) * deltaTime);
-        }
+        // Eventually to be converted into a eight-directional sprite changer, based on the direction the character is facing
+        // Current not used
+        /// <summary>
+        /// Calculates a rotation value, for use in rotating character visuals
+        /// </summary>
+        /// <param name="self">The position of the character being rotated</param>
+        /// <param name="target">The position the character should face</param>
+        //protected void Rotate(Vector2 self, Vector2 target)
+        //{
+        //    Vector2 Dpos = target - self; //Vector between target and self
 
-        public void Rotate(Vector2 self, Vector2 target)
-        {
-            Vector2 Dpos = target - self; //Vector between target and self
-
-            rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
-        }
+        //    rotation = (float)Math.Atan2(Dpos.Y, Dpos.X);
+        //}
 
         public override void TakeDamage(int attackDamage)
         {
@@ -106,7 +108,7 @@ namespace PixelSouls
             }          
         }
 
-        public void CheckDeath()
+        private void CheckDeath()
         {
             if(health <= 0)
             {
@@ -121,13 +123,13 @@ namespace PixelSouls
             }
         }
 
-        public override void CreateOrigin()
+        protected override void CreateOrigin()
         {
             base.CreateOrigin();
             trueOrigin = origin;
         }
 
-        public void Animate(GameTime gameTime)
+        private void Animate(GameTime gameTime)
         {
             if(velocity == Vector2.Zero && animState != AnimState.Idle && !animationLock)
             {
@@ -159,7 +161,7 @@ namespace PixelSouls
             sprite = currentSpriteList[currentSpriteIndex];
         }
 
-        public void ChangeAnimationState(AnimState animState, List<Texture2D> spriteList, Vector2 origin, float fps)
+        protected void ChangeAnimationState(AnimState animState, List<Texture2D> spriteList, Vector2 origin, float fps)
         {
             this.animState = animState;
             currentSpriteList = spriteList;
@@ -168,7 +170,7 @@ namespace PixelSouls
             this.fps = fps;
         }
 
-        public void ResetAnimation()
+        private void ResetAnimation()
         {
             animCounter = 0;
             currentSpriteIndex = 0;

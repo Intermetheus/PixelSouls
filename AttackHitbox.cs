@@ -10,14 +10,11 @@ namespace PixelSouls
 {
     class AttackHitbox : GameObject
     {
-        private int windupMS;
         private int attackDamage;
         private int attackWidth;
         private int attackHeight;
 
         private GameObject attacker;
-
-        //private Rectangle collisionBox = new Rectangle();
 
         public override Rectangle CollisionBoxProp
         {
@@ -25,10 +22,9 @@ namespace PixelSouls
             set { collisionBox = value; }
         }
 
-        public AttackHitbox(GameObject attacker, Vector2 position, int windupMS, int attackDamage, int attackWidth, int attackHeight)
+        public AttackHitbox(GameObject attacker, Vector2 position, int attackDamage, int attackWidth, int attackHeight)
         {
             this.attacker = attacker;
-            this.windupMS = windupMS;
             this.attackDamage = attackDamage;
             this.attackWidth = attackWidth;
             this.attackHeight = attackHeight;
@@ -42,6 +38,11 @@ namespace PixelSouls
         public override void LoadContent(ContentManager content)
         {
             // Empty to allow the hitbox to be a game object, though it has no content of its own
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            GameWorld.Destroy(this);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -62,17 +63,5 @@ namespace PixelSouls
                 other.TakeDamage(attackDamage);
             }
         }
-
-        public override void Update(GameTime gameTime)
-        {
-            GameWorld.Destroy(this);
-            //base.Update(gameTime);
-        }
-
-
-        //private void DealDamage(Character target)
-        //{
-        //    target.HealthProp -= attackDamage;
-        //}
     }
 }

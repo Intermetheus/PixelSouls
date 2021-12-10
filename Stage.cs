@@ -7,12 +7,11 @@ using System.Text;
 
 namespace PixelSouls
 {
-     class Stage
+     static class Stage
     {
-        public static int currentStage;
+        //public static int currentStage;   // Value used to track the current stage. Currently only one stage implemented
         private static Rectangle worldSize;
-        protected static Texture2D backgroundImage;
-
+        private static Texture2D backgroundImage;
 
         public static Rectangle WorldSize { get => worldSize; set => worldSize = value; }
 
@@ -21,11 +20,10 @@ namespace PixelSouls
             backgroundImage = content.Load<Texture2D>("backgroundImage");
         }
 
-
         public static void LoadLevel(string levelName)
         {
-            //TODO: make this dynamic
-            //Use string to call class methods
+            // TODO: make this dynamic
+            // Use string to call class methods
             if (levelName == "PrototypePlayground")
             {
                 PrototypePlayground.CreateLevel(backgroundImage);

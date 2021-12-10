@@ -23,10 +23,17 @@ namespace PixelSouls
             base.Update(gameTime);
         }
 
+        protected override void Move(GameTime gameTime)
+        {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            position += ((velocity * speed) * deltaTime);
+        }
+
         /// <summary>
         /// Governs enemy movement and attack behaviour
         /// </summary>
-        public void Behaviour()
+        private void Behaviour()
         {
             if(attackCooldown <= 0)
             {

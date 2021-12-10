@@ -33,8 +33,6 @@ namespace PixelSouls
 
         private SoundEffectInstance backgroundMusic;
 
-        private UI ui;
-
         public static GameState WinLoseState
         {
             get { return winLoseState; }
@@ -61,7 +59,6 @@ namespace PixelSouls
             gameObjects.Add(boss);
             gameObjects.Add(new Target());
 
-            ui = new UI();
             base.Initialize();
             Stage.LoadLevel("PrototypePlayground");
         }
@@ -87,7 +84,7 @@ namespace PixelSouls
                 gameObject.LoadContent(Content);
             }
 
-            ui.LoadContent(Content);
+            UI.LoadContent(Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -122,7 +119,7 @@ namespace PixelSouls
                         }
                     }
                 }
-                ui.Update(gameTime);
+                UI.Update(gameTime);
             }            
 
             base.Update(gameTime);
@@ -143,7 +140,7 @@ namespace PixelSouls
                     DrawCollisionBox(gameObject.CollisionBoxProp);
 #endif
                 }
-                ui.Draw(spriteBatch);
+                UI.Draw(spriteBatch);
 
                 DrawWorldBoundary(Stage.WorldSize);
             }

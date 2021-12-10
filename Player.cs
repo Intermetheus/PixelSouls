@@ -114,7 +114,7 @@ namespace PixelSouls
             AnimationLock();   // animationLock & Dodge
             CheckIFrames();
 
-            Aim();
+            //Aim();
             AttackCheck();
             base.Update(gameTime);
         }
@@ -187,10 +187,10 @@ namespace PixelSouls
             }
         }
 
-        private void Aim()
-        {
-            Rotate(position, new Vector2(mouseState.X, mouseState.Y));
-        }
+        //private void Aim()
+        //{
+        //    Rotate(position, new Vector2(mouseState.X, mouseState.Y));
+        //}
 
         protected override void Move(GameTime gameTime)
         {
@@ -349,7 +349,7 @@ namespace PixelSouls
             }
         }
 
-        public override void Attack()
+        protected override void Attack()
         {
             if (!animationLock)
             {
@@ -378,8 +378,8 @@ namespace PixelSouls
         {
             if (isAttacking == true && windup <= 0)
             {
-                GameWorld.Instantiate(new AttackHitbox(this, position - trueOrigin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 100, 50, 50, 50));
-                GameWorld.Instantiate(new AttackHitbox(this, position - trueOrigin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 100, 50, 50, 50));
+                GameWorld.Instantiate(new AttackHitbox(this, position - trueOrigin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 25, 50, 50, 50));
+                GameWorld.Instantiate(new AttackHitbox(this, position - trueOrigin - Vector2.Normalize(position - new Vector2(mouseState.X, mouseState.Y)) * 75, 50, 50, 50));
 
                 stamina -= attackStaminaCost;
 
@@ -394,7 +394,7 @@ namespace PixelSouls
             }
         }
 
-        public void CheckIFrames()
+        private void CheckIFrames()
         {
             if (IFrameCooldown > 0)
             {

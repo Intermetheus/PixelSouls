@@ -13,9 +13,11 @@ namespace PixelSouls
 {
     public class Boss : Enemy
     {
-        public string name;
+        private string name;
 
         private SoundEffectInstance bossAttackSound;
+
+        public string Name { get => name; }
 
         public Boss(string name)
         {
@@ -61,12 +63,12 @@ namespace PixelSouls
             base.LoadContent(content);
         }
 
-        public override void Attack()
+        protected override void Attack()
         {
             bossAttackSound.Play();
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 25, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 75, 100, 25, 50, 50));
-            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 125, 100, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 25, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 75, 25, 50, 50));
+            GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 125, 25, 50, 50));
         }
 
         public override void OnCollision(GameObject other)

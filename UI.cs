@@ -7,32 +7,32 @@ using System.Text;
 
 namespace PixelSouls
 {
-    class UI
+    static class UI
     {
-        private QuantityDisplayBar healthBar;
-        private QuantityDisplayBar staminaBar;
-        private QuantityDisplayBar bossHealthBar;
+        private static QuantityDisplayBar healthBar;
+        private static QuantityDisplayBar staminaBar;
+        private static QuantityDisplayBar bossHealthBar;
 
-        public virtual void LoadContent(ContentManager content)
+        public static void LoadContent(ContentManager content)
         {
             healthBar = new QuantityDisplayBar(content, new Vector2(20, 20), Color.DarkRed, new Vector2(200,20));
             staminaBar = new QuantityDisplayBar(content, new Vector2(20, 40), Color.DarkGreen, new Vector2(100, 20));
             bossHealthBar = new QuantityDisplayBar(content, new Vector2(GameWorld.ScreenSize.X/2-300, GameWorld.ScreenSize.Y - 50), Color.DarkRed, new Vector2(600, 20));
         }
 
-        public void Update(GameTime gameTime)
+        public static void Update(GameTime gameTime)
         {
             healthBar.Update(GameWorld.player.HealthProp, GameWorld.player.MaxHealthProp);
             staminaBar.Update(GameWorld.player.Stamina, GameWorld.player.MaxStamina);
             bossHealthBar.Update(GameWorld.boss.HealthProp, GameWorld.boss.MaxHealthProp);
         }
 
-        public virtual void Draw(SpriteBatch spritebatch)
+        public static void Draw(SpriteBatch spritebatch)
         {
             healthBar.Draw(spritebatch);
             staminaBar.Draw(spritebatch);
             bossHealthBar.Draw(spritebatch);
-            spritebatch.DrawString(GameWorld.arial, GameWorld.boss.name, new Vector2(GameWorld.ScreenSize.X / 2 - 200, GameWorld.ScreenSize.Y - 100), Color.Red, 0, Vector2.Zero, 2, SpriteEffects.None, 1);
+            spritebatch.DrawString(GameWorld.arial, GameWorld.boss.Name, new Vector2(GameWorld.ScreenSize.X / 2 - 200, GameWorld.ScreenSize.Y - 100), Color.Red, 0, Vector2.Zero, 2, SpriteEffects.None, 1);
         }
     }
 }

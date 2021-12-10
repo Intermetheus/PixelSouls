@@ -22,7 +22,6 @@ namespace PixelSouls
         protected float scale;
         protected float layerDepth;
 
-
         protected Rectangle collisionBox;
 
         public Vector2 Position
@@ -68,7 +67,7 @@ namespace PixelSouls
             }
         }
 
-        public virtual void CreateOrigin()
+        protected virtual void CreateOrigin()
         {
             origin = new Vector2(sprite.Width / 2, sprite.Height / 2);
         }
