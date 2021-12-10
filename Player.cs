@@ -158,7 +158,7 @@ namespace PixelSouls
 
             if (keyState.IsKeyDown(Keys.F))
             {
-                Healing();
+                Heal();
             }
 
             if (keyState.IsKeyDown(Keys.Space))
@@ -406,7 +406,7 @@ namespace PixelSouls
             }
         }
 
-        private void Healing()
+        private void Heal()
         {
             if (!animationLock)
             {
