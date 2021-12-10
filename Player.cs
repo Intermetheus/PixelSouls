@@ -40,9 +40,9 @@ namespace PixelSouls
 
         private Vector2 targetedPosition;   // Target position the boss attacks
 
-        private SoundEffectInstance dodgeSound;
         private float delay = 14;   // sound delay
         private float remainingDelay = 0;
+        private SoundEffectInstance dodgeSound;
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance walk2Sound;
         private SoundEffectInstance attackSound;
