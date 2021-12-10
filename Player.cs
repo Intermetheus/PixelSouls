@@ -46,17 +46,17 @@ namespace PixelSouls
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance attackSound;
 
-        public bool IsTargeted { get => isTargeted; set => isTargeted = value; }
-        public int Stamina { get => stamina; set => stamina = value; }
-        public int MaxStamina { get => maxStamina; set => maxStamina = value; }
-        public Vector2 TargetedPosition { get => targetedPosition; set => targetedPosition = value; }
+        public bool IsTargeted { set => isTargeted = value; }
+        public int Stamina { get => stamina; }
+        public int MaxStamina { get => maxStamina; }
+        public Vector2 TargetedPosition { get => targetedPosition; }
 
         public Player()
         {
             maxHealth = 100;
             health = maxHealth;
-            MaxStamina = 100;
-            Stamina = maxStamina;
+            maxStamina = 100;
+            stamina = maxStamina;
 
             speed = 400;
 
@@ -97,7 +97,6 @@ namespace PixelSouls
 
             dodgeSound = content.Load<SoundEffect>("dodge").CreateInstance();
             walk1Sound = content.Load<SoundEffect>("walk1").CreateInstance();
-            walk2Sound = content.Load<SoundEffect>("walk2").CreateInstance();
             attackSound = content.Load<SoundEffect>("attack").CreateInstance();
             damageSound = content.Load<SoundEffect>("damageSound").CreateInstance();
 
@@ -279,7 +278,7 @@ namespace PixelSouls
                     // Prevents the player from dodging twice(losing twice stamina) when moving diagonally.
                     if (!isDodge)
                     {
-                        Stamina -= dodgeStaminaCost;
+                        stamina -= dodgeStaminaCost;
                         dodgeSpeed = 1.5f;   // multiplier used in Move()
                         lockTime = dodgeLockTime;   // Time the player is animation locked for
                         iFrameCooldown = iFrameCountDodge;
@@ -306,11 +305,11 @@ namespace PixelSouls
         {
             if (Stamina < MaxStamina && !animationLock)
             {
-                Stamina++;
+                stamina++;
 
                 if (Stamina > MaxStamina)
                 {
-                    Stamina = MaxStamina;
+                    stamina = MaxStamina;
                 }
             }
 
