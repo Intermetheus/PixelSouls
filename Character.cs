@@ -84,7 +84,7 @@ namespace PixelSouls
         protected abstract void Move(GameTime gameTime);
 
         // Eventually to be converted into a eight-directional sprite changer, based on the direction the character is facing
-        // Current not used
+        // Currently unused
         /// <summary>
         /// Calculates a rotation value, for use in rotating character visuals
         /// </summary>
@@ -108,18 +108,11 @@ namespace PixelSouls
             }          
         }
 
-        private void CheckDeath()
+        protected virtual void CheckDeath()
         {
-            if(health <= 0)
+            if (health <= 0)
             {
-                if(GetType() == typeof(Player))
-                {
-                    GameWorld.WinLoseState = GameState.Lose;
-                }
-                else
-                {
-                    GameWorld.WinLoseState = GameState.Win;
-                }
+                GameWorld.Destroy(this);
             }
         }
 

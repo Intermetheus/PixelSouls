@@ -32,7 +32,7 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            position = GameWorld.player.TargetedPosition;
+            position = GameWorld.PlayerProp.TargetedPosition;
         }
 
         public override void OnCollision(GameObject other)

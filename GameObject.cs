@@ -40,7 +40,7 @@ namespace PixelSouls
 
         public virtual void Update(GameTime gameTime)
         {
-            screenPosition = position - GameWorld.CameraPosition;
+            screenPosition = position - GameWorld.CameraPositionProp;
             collisionBox = new Rectangle((int)screenPosition.X - (int)origin.X, (int)screenPosition.Y - (int)origin.Y, sprite.Width, sprite.Height);
         }
 

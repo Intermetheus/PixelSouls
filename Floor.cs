@@ -19,7 +19,7 @@ namespace PixelSouls
             layerDepth = 0.1f;
         }
 
-        //Override draw function to put floors below the player
+        // Override draw function to put floors below the player
         //public override void Draw(SpriteBatch spriteBatch)
         //{
         //    spriteBatch.Draw(sprite, screenPosition, null, Color.White, rotation, origin, 1f, SpriteEffects.None, 0.1f);
@@ -27,12 +27,12 @@ namespace PixelSouls
 
         public override void LoadContent(ContentManager content)
         {
-            //This should be loaded in Stage
+            // This should be loaded in Stage
         }
 
         public override void Update(GameTime gameTime)
         {
-            screenPosition = position - GameWorld.CameraPosition;
+            screenPosition = position - GameWorld.CameraPositionProp;
         }
 
         public override void OnCollision(GameObject other)

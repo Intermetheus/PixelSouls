@@ -79,7 +79,7 @@ namespace PixelSouls
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("ready_1");
-            position = new Vector2(GameWorld.ScreenSize.X / 2, GameWorld.ScreenSize.Y / 2);
+            position = new Vector2(GameWorld.ScreenSizeProp.X / 2, GameWorld.ScreenSizeProp.Y / 2);
 
             for (int i = 0; i < 3; i++)
             {
@@ -194,48 +194,48 @@ namespace PixelSouls
 
         protected override void Move(GameTime gameTime)
         {
-            //If the window is resized, the player will remain in the middle of the screen.
-            //BUG: This can change the player, therefore moving outside the game area :(
-            position = new Vector2(GameWorld.ScreenSize.X / 2, GameWorld.ScreenSize.Y / 2);
+            // If the window is resized, the player will remain in the middle of the screen.
+            // BUG: This can change the player, therefore moving outside the game area :(
+            position = new Vector2(GameWorld.ScreenSizeProp.X / 2, GameWorld.ScreenSizeProp.Y / 2);
 
-            //Save position from before move.
-            initialPosition = GameWorld.CameraPosition;
+            // Save position from before move.
+            initialPosition = GameWorld.CameraPositionProp;
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             bool isColliding = false;
 
-            //Create future player position(collision with objects)
+            // Create future player position(collision with objects)
             // Unused?
             int newX = (int)(position.X - origin.X + velocity.X * speed * deltaTime);
             int newY = (int)(position.Y - origin.Y + velocity.Y * speed * deltaTime);
 
-            //Future Camera position (collision with worldSize)
-            int cameraX = (int)(GameWorld.CameraPosition.X - origin.X + velocity.X * speed * dodgeSpeed * deltaTime);
-            int cameraY = (int)(GameWorld.CameraPosition.Y - origin.Y + velocity.Y * speed * dodgeSpeed * deltaTime);
+            // Future Camera position (collision with worldSize)
+            int cameraX = (int)(GameWorld.CameraPositionProp.X - origin.X + velocity.X * speed * dodgeSpeed * deltaTime);
+            int cameraY = (int)(GameWorld.CameraPositionProp.Y - origin.Y + velocity.Y * speed * dodgeSpeed * deltaTime);
 
-            //Future player collision
-            Rectangle futurePosition = new Rectangle(newX, newY, sprite.Width, sprite.Height); // Unused?
+            // Future player collision
+            Rectangle futurePosition = new Rectangle(newX, newY, sprite.Width, sprite.Height);   // Unused?
             Rectangle futureCamera = new Rectangle(cameraX, cameraY, sprite.Width, sprite.Height);
 
-            //For collision with worldSize use future camera position
-            //This is because the futurePosition uses the player position, which is always in the middle of the screen.
+            // For collision with worldSize use future camera position
+            // For collision with objects use futurePosition
+            // This is because the futurePosition uses the player position, which is always in the middle of the screen.
             if (!Stage.WorldSize.Contains(futureCamera))
             {
                 isColliding = true;
             }
-            //For collision with objects use futurePosition
 
             if (isColliding)
             {
-                GameWorld.CameraPosition = initialPosition;
+                GameWorld.CameraPositionProp = initialPosition;
             }
             else
             {
                 if (isDodge)
                 {
                     float dodgeMultiplier = dodgeSpeed;
-                    GameWorld.CameraPosition += velocity * speed * dodgeMultiplier * deltaTime;
+                    GameWorld.CameraPositionProp += velocity * speed * dodgeMultiplier * deltaTime;
                 }
-                GameWorld.CameraPosition += velocity * speed * deltaTime;
+                GameWorld.CameraPositionProp += velocity * speed * deltaTime;
             }
 
             if (!isTargeted)
@@ -250,8 +250,8 @@ namespace PixelSouls
 
         private void Dodge()
         {
-            //dodgeCost is the amount of stamina used to dodge
-            //BUG: if you dodge in opposite directions, you don't use stamina
+            // dodgeCost is the amount of stamina used to dodge
+            // BUG: if you dodge in opposite directions, you don't use stamina
             if (Stamina > dodgeStaminaCost && !isDodge)
             {
                 if (keyState.IsKeyDown(Keys.W))
@@ -277,12 +277,12 @@ namespace PixelSouls
 
                 void dodgePreset()
                 {
-                    //Prevents the player from dodging twice(losing twice stamina) when moving diagonally.
+                    // Prevents the player from dodging twice(losing twice stamina) when moving diagonally.
                     if (!isDodge)
                     {
                         Stamina -= dodgeStaminaCost;
-                        dodgeSpeed = 1.5f; //multiplier used in Move()
-                        lockTime = dodgeLockTime; //Time the player is animation locked for
+                        dodgeSpeed = 1.5f;   // multiplier used in Move()
+                        lockTime = dodgeLockTime;   // Time the player is animation locked for
                         IFrameCooldown = iFrameCountDodge;
                         animationLock = true;
                         isDodge = true;
@@ -439,6 +439,13 @@ namespace PixelSouls
                 IFrame = true;
                 IFrameCooldown = iFrameCountDamage;
                 base.TakeDamage(attackDamage);
+            }
+        }
+        protected override void CheckDeath()
+        {
+            if (health <= 0)
+            {
+                GameWorld.WinLoseStateProp = GameState.Lose;
             }
         }
 

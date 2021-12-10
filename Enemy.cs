@@ -16,7 +16,7 @@ namespace PixelSouls
 
         public override void Update(GameTime gameTime)
         {
-            screenPosition = position - GameWorld.CameraPosition;
+            screenPosition = position - GameWorld.CameraPositionProp;
             collisionBox = new Rectangle((int)screenPosition.X - (int)trueOrigin.X, (int)screenPosition.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
             
             Behaviour();
@@ -37,7 +37,7 @@ namespace PixelSouls
         {
             if(attackCooldown <= 0)
             {
-                if (Vector2.Distance(screenPosition, GameWorld.player.Position) < 250 && !isAttacking)
+                if (Vector2.Distance(screenPosition, GameWorld.PlayerProp.Position) < 250 && !isAttacking)
                 {
                     isAttacking = true;
 
@@ -49,12 +49,12 @@ namespace PixelSouls
                     {
                         ChangeAnimationState(AnimState.Attack, attackSprites, origin, 5);
 
-                        if (screenPosition.X < GameWorld.player.Position.X)
+                        if (screenPosition.X < GameWorld.PlayerProp.Position.X)
                         {
                             facingRight = true;
                             origin = new Vector2(40, 42);
                         }
-                        else if (screenPosition.X > GameWorld.player.Position.X)
+                        else if (screenPosition.X > GameWorld.PlayerProp.Position.X)
                         {
                             facingRight = false;
                             origin = new Vector2(60, 42);
@@ -65,9 +65,9 @@ namespace PixelSouls
 
                 if (isAttacking && windupTimer <= 0)
                 {
-                    playerTarget = GameWorld.player.TargetedPosition;
+                    playerTarget = GameWorld.PlayerProp.TargetedPosition;
                     Attack();
-                    GameWorld.player.IsTargeted = false;
+                    GameWorld.PlayerProp.IsTargeted = false;
                     attackCooldown = 100;
                     isAttacking = false;
                     animationLock = false;
@@ -78,7 +78,7 @@ namespace PixelSouls
 
                     if (windupTimer <= attackTrackingLag)
                     {
-                        GameWorld.player.IsTargeted = true;
+                        GameWorld.PlayerProp.IsTargeted = true;
                     }
                 }
             }
@@ -89,7 +89,7 @@ namespace PixelSouls
 
             if (!isAttacking)
             {
-                velocity = GameWorld.player.Position - screenPosition;
+                velocity = GameWorld.PlayerProp.Position - screenPosition;
                 velocity.Normalize();
             }           
         }

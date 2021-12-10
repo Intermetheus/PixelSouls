@@ -15,32 +15,40 @@ namespace PixelSouls
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        public static SpriteFont arial;
+        private static SpriteFont arial;
 
         private Texture2D collisionTexture;
 
-        public static List<GameObject> gameObjects = new List<GameObject>();
+        // Static fields allow the Instatiate and Destroy methods to be static
+        private static List<GameObject> gameObjects = new List<GameObject>();
         private static List<GameObject> newGameObjects = new List<GameObject>();
         private static List<GameObject> removeGameObjects = new List<GameObject>();
 
         private static Vector2 screenSize;
         private static Vector2 cameraPosition = new Vector2(800, 800);
 
-        public static Player player = new Player();
-        public static Boss boss = new Boss("Onesiphorus The Blasphemed");
+        private static Player player = new Player();
+        private static Boss boss = new Boss("Onesiphorus The Blasphemed");
 
         private static GameState winLoseState;
 
         private SoundEffectInstance backgroundMusic;
 
-        public static GameState WinLoseState
+        public static SpriteFont ArialProp 
+        {
+            get { return arial; }
+        }
+
+        public static Vector2 CameraPositionProp { get => cameraPosition; set => cameraPosition = value; }
+        public static Vector2 ScreenSizeProp { get => screenSize; set => screenSize = value; }
+        public static Player PlayerProp { get => player; }
+        public static Boss BossProp { get => boss; }
+
+        public static GameState WinLoseStateProp
         {
             get { return winLoseState; }
             set { winLoseState = value; }
         }
-
-        public static Vector2 CameraPosition { get => cameraPosition; set => cameraPosition = value; }
-        public static Vector2 ScreenSize { get => screenSize; set => screenSize = value; }
 
         public GameWorld()
         {
@@ -55,8 +63,8 @@ namespace PixelSouls
         protected override void Initialize()
         {
             winLoseState = GameState.Play;
-            gameObjects.Add(player);
-            gameObjects.Add(boss);
+            gameObjects.Add(PlayerProp);
+            gameObjects.Add(BossProp);
             gameObjects.Add(new Target());
 
             base.Initialize();
@@ -76,7 +84,7 @@ namespace PixelSouls
 
             collisionTexture = Content.Load<Texture2D>("collisionTexture");
 
-            //Sprites used in the stage have to be loaded here
+            // Sprites used in the stage have to be loaded here
             Stage.LoadContent(Content);
 
             foreach (GameObject gameObject in gameObjects)
@@ -146,11 +154,11 @@ namespace PixelSouls
             }
             else if (winLoseState == GameState.Win)
             {
-                spriteBatch.DrawString(arial, "You Win", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                spriteBatch.DrawString(ArialProp, "You Win", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
             }
             else if (winLoseState == GameState.Lose)
             {
-                spriteBatch.DrawString(arial, "You Suck", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                spriteBatch.DrawString(ArialProp, "You Suck", new Vector2(screenSize.X / 2 - 100, screenSize.Y / 2), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
             }
 
             spriteBatch.End();
@@ -168,23 +176,23 @@ namespace PixelSouls
             removeGameObjects.Add(gameObject);
         }
 
-        // This is used to draw the Stages walls
+        
         private void DrawCollisionBox(Rectangle rect)
         {
-            DrawLines(rect, Color.Red, 1);
+            DrawBox(rect, Color.Red, 1);
         }
 
         private void DrawWorldBoundary(Rectangle rect)
         {
             Rectangle collisionBox = rect;
 
-            collisionBox.X = collisionBox.X - (int)CameraPosition.X + (int)ScreenSize.X / 2;
-            collisionBox.Y = collisionBox.Y - (int)CameraPosition.Y + (int)ScreenSize.Y / 2;
+            collisionBox.X = collisionBox.X - (int)CameraPositionProp.X + (int)ScreenSizeProp.X / 2;
+            collisionBox.Y = collisionBox.Y - (int)CameraPositionProp.Y + (int)ScreenSizeProp.Y / 2;
 
-            DrawLines(collisionBox, Color.DarkGray, 10);
+            DrawBox(collisionBox, Color.DarkGray, 10);
         }
 
-        private void DrawLines(Rectangle rect, Color color, int lineWidth)
+        private void DrawBox(Rectangle rect, Color color, int lineWidth)
         {
             Rectangle topLine = new Rectangle(rect.X, rect.Y, rect.Width, lineWidth);
             Rectangle bottomLine = new Rectangle(rect.X, rect.Y + rect.Height, rect.Width, lineWidth);

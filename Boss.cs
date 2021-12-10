@@ -71,6 +71,15 @@ namespace PixelSouls
             GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 125, 25, 50, 50));
         }
 
+        protected override void CheckDeath()
+        {
+            if (health <= 0)
+            {
+                GameWorld.WinLoseStateProp = GameState.Win;
+            }
+            base.CheckDeath();
+        }
+
         public override void OnCollision(GameObject other)
         {
 
