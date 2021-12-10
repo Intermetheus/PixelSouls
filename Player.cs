@@ -18,8 +18,8 @@ namespace PixelSouls
         private bool isDodge;
         private bool isTargeted;
 
-        private bool IFrame;
-        private int IFrameCooldown;
+        private bool iFrame;
+        private int iFrameCooldown;
         private int iFrameCountDamage = 5;
 
         private int dodgeTime = 15;
@@ -283,7 +283,7 @@ namespace PixelSouls
                         Stamina -= dodgeStaminaCost;
                         dodgeSpeed = 1.5f;   // multiplier used in Move()
                         lockTime = dodgeLockTime;   // Time the player is animation locked for
-                        IFrameCooldown = iFrameCountDodge;
+                        iFrameCooldown = iFrameCountDodge;
                         animationLock = true;
                         isDodge = true;
                         dodgeSound.Play();
@@ -396,14 +396,14 @@ namespace PixelSouls
 
         private void CheckIFrames()
         {
-            if (IFrameCooldown > 0)
+            if (iFrameCooldown > 0)
             {
-                IFrameCooldown--;
-                IFrame = true;
+                iFrameCooldown--;
+                iFrame = true;
             }
             else
             {
-                IFrame = false;
+                iFrame = false;
             }
         }
 
@@ -434,10 +434,10 @@ namespace PixelSouls
 
         public override void TakeDamage(int attackDamage)
         {
-            if (!IFrame)
+            if (!iFrame)
             {
-                IFrame = true;
-                IFrameCooldown = iFrameCountDamage;
+                iFrame = true;
+                iFrameCooldown = iFrameCountDamage;
                 base.TakeDamage(attackDamage);
             }
         }
