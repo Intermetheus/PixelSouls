@@ -24,6 +24,11 @@ namespace PixelSouls
             // This should be loaded in Stage
         }
 
+        /// <summary>
+        /// Updates the screenposition of floors based on camera position and actual position in the gameWorld.
+        /// screenPosition variable is used to draw the sprites correctly, dependent on where the camera has moved.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             screenPosition = position - GameWorld.CameraPositionProp;

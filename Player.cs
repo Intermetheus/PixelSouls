@@ -75,6 +75,10 @@ namespace PixelSouls
             isAttacking = false;
         }
 
+        /// <summary>
+        /// The same as in character, but with different resources
+        /// </summary>
+        /// <param name="content"></param>
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("ready_1");
@@ -106,6 +110,10 @@ namespace PixelSouls
             base.LoadContent(content);
         }
 
+        /// <summary>
+        /// Runs the players different update checks. The player input is run from within the AnimationLock() method.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             collisionBox = new Rectangle((int)position.X - (int)trueOrigin.X, (int)position.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
@@ -129,6 +137,10 @@ namespace PixelSouls
             }
 
         }
+
+        /// <summary>
+        /// HandleInput gets the mouseState and keyState. Checks which inputs the player is pressing.
+        /// </summary>
         private void HandleInput()
         {
             mouseState = Mouse.GetState();
@@ -191,6 +203,13 @@ namespace PixelSouls
         //    Rotate(position, new Vector2(mouseState.X, mouseState.Y));
         //}
 
+        /// <summary>
+        /// Creates a rectangle in the future position of the player, and checks if that rectangle is inside the world and doesn't collide with another object.
+        /// 
+        /// <para>If no collisions are found, the players position will be updated</para> 
+        /// <para>Updates the position of the playerTarget, which is where the enemies can see the player. When the enemies are attacking the target will freeze position.</para> 
+        /// </summary>
+        /// <param name="gameTime"></param>
         protected override void Move(GameTime gameTime)
         {
             // If the window is resized, the player will remain in the middle of the screen.
@@ -203,7 +222,7 @@ namespace PixelSouls
             bool isColliding = false;
 
             // Create future player position(collision with objects)
-            // Unused?
+            // Unused. However, it can be used for collision with obstacles in the future.
             int newX = (int)(position.X - origin.X + velocity.X * speed * deltaTime);
             int newY = (int)(position.Y - origin.Y + velocity.Y * speed * deltaTime);
 
@@ -241,12 +260,15 @@ namespace PixelSouls
             {
                 targetedPosition = position;
             }
+            //If the player is under attack by an enemy, the target will move en the opposite direction of the player, therefore freezing in position.
             if (isTargeted)
             {
                 targetedPosition -= velocity * speed * deltaTime;
             }
         }
-
+        /// <summary>
+        /// If the player has enough stamina and is dodging. The players dodge multiplier is increased, therefore moving the player faster.
+        /// </summary>
         private void Dodge()
         {
             // dodgeCost is the amount of stamina used to dodge
@@ -298,9 +320,9 @@ namespace PixelSouls
 
         /// <summary>
         /// This method gives the player stamina each time Update() is called (if your stamina is below maxStamina)
-        /// It also handles cooldowns
-        /// The higher animationLockCooldown is, the longer you can't input.
-        /// The higher dodgeCooldown is the longer you dodge
+        /// <para>It also handles cooldowns</para>
+        /// <para>The higher animationLockCooldown is, the longer you can't input.</para>
+        /// <para>The higher dodgeCooldown is the longer you dodge</para>
         /// </summary>
         private void AnimationLock()
         {
@@ -348,6 +370,10 @@ namespace PixelSouls
             }
         }
 
+        /// <summary>
+        /// Starts the player attack by setting a windup time and locking the player animation and velocity to zero.
+        /// <para>Updates the player direction to the attacking direction</para>
+        /// </summary>
         protected override void Attack()
         {
             if (!animationLock)
@@ -373,6 +399,12 @@ namespace PixelSouls
             }
         }
 
+        /// <summary>
+        /// Instantiates attackHitboxes when the windup time is over.
+        /// <para>Consumes stamina</para>
+        /// <para>Creates a new animation lock for a short time after the attack is over</para>
+        /// <para>Plays the attack sound</para>
+        /// </summary>
         private void AttackCheck()
         {
             if (isAttacking == true && windup <= 0)
@@ -392,7 +424,9 @@ namespace PixelSouls
                 windup--;
             }
         }
-
+        /// <summary>
+        /// Decreases IFrameCooldown until it will set IFrame to false.
+        /// </summary>
         private void CheckIFrames()
         {
             if (iFrameCooldown > 0)
@@ -406,6 +440,11 @@ namespace PixelSouls
             }
         }
 
+        /// <summary>
+        /// <para>Player can only move when not animation locked</para>
+        /// Heals the player and decreases healingTries
+        /// <para>animationLOcks the player</para>
+        /// </summary>
         private void Heal()
         {
             if (!animationLock)

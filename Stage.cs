@@ -14,12 +14,20 @@ namespace PixelSouls
         private static Texture2D backgroundImage;
 
         public static Rectangle WorldSize { get => worldSize; set => worldSize = value; }
-
+        /// <summary>
+        /// Loads the floor sprite, because the sprite must be loaded, before it can be instantiated correctly.
+        /// </summary>
+        /// <param name="content"></param>
         public static void LoadContent(ContentManager content)
         {
             backgroundImage = content.Load<Texture2D>("backgroundImage");
         }
 
+        /// <summary>
+        /// Loads a level in with a simple if statement
+        /// <para>Level loading can be made dynamic in the future</para>
+        /// </summary>
+        /// <param name="levelName"></param>
         public static void LoadLevel(string levelName)
         {
             // TODO: make this dynamic
@@ -30,6 +38,9 @@ namespace PixelSouls
             }
         }
 
+        /// <summary>
+        /// When more levels are created, this should destroy() the floor and other gameObjects.
+        /// </summary>
         public static void UnloadLevel()
         {
 

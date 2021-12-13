@@ -10,6 +10,10 @@ namespace PixelSouls
 {
     static class PrototypePlayground
     {
+        /// <summary>
+        /// Makes a Rectangle accessable through WorldSize, takes a sprite in parameter and sends to SetBackground()
+        /// </summary>
+        /// <param name="sprite"></param>
         public static void CreateLevel(Texture2D sprite)
         {
             // Change boundary size for collision
@@ -21,9 +25,14 @@ namespace PixelSouls
             // TODO: Instantiate bosses, enemies etc.
         }
 
+        /// <summary>
+        /// Takes a sprite from CreateLevel and instantiates the floors
+        /// <para>Amount of floors are dependent on the WorldSize</para>
+        /// </summary>
+        /// <param name="sprite"></param>
         private static void SetBackground(Texture2D sprite)
         {
-            // Draw Floor
+            // Draw Floor, divided by 800, because that is the size of the sprite, this is hardcoded I don't know why.
             for (int i = 0; i <= Stage.WorldSize.Width / 800 + 1; i++)
             {
                 for (int j = 0; j <= Stage.WorldSize.Height / 800 + 1; j++)
@@ -32,8 +41,6 @@ namespace PixelSouls
                 }
             }
 
-            // Draw walls
-            // Walls to be implemented
         }
     }
 }

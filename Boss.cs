@@ -35,6 +35,11 @@ namespace PixelSouls
             attackTrackingLag = 15;
         }
 
+        /// <summary>
+        /// Loads the bosses textures & sounds. Animations are loaded into each of their own lists.
+        /// Sets the bosses position
+        /// </summary>
+        /// <param name="content"></param>
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("ready1_1");
@@ -63,6 +68,9 @@ namespace PixelSouls
             base.LoadContent(content);
         }
 
+        /// <summary>
+        /// Plays attack sound & instantiates attackhitboxes, based on the direction of the playerTarget's position.
+        /// </summary>
         protected override void Attack()
         {
             bossAttackSound.Play();
@@ -70,7 +78,9 @@ namespace PixelSouls
             GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 75, 25, 50, 50));
             GameWorld.Instantiate(new AttackHitbox(this, screenPosition - trueOrigin - Vector2.Normalize(screenPosition - playerTarget) * 125, 25, 50, 50));
         }
-
+        /// <summary>
+        /// Changes the GameState to Win if the boss has less than or equal to 0 health.
+        /// </summary>
         protected override void CheckDeath()
         {
             if (health <= 0)

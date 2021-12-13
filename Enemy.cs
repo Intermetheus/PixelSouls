@@ -14,6 +14,10 @@ namespace PixelSouls
         protected int attackTrackingLag;
         protected int windupTimer;
 
+        /// <summary>
+        /// Runs the enemies behaviour method. Updates screenPosition & creates collisionBox Rectangle
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             screenPosition = position - GameWorld.CameraPositionProp;
@@ -23,6 +27,10 @@ namespace PixelSouls
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Updates the Characters position by adding the product of velocity, speed and deltaTime
+        /// </summary>
+        /// <param name="gameTime"></param>
         protected override void Move(GameTime gameTime)
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -31,7 +39,7 @@ namespace PixelSouls
         }
 
         /// <summary>
-        /// Governs enemy movement and attack behaviour
+        /// Governs enemy movement and attack behaviour. Currently the enemy has an attackCooldown and uses a set distance to determine when it can attack. The enemy moves directly towards the player.
         /// </summary>
         private void Behaviour()
         {

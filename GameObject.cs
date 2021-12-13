@@ -36,6 +36,12 @@ namespace PixelSouls
 
         public abstract void LoadContent(ContentManager content);
 
+        /// <summary>
+        /// Updates the screenposition of floors based on camera position and actual position in the gameWorld.
+        /// screenPosition variable is used to draw the sprites correctly, dependent on where the camera has moved.
+        /// 
+        /// </summary>
+        /// <param name="gameTime"></param>
         public virtual void Update(GameTime gameTime)
         {
             screenPosition = position - GameWorld.CameraPositionProp;
@@ -65,6 +71,9 @@ namespace PixelSouls
             }
         }
 
+        /// <summary>
+        /// Sets value of origin to the center of the sprites texture.
+        /// </summary>
         protected virtual void CreateOrigin()
         {
             origin = new Vector2(sprite.Width / 2, sprite.Height / 2);

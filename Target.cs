@@ -23,13 +23,20 @@ namespace PixelSouls
             layerDepth = 0.8f;
         }
 
+        /// <summary>
+        /// The target is only for debug
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
 #if DEBUG
             spriteBatch.Draw(sprite, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, layerDepth);
 #endif
         }
-
+        /// <summary>
+        /// Sets the position of the target to the TargetedPosition, which is updated in the Player Move() method
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             position = GameWorld.PlayerProp.TargetedPosition;

@@ -49,7 +49,9 @@ namespace PixelSouls
             get { return winLoseState; }
             set { winLoseState = value; }
         }
-
+        /// <summary>
+        /// Screensize is fixed to 1600x900
+        /// </summary>
         public GameWorld()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -59,7 +61,9 @@ namespace PixelSouls
             graphics.PreferredBackBufferHeight = 900;
             screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
         }
-
+        /// <summary>
+        /// Adds the player and boss to the gameObjects List, also loads the stage.
+        /// </summary>
         protected override void Initialize()
         {
             winLoseState = GameState.Play;
@@ -70,7 +74,9 @@ namespace PixelSouls
             base.Initialize();
             Stage.LoadLevel("PrototypePlayground");
         }
-
+        /// <summary>
+        /// Runs the LoadContent in every object inside the gameObject List, also plays the backgroundmusic on loop.
+        /// </summary>
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -95,6 +101,10 @@ namespace PixelSouls
             UI.LoadContent(Content);
         }
 
+        /// <summary>
+        /// Runs the Update() method on every gameObject & adds / removes objects from the game.
+        /// </summary>
+        /// <param name="gameTime"></param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -176,12 +186,19 @@ namespace PixelSouls
             removeGameObjects.Add(gameObject);
         }
 
-        
+        /// <summary>
+        /// Runs the drawBox code with the given Rectangle from its parameter
+        /// </summary>
+        /// <param name="rect"></param>
         private void DrawCollisionBox(Rectangle rect)
         {
             DrawBox(rect, Color.Red, 1);
         }
 
+        /// <summary>
+        /// Draws the World Boundary in DarkGray colour.
+        /// </summary>
+        /// <param name="rect"></param>
         private void DrawWorldBoundary(Rectangle rect)
         {
             Rectangle collisionBox = rect;
@@ -192,6 +209,12 @@ namespace PixelSouls
             DrawBox(collisionBox, Color.DarkGray, 10);
         }
 
+        /// <summary>
+        /// Draws a pixel-thin box around every rectangle. The rectangle is in most cases the same size as the sprite.
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="color"></param>
+        /// <param name="lineWidth"></param>
         private void DrawBox(Rectangle rect, Color color, int lineWidth)
         {
             Rectangle topLine = new Rectangle(rect.X, rect.Y, rect.Width, lineWidth);
