@@ -19,7 +19,7 @@ namespace PixelSouls
         public override Rectangle CollisionBoxProp
         {
             get { return new Rectangle(collisionBox.X, collisionBox.Y, attackWidth, attackHeight); }
-            set { collisionBox = value; }
+            //set { collisionBox = value; }
         }
 
         public AttackHitbox(GameObject attacker, Vector2 position, int attackDamage, int attackWidth, int attackHeight)
