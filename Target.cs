@@ -14,6 +14,10 @@ namespace PixelSouls
     /// </summary>
     class Target : GameObject
     {
+        /// <summary>
+        /// Loads the target texture
+        /// </summary>
+        /// <param name="content">Content reference for loading assets</param>
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("target");
@@ -24,9 +28,9 @@ namespace PixelSouls
         }
 
         /// <summary>
-        /// The target is only for debug
+        /// The target is only for debug, therefore the draw is inside an if DEBUG statement
         /// </summary>
-        /// <param name="spriteBatch"></param>
+        /// <param name="spriteBatch">Spritebatch reference for drawing sprites</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
 #if DEBUG
@@ -36,9 +40,10 @@ namespace PixelSouls
         /// <summary>
         /// Sets the position of the target to the TargetedPosition, which is updated in the Player Move() method
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime"> Time reference for running update code at a fixed interval</param>
         public override void Update(GameTime gameTime)
         {
+            //The position of the TargetedPosition is updated in the Player Class Move() method
             position = GameWorld.PlayerProp.TargetedPosition;
         }
 
