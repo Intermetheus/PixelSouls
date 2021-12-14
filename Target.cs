@@ -8,6 +8,7 @@ using System.Text;
 namespace PixelSouls
 {
     /// <summary>
+    /// Only used for debugging purposes
     /// Creates a target which shows where the boss i attacking.
     /// The target is based on where the player was, when the boss starts attacking.
     /// The time it takes before the boss attacks is determined by attackCooldown in the Boss Class
