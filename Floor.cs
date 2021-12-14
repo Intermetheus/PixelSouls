@@ -7,8 +7,17 @@ using System.Text;
 
 namespace PixelSouls
 {
+    /// <summary>
+    /// Tileable background construction.
+    /// </summary>
     class Floor : GameObject
     {
+        /// <summary>
+        /// Uses the supplied coordinates and sprite to construct one tile.
+        /// </summary>
+        /// <param name="x">x coordinate of tile position.</param>
+        /// <param name="y">y coordinate of tile position.</param>
+        /// <param name="sprite">The image being used.</param>
         public Floor(int x, int y, Texture2D sprite)
         {
             this.position = new Vector2(x, y);
