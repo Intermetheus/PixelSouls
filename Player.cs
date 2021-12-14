@@ -10,6 +10,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PixelSouls
 {
+    /// <summary>
+    /// Functionality relating to the player controlled character
+    /// </summary>
     public class Player : Character
     {
         private MouseState mouseState;
@@ -46,11 +49,26 @@ namespace PixelSouls
         private SoundEffectInstance walk1Sound;
         private SoundEffectInstance attackSound;
 
+        /// <summary>
+        /// Determines wether the player is targeted by the boss or not. Makes attacks dodgable
+        /// </summary>
         public bool IsTargeted { set => isTargeted = value; }
+        /// <summary>
+        /// Reads current stamina to display on UI
+        /// </summary>
         public int Stamina { get => stamina; }
+        /// <summary>
+        /// Reads max stamina to display on UI
+        /// </summary>
         public int MaxStamina { get => maxStamina; }
+        /// <summary>
+        /// Position the boss is targeting. Updates to player position when player is targeted
+        /// </summary>
         public Vector2 TargetedPosition { get => targetedPosition; }
 
+        /// <summary>
+        /// Sets initial values for player character
+        /// </summary>
         public Player()
         {
             maxHealth = 100;
@@ -76,9 +94,9 @@ namespace PixelSouls
         }
 
         /// <summary>
-        /// The same as in character, but with different resources
+        /// Loads player related assets
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="content">Content reference for loading assets</param>
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("ready_1");
@@ -113,7 +131,7 @@ namespace PixelSouls
         /// <summary>
         /// Runs the players different update checks. The player input is run from within the AnimationLock() method.
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">Time reference for running update code at a fixed interval</param>
         public override void Update(GameTime gameTime)
         {
             collisionBox = new Rectangle((int)position.X - (int)trueOrigin.X, (int)position.Y - (int)trueOrigin.Y, (int)trueOrigin.X * 2, (int)trueOrigin.Y * 2);
@@ -125,6 +143,10 @@ namespace PixelSouls
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Draws player sprite on screen, facing left or right
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch reference for drawing sprites</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (facingRight)
@@ -209,7 +231,7 @@ namespace PixelSouls
         /// <para>If no collisions are found, the players position will be updated</para> 
         /// <para>Updates the position of the playerTarget, which is where the enemies can see the player. When the enemies are attacking the target will freeze position.</para> 
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">Time reference for running update code at a fixed interval</param>
         protected override void Move(GameTime gameTime)
         {
             // If the window is resized, the player will remain in the middle of the screen.
@@ -470,6 +492,10 @@ namespace PixelSouls
             }
         }
 
+        /// <summary>
+        /// Checks for possible iframes before dealing damage to player
+        /// </summary>
+        /// <param name="attackDamage">Amount of damage to be dealt</param>
         public override void TakeDamage(int attackDamage)
         {
             if (!iFrame)
@@ -479,6 +505,10 @@ namespace PixelSouls
                 base.TakeDamage(attackDamage);
             }
         }
+
+        /// <summary>
+        /// Checkes if player is dead and changes gamestate accordingly
+        /// </summary>
         protected override void CheckDeath()
         {
             if (health <= 0)
@@ -487,6 +517,10 @@ namespace PixelSouls
             }
         }
 
+        /// <summary>
+        /// currently unused collision function
+        /// </summary>
+        /// <param name="other">gameobject player is colliding with</param>
         public override void OnCollision(GameObject other)
         {
             

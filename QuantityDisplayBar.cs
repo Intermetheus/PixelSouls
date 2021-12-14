@@ -7,6 +7,9 @@ using System.Text;
 
 namespace PixelSouls
 {
+    /// <summary>
+    /// Class used to display depletable colored bars on screen
+    /// </summary>
     class QuantityDisplayBar
     {
         private int border = 2;
@@ -17,7 +20,13 @@ namespace PixelSouls
         private Texture2D shade;
         private Texture2D solid;
 
-
+        /// <summary>
+        /// Constructor for QuantityDisplayBar
+        /// </summary>
+        /// <param name="content">Content reference for loading sprites</param>
+        /// <param name="position">Position on screen</param>
+        /// <param name="color">Color of depletable bar</param>
+        /// <param name="size">Size of filled bar</param>
         public QuantityDisplayBar(ContentManager content, Vector2 position, Color color, Vector2 size)
         {
             this.position = position;
@@ -28,11 +37,20 @@ namespace PixelSouls
             solid = content.Load<Texture2D>("solid");
         }
 
+        /// <summary>
+        /// Updates size of display bar
+        /// </summary>
+        /// <param name="current">Current value to display</param>
+        /// <param name="max">Max value to display</param>
         public void Update(float current, float max)
         {
             percentage = current / max;
         }
 
+        /// <summary>
+        /// Draws display bar on screen
+        /// </summary>
+        /// <param name="spriteBatch">Spritebatch reference for drawing</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(shade, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), null, Color.Black, 0, Vector2.Zero, SpriteEffects.None, 1f);
