@@ -8,8 +8,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PixelSouls
 {
-    public enum AnimState { Idle, Walk, Attack}
+    /// <summary>
+    /// Describes possible animation states.
+    /// </summary>
+    public enum AnimState { Idle, Walk, Attack }
 
+    /// <summary>
+    /// Character class managing all elements that are generic to all characters.
+    /// </summary>
     public abstract class Character : GameObject
     {
         protected int health;
@@ -23,7 +29,7 @@ namespace PixelSouls
         protected int windup;
 
         protected Vector2 initialPosition;
-        protected Vector2 trueOrigin;
+        protected Vector2 trueOrigin;   // A mirror of the origin that does not get updated as the sprite changes
 
         protected int attackDamage = 1;
         protected int attackWidth = 100;
@@ -42,36 +48,49 @@ namespace PixelSouls
 
         protected SoundEffectInstance damageSound;
 
+        /// <summary>
+        /// Used by the UI to display the health of a character
+        /// </summary>
         public int HealthProp
         {
             get { return health; }
             set { health = value; }
         }
+        /// <summary>
+        /// Used by the UI to display the max health of a character
+        /// </summary>
         public int MaxHealthProp
         {
             get { return maxHealth; }
             set { maxHealth = value; }
         }
+
         /// <summary>
         /// Sets currentSpriteList to idleSprites, because the character is idle at the start of the game.
+        /// Creates the origin and true origin of the character.
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="content">Content reference for loading assets</param>
         public override void LoadContent(ContentManager content)
         {
             currentSpriteList = idleSprites;
             CreateOrigin();
         }
 
+        /// <summary>
+        /// All characters must move and animate continously.
+        /// </summary>
+        /// <param name="gameTime">Time reference for running update code at a fixed interval</param>
         public override void Update(GameTime gameTime)
         {
             Move(gameTime);
             Animate(gameTime);
-            hasTakenDamage = false;
+            hasTakenDamage = false;   // Used to ensure one attack does not inflict multiple instances of damage with different hitboxes.
         }
+
         /// <summary>
-        /// Draws the character depending on the direction they are facing
+        /// Draws the character depending on the direction they are facing.
         /// </summary>
-        /// <param name="spriteBatch"></param>
+        /// <param name="spriteBatch">Spritebatch reference for drawing sprites</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (facingRight)
@@ -84,9 +103,16 @@ namespace PixelSouls
             }
         }
 
+        /// <summary>
+        /// Most characters will require an attack, however the player and non-player characters must attack using very different logic
+        /// </summary>
         protected abstract void Attack();
 
+        /// <summary>
+        /// Most characters will require movement, however the player and non-player characters must move using very different logic
+        /// </summary>
         protected abstract void Move(GameTime gameTime);
+
 
         // Eventually to be converted into a eight-directional sprite changer, based on the direction the character is facing
         // Currently unused
@@ -100,14 +126,12 @@ namespace PixelSouls
         
         
         /// <summary>
-        /// Removes health from the character, based on the value in the parameter.
-        /// Plays attack sound.
-        /// Runs the CheckDeath() method.
+        /// Removes health from the character, based on the value in the parameter and checks if this kills the character.
         /// </summary>
-        /// <param name="attackDamage"></param>
+        /// <param name="attackDamage">The damage taken</param>
         public override void TakeDamage(int attackDamage)
         {
-            if (!hasTakenDamage)
+            if (!hasTakenDamage)   // Ensures one attack does not inflict damage multiple times if overlapping hitboxes touch the character
             {
                 hasTakenDamage = true;
                 damageSound.Play();
@@ -115,6 +139,7 @@ namespace PixelSouls
                 CheckDeath();
             }          
         }
+
         /// <summary>
         /// Checks if health is zero or below, then destroys the Character
         /// </summary>
@@ -125,21 +150,24 @@ namespace PixelSouls
                 GameWorld.Destroy(this);
             }
         }
+
         /// <summary>
         /// Runs the CreateOrigin on the base, GameObject, and sets trueOrigin to the origin value.
+        /// 'True origin' is a mirror of the origin that does not get updated as the sprite changes.
         /// </summary>
         protected override void CreateOrigin()
         {
             base.CreateOrigin();
             trueOrigin = origin;
         }
+
         /// <summary>
-        /// 
+        /// Looks at the game state of the character and ensures the correct animation is played.
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">Time reference for running animation code at a fixed interval</param>
         private void Animate(GameTime gameTime)
         {
-            if(velocity == Vector2.Zero && animState != AnimState.Idle && !animationLock)
+            if(velocity == Vector2.Zero && animState != AnimState.Idle && !animationLock)   // Checks if moving.
             {
                 ChangeAnimationState(AnimState.Idle, idleSprites, trueOrigin, 5);
             }
@@ -148,7 +176,7 @@ namespace PixelSouls
                 ChangeAnimationState(AnimState.Walk, walkSprites, trueOrigin, 5);
             }
 
-            if(velocity.X > 0)
+            if(velocity.X > 0)   // Checks direction of movement.
             {
                 facingRight = true;
             }
@@ -168,13 +196,14 @@ namespace PixelSouls
 
             sprite = currentSpriteList[currentSpriteIndex];
         }
+
         /// <summary>
-        /// 
+        /// Generic method for changing animation stat that can more easily be reused and called elsewhere.
         /// </summary>
-        /// <param name="animState"></param>
-        /// <param name="spriteList"></param>
-        /// <param name="origin"></param>
-        /// <param name="fps"></param>
+        /// <param name="animState">The animation stat being changed to</param>
+        /// <param name="spriteList">The sprite list now in use</param>
+        /// <param name="origin">Origin of the new sprite</param>
+        /// <param name="fps">The playback speed of the new animation</param>
         protected void ChangeAnimationState(AnimState animState, List<Texture2D> spriteList, Vector2 origin, float fps)
         {
             this.animState = animState;
@@ -183,9 +212,7 @@ namespace PixelSouls
             this.origin = origin;
             this.fps = fps;
         }
-        /// <summary>
-        /// 
-        /// </summary>
+
         private void ResetAnimation()
         {
             animCounter = 0;
