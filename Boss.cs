@@ -17,6 +17,7 @@ namespace PixelSouls
 
         private SoundEffectInstance bossAttackSound;
 
+        // Name Property used in the UI for the boss healthbar
         public string Name { get => name; }
 
         public Boss(string name)
@@ -39,12 +40,14 @@ namespace PixelSouls
         /// Loads the bosses textures & sounds. Animations are loaded into each of their own lists.
         /// Sets the bosses position
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="content">Content reference for loading assets</param>
         public override void LoadContent(ContentManager content)
         {
             sprite = content.Load<Texture2D>("ready1_1");
             position = new Vector2(1000, 1000);
 
+
+            //For loops each load a set of frames of the different animations of this character
             for (int i = 0; i < 3; i++)
             {
                 idleSprites.Add(content.Load<Texture2D>($"ready1_{i + 1}"));
