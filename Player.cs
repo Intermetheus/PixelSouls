@@ -227,7 +227,6 @@ namespace PixelSouls
 
         /// <summary>
         /// Creates a rectangle in the future position of the player, and checks if that rectangle is inside the world and doesn't collide with another object.
-        /// 
         /// <para>If no collisions are found, the players position will be updated</para> 
         /// <para>Updates the position of the playerTarget, which is where the enemies can see the player. When the enemies are attacking the target will freeze position.</para> 
         /// </summary>
@@ -289,7 +288,7 @@ namespace PixelSouls
             }
         }
         /// <summary>
-        /// If the player has enough stamina and is dodging. The players dodge multiplier is increased, therefore moving the player faster.
+        /// If the player has enough stamina and is not dodging already, a dodge is excecuted. The players dodge multiplier is increased, therefore moving the player faster.
         /// </summary>
         private void Dodge()
         {
@@ -332,11 +331,6 @@ namespace PixelSouls
                         dodgeSound.Play();
                     }
                 }
-                //Dodge in mouse direction
-                //Vector2 muse = new Vector2(mouseState.X, mouseState.Y);
-                //Vector2 Dpos = muse - position;
-
-                //velocity = Dpos;
             }
         }
 
@@ -348,7 +342,7 @@ namespace PixelSouls
         /// </summary>
         private void AnimationLock()
         {
-            if (Stamina < MaxStamina && !animationLock)
+            if (Stamina < MaxStamina && !animationLock)   // Pauses stamina regeneration while taking an action
             {
                 stamina++;
 
@@ -358,22 +352,22 @@ namespace PixelSouls
                 }
             }
 
-            if (!animationLock)
+            if (!animationLock)   // Player movement is only enabled when not animation locked
             {
                 HandleInput();
             }
-            else
+            else   // While locked cooldowns are advanced
             {
                 animationLockCooldown++;
                 dodgeCooldown++;
 
-                if (dodgeCooldown >= dodgeTime && isDodge)
+                if (dodgeCooldown >= dodgeTime && isDodge)   // Ends dodge when timer runs out
                 {
                     isDodge = false;
                     velocity = velocity * 0.2f;
                 }
 
-                if (animationLockCooldown >= lockTime + dodgeTime)
+                if (animationLockCooldown >= lockTime + dodgeTime)   // Ends animation lock when timer runs out
                 {
                     dodgeCooldown = 0;
                     animationLockCooldown = 0;
@@ -408,7 +402,7 @@ namespace PixelSouls
                 velocity = Vector2.Zero;
                 ChangeAnimationState(AnimState.Attack, attackSprites, origin, 10);
 
-                if (mouseState.Position.X <= position.X)
+                if (mouseState.Position.X <= position.X)   // Ensures the sprite is facing the attack direction while attacking
                 {
                     facingRight = false;
                     origin = new Vector2(60, 42);
@@ -465,29 +459,24 @@ namespace PixelSouls
         /// <summary>
         /// <para>Player can only move when not animation locked</para>
         /// Heals the player and decreases healingTries
-        /// <para>animationLOcks the player</para>
+        /// <para>animationLocks the player</para>
         /// </summary>
         private void Heal()
         {
-            if (!animationLock)
+            if (!animationLock || healingTries > 0 || health < 100)
             {
-                if (healingTries > 0)
+                velocity = Vector2.Zero;
+                ChangeAnimationState(AnimState.Idle, idleSprites, trueOrigin, 5);
+
+                animationLock = true;
+                lockTime = 100;
+
+                health += 40;
+                healingTries -= 1;
+
+                if (health > 100)
                 {
-                    if (health < 100)
-                    {
-                        velocity = Vector2.Zero;
-                        ChangeAnimationState(AnimState.Idle, idleSprites, trueOrigin, 5);
-
-                        animationLock = true;
-                        lockTime = 100;
-
-                        health += 40;
-                        healingTries -= 1;
-                        if (health > 100)
-                        {
-                            health = 100;
-                        }
-                    }
+                    health = 100;
                 }
             }
         }

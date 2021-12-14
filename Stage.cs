@@ -13,7 +13,7 @@ namespace PixelSouls
         private static Rectangle worldSize;
         private static Texture2D backgroundImage;
 
-        //WorldSize is a rectangle used for the boundaries of the playable area.
+        // WorldSize is a rectangle used for the boundaries of the playable area.
         public static Rectangle WorldSize { get => worldSize; set => worldSize = value; }
 
         /// <summary>

@@ -252,7 +252,7 @@ namespace PixelSouls
         }
 
         /// <summary>
-        /// Draws a box around every rectangle. The rectangle is in most cases the same size as the sprite.
+        /// Generic method for drawing a box around a rectangle.
         /// </summary>
         /// <param name="rect">Box to draw</param>
         /// <param name="color">Color of lines</param>
