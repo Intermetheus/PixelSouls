@@ -9,8 +9,14 @@ using System.Diagnostics;
 
 namespace PixelSouls
 {
+    /// <summary>
+    /// Contains possible game states
+    /// </summary>
     public enum GameState { Play, Menu, Lose, Win }
 
+    /// <summary>
+    /// Functionality relating to the game world
+    /// </summary>
     public class GameWorld : Game
     {
         private GraphicsDeviceManager graphics;
@@ -34,21 +40,43 @@ namespace PixelSouls
 
         private SoundEffectInstance backgroundMusic;
 
+        /// <summary>
+        /// Font for writing text on screen
+        /// </summary>
         public static SpriteFont ArialProp 
         {
             get { return arial; }
         }
 
+        /// <summary>
+        /// Moves with the player. Draws everything else in relation to this
+        /// </summary>
         public static Vector2 CameraPositionProp { get => cameraPosition; set => cameraPosition = value; }
+
+        /// <summary>
+        /// Size of screen for positioning player in the middle
+        /// </summary>
         public static Vector2 ScreenSizeProp { get => screenSize; set => screenSize = value; }
+
+        /// <summary>
+        /// Easily accessable reference to the instatiated player
+        /// </summary>
         public static Player PlayerProp { get => player; }
+
+        /// <summary>
+        /// Easily accessable reference to the instatiated boss
+        /// </summary>
         public static Boss BossProp { get => boss; }
 
+        /// <summary>
+        /// Manages game states
+        /// </summary>
         public static GameState WinLoseStateProp
         {
             get { return winLoseState; }
             set { winLoseState = value; }
         }
+
         /// <summary>
         /// Screensize is fixed to 1600x900
         /// </summary>
@@ -61,6 +89,7 @@ namespace PixelSouls
             graphics.PreferredBackBufferHeight = 900;
             screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
         }
+
         /// <summary>
         /// Adds the player and boss to the gameObjects List, also loads the stage.
         /// </summary>
@@ -74,6 +103,7 @@ namespace PixelSouls
             base.Initialize();
             Stage.LoadLevel("PrototypePlayground");
         }
+
         /// <summary>
         /// Runs the LoadContent in every object inside the gameObject List, also plays the backgroundmusic on loop.
         /// </summary>
@@ -104,7 +134,7 @@ namespace PixelSouls
         /// <summary>
         /// Runs the Update() method on every gameObject & adds / removes objects from the game.
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">Time reference for running update code at a fixed interval</param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -137,12 +167,16 @@ namespace PixelSouls
                         }
                     }
                 }
-                UI.Update(gameTime);
+                UI.Update();
             }            
 
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Runs all relevant draw methods on gameobjects
+        /// </summary>
+        /// <param name="gameTime">Time reference for running update code at a fixed interval</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
@@ -176,11 +210,19 @@ namespace PixelSouls
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Adds newly instantiated gameobjects to gameobject list
+        /// </summary>
+        /// <param name="gameObject">Gameobject to be added</param>
         public static void Instantiate(GameObject gameObject)
         {
             newGameObjects.Add(gameObject);
         }
 
+        /// <summary>
+        /// Removes gameobject from gameobject list
+        /// </summary>
+        /// <param name="gameObject">gameobject to be removed</param>
         public static void Destroy(GameObject gameObject)
         {
             removeGameObjects.Add(gameObject);
@@ -189,7 +231,7 @@ namespace PixelSouls
         /// <summary>
         /// Runs the drawBox code with the given Rectangle from its parameter
         /// </summary>
-        /// <param name="rect"></param>
+        /// <param name="rect">Box to draw</param>
         private void DrawCollisionBox(Rectangle rect)
         {
             DrawBox(rect, Color.Red, 1);
@@ -198,7 +240,7 @@ namespace PixelSouls
         /// <summary>
         /// Draws the World Boundary in DarkGray colour.
         /// </summary>
-        /// <param name="rect"></param>
+        /// <param name="rect">Worldsize</param>
         private void DrawWorldBoundary(Rectangle rect)
         {
             Rectangle collisionBox = rect;
@@ -210,11 +252,11 @@ namespace PixelSouls
         }
 
         /// <summary>
-        /// Draws a pixel-thin box around every rectangle. The rectangle is in most cases the same size as the sprite.
+        /// Draws a box around every rectangle. The rectangle is in most cases the same size as the sprite.
         /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="color"></param>
-        /// <param name="lineWidth"></param>
+        /// <param name="rect">Box to draw</param>
+        /// <param name="color">Color of lines</param>
+        /// <param name="lineWidth">Width of lines</param>
         private void DrawBox(Rectangle rect, Color color, int lineWidth)
         {
             Rectangle topLine = new Rectangle(rect.X, rect.Y, rect.Width, lineWidth);
