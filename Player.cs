@@ -463,7 +463,7 @@ namespace PixelSouls
         /// </summary>
         private void Heal()
         {
-            if (!animationLock || healingTries > 0 || health < 100)
+            if (!animationLock || healingTries > 0 || health < maxHealth)
             {
                 velocity = Vector2.Zero;
                 ChangeAnimationState(AnimState.Idle, idleSprites, trueOrigin, 5);
@@ -474,9 +474,9 @@ namespace PixelSouls
                 health += 40;
                 healingTries -= 1;
 
-                if (health > 100)
+                if (health > maxHealth)
                 {
-                    health = 100;
+                    health = maxHealth;
                 }
             }
         }
