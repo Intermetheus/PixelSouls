@@ -292,7 +292,7 @@ namespace PixelSouls
         private void Dodge()
         {
             // dodgeCost is the amount of stamina used to dodge
-            // BUG: if you dodge in opposite directions, you don't use stamina
+            // BUG: if you dodge in opposite directions, you don't move and still use stamina
             if (Stamina > dodgeStaminaCost && !isDodge)
             {
                 if (keyState.IsKeyDown(Keys.W))
