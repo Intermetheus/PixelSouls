@@ -234,7 +234,6 @@ namespace PixelSouls
         protected override void Move(GameTime gameTime)
         {
             // If the window is resized, the player will remain in the middle of the screen.
-            // BUG: This can change the player, therefore moving outside the game area :(
             position = new Vector2(GameWorld.ScreenSizeProp.X / 2, GameWorld.ScreenSizeProp.Y / 2);
 
             // Save position from before move.
